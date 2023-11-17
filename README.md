@@ -1,2 +1,4 @@
 # Game_Project
-This is some shitty thing you can see after I did something to take a practice to my first GitHub project
+This is the documentation for this project
+Have header files of every object.
+
