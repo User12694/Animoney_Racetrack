@@ -1,11 +1,26 @@
 import sys, pygame, random
-
+#Khởi tạo tất cả
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
+#Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
+WINDOW_SIZES = [(800, 600), (1080, 720), (1366, 768), (1920, 1080)]
+WINDOW_SIZE_INDEX = 0
+#Một số biến được sử dụng
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX])
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
-
-Background = pygame.image.load('assets/background/background(800x600).png')
+#Chữ chạy (Chủ yếu để trang trí)
+KieuChu1 = pygame.font.Font(None, 30)
+ChuChay1_surface = KieuChu1.render("THIS IS GROUP 12'S AMAZING RACE GAME!!!", False, 'blue')
+ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
+#Nhân vật (Sau này có thể đặt vào trong class để dễ quản lý)
+Character1_Suf = pygame.image.load('assets/characters/Testchar.png').convert_alpha()
+Character1_Box = Character1_Suf.get_rect(midbottom = (50, 300))
+#
+Background = pygame.image.load('assets/background/background(800x600).png').convert()
+#FinishLine(Test)
+FinishLine = pygame.image.load('assets/terrains/FinishLine.png').convert_alpha()
+FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] - 50, 0))
+#
 #Đây là main loop
 while True:
     for event in pygame.event.get():
@@ -13,5 +28,15 @@ while True:
             pygame.quit()
             sys.exit()
     screen.blit(Background,(0,0))
+    screen.blit(FinishLine, FinishLine_Box)
+    #Nhân vật (test)
+    screen.blit(Character1_Suf, Character1_Box)
+    Character1_Box.x += 5
+    #
+    #Chữ chạy
+    screen.blit(ChuChay1_surface, ChuChay1_Box)
+    ChuChay1_Box.x -= 3
+    if ChuChay1_Box.right <= 0: ChuChay1_Box.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+    #
     pygame.display.update()
     clock.tick(60)
