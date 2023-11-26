@@ -18,8 +18,9 @@ Character1_Box = Character1_Suf.get_rect(midbottom = (50, 300))
 Character1_Run = True
 #Âm thanh
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-VOLUME_INDEX = 5
+VOLUME_INDEX = 4
 Victory_sound = pygame.mixer.Sound('assets/sounds/Victorious.ogg')
+Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
 Victory_sound_Play = True
 #Ảnh
 Background = pygame.image.load('assets/background/background(800x600).png').convert()
