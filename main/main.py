@@ -18,6 +18,8 @@ def CreateImg(Address):
     return Img
 
 #Hàm pause
+Pause = False
+
 
 #Hàm viết chữ
 def WriteText(Text, Font, Color, x, y):
@@ -51,6 +53,23 @@ FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX]
 #Đây là main loop
 def main():
     while True:
+        #Pause
+        global Pause
+        if Pause:
+            button = KieuChu1.render("Quit", False, 'white')
+            button_Box = button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
+            while Pause:
+                screen.fill('black')
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.K_ESCAPE:
+                        Pause = False
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if button_Box.collidepoint(event.pos):
+                            Pause = False
+        
         #Ảnh nền
         screen.blit(Background,(0,0))
         screen.blit(FinishLine, FinishLine_Box)
@@ -60,7 +79,7 @@ def main():
         global Victory_sound_Play
         screen.blit(Character1_Suf, Character1_Box)
         if Character1_Run:
-            Character1_Box.x += 5
+            Character1_Box.x += 3
         if Character1_Box.right == FinishLine_Box.right:
             Character1_Run = False
             if Victory_sound_Play:

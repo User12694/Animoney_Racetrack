@@ -79,7 +79,7 @@ def main():
         global Victory_sound_Play
         screen.blit(Character1_Suf, Character1_Box)
         if Character1_Run:
-            Character1_Box.x += 5
+            Character1_Box.x += 3
         if Character1_Box.right == FinishLine_Box.right:
             Character1_Run = False
             if Victory_sound_Play:
