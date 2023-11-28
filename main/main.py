@@ -17,9 +17,6 @@ def CreateImg(Address):
     Img = pygame.image.load(Address).convert_alpha()
     return Img
 
-#Hàm pause
-Pause = False
-
 
 #Hàm viết chữ
 def WriteText(Text, Font, Color, x, y):
@@ -30,6 +27,11 @@ def WriteText(Text, Font, Color, x, y):
 KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
 ChuChay1_surface = KieuChu1.render("THIS IS GROUP 12'S AMAZING RACE GAME!!!", False, 'black')
 ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
+
+#Chữ các thứ
+KieuChu2 = pygame.font.SysFont('Verdana', 40, bold=True)
+scoreBoard = KieuChu2.render("Score: ", False, "Black")
+scoreBoard_Box = scoreBoard.get_rect(bottomleft = (0,WINDOW_SIZES[WINDOW_SIZE_INDEX][1]))
 
 #Nhân vật (Sau này có thể đặt vào trong class để dễ quản lý)
 Character1_Suf = CreateImg('assets/characters/Testchar.png')
@@ -50,10 +52,13 @@ Background = CreateImg('assets/background/background(800x600).png')
 FinishLine = CreateImg('assets/terrains/FinishLine.png')
 FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] - 50, 0))
 
+#Hàm pause(đang bị lỗi)
+Pause = False
+
 #Đây là main loop
 def main():
     while True:
-        #Pause
+        #Pause (Đang bị lỗi)
         global Pause
         if Pause:
             button = KieuChu1.render("Quit", False, 'white')
@@ -69,10 +74,15 @@ def main():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if button_Box.collidepoint(event.pos):
                             Pause = False
-        
+
         #Ảnh nền
         screen.blit(Background,(0,0))
         screen.blit(FinishLine, FinishLine_Box)
+
+        #Bảng điểm
+        pygame.draw.rect(screen, "white", scoreBoard_Box)
+        screen.blit(scoreBoard, scoreBoard_Box)
+        
 
         #Nhân vật + nhạc khi win (test)
         global Character1_Run
