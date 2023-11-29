@@ -113,8 +113,8 @@ class LoginRegisterMenu:
 
 # Tạo một cửa sổ gốc
 root = tk.Tk()
-#Loại bỏ thanh tiêu đề
 '''
+#Loại bỏ thanh tiêu đề
 root.overrideredirect(True)
 root.bind("<ButtonPress-1>", start_move)
 root.bind("<ButtonRelease-1>", stop_move)
