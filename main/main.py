@@ -211,9 +211,6 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     STAGE_INDEX = 1
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if button_Box.collidepoint(event.pos):
-                    STAGE_INDEX = 0
             # Code để tìm vị trí cụ thể trên màn hình
             # if event.type == pygame.MOUSEMOTION:
             #     print(event.pos)
