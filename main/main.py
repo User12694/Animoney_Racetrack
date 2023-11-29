@@ -66,7 +66,7 @@ FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX]
 tempSpeed = Character1_Speed
 Activated = False
 #Làm chậm
-SlowTime = 180
+SlowTime = 150
 SlowTimeConst = SlowTime
 ActivateSlow = False
 #Tăng tốc
