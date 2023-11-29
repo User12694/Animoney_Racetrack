@@ -10,7 +10,7 @@ WINDOW_SIZE_INDEX = 0
 
 #Một số biến được sử dụng
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX])
-pygame.display.set_caption("Animoney RaceTrack")
+pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 
 #Hàm tạo ảnh
@@ -85,6 +85,9 @@ STAGE_INDEX = 0
 #Đây là main loop
 def main():
     while True:
+        #Check đăng nhập
+        if not check_if_login:
+            break
         #nhạc nền + âm lượng
         Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
 
