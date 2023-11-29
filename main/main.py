@@ -35,7 +35,7 @@ scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
 scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
 
 #Nhân vật (Sau này có thể đặt vào trong class để dễ quản lý)
-Character1_Speed = 4
+Character1_Speed = 2.5
 Character1_Suf = CreateImg('assets/characters/Testchar.png')
 Character1_Box = Character1_Suf.get_rect(midbottom = (50, 300))
 Character1_Run = True
@@ -51,8 +51,9 @@ luckyBox_Box = luckyBox.get_rect(midbottom = (luckyBox_Pos, 300))
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 VOLUME_INDEX = 4
 Victory_sound = pygame.mixer.Sound('assets/sounds/Victorious.ogg')
-Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
 Victory_sound_Play = True
+pygame.mixer.music.load('assets/sounds/Panorama.wav')
+pygame.mixer.music.play(loops = -1)
 
 #Ảnh
 Background = CreateImg('assets/background/background(800x600).png')
@@ -62,7 +63,19 @@ FinishLine = CreateImg('assets/terrains/FinishLine.png')
 FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.9, 0))
 
 #Các trạng thái
+tempSpeed = Character1_Speed
+Activated = False
+#Làm chậm
+SlowTime = 180
+SlowTimeConst = SlowTime
+ActivateSlow = False
+#Tăng tốc
+SpeedTime = 20
+SpeedTimeConst = SpeedTime
+ActivateSpeed = False
+#Choáng
 DizzyTime = 60
+DizzyTimeConst = DizzyTime
 ActivateDizzy = False
 
 #Trạng thái game
@@ -72,6 +85,9 @@ STAGE_INDEX = 0
 #Đây là main loop
 def main():
     while True:
+        #nhạc nền + âm lượng
+        Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
+
         #Kích thước màn hình
         global WINDOW_SIZE_INDEX
         
@@ -94,13 +110,23 @@ def main():
                 if Character1_Box.x > FinishLine_Box.x:
                     Character1_Run = False
                     if Victory_sound_Play:
+                        pygame.mixer.music.stop()
                         Victory_sound.play()
                         Victory_sound_Play = False
+                        
 
                 #Lucky box
-                global ActivateDizzy
                 global activateLuckyBox
+
+                global SlowTime
+                global ActivateSlow
+
+                global SpeedTime
+                global ActivateSpeed
+
+                global ActivateDizzy
                 global DizzyTime
+                
                 if not activateLuckyBox:
                     screen.blit(luckyBox, luckyBox_Box)
                 if Character1_Box.colliderect(luckyBox_Box):
@@ -108,24 +134,48 @@ def main():
                         #Kích hoạt hiệu ứng(Tạm)
                         match luckyBox_Effect:
                             case 0:
-                                Character1_Speed -= 2
+                                ActivateSlow = True
                             case 1:
-                                Character1_Speed += 3
+                                ActivateSpeed = True
                             case 2:
                                 ActivateDizzy = True
 
                         activateLuckyBox = True
+
+                global tempSpeed #Cái này để lưu tốc chạy cơ bản của nhân vật ở ngoài hàm main
+                global Activated
+                #Làm chậm
+                if ActivateSlow == True:
+                    if not Activated:
+                        Character1_Speed -= 2
+                        Activated = True
+                    SlowTime -= 1
+                if SlowTime == 0:
+                    SlowTime = SlowTimeConst
+                    Character1_Speed = tempSpeed
+                    ActivateSlow = False
+                
+                #Tăng tốc
+                if ActivateSpeed == True:
+                    if not Activated:
+                        Character1_Speed += 3
+                        Activated = True
+                    SpeedTime -= 1
+                if SpeedTime == 0:
+                    SpeedTime = DizzyTimeConst
+                    Character1_Speed = tempSpeed
+                    ActivateSpeed = False
+
                 #Choáng
                 if ActivateDizzy == True:
                     Character1_Speed = 0
                     DizzyTime -= 1
                 if DizzyTime == 0:
-                    Character1_Speed += 3
-                    DizzyTime = 150
+                    Character1_Speed = tempSpeed
+                    DizzyTime = DizzyTimeConst
                     ActivateDizzy = False
 
                 #Bảng tiền
-                global Money
                 pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
                 screen.blit(scoreBoard, scoreBoard_Box)
                 
@@ -141,6 +191,16 @@ def main():
                 button_Box = button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
                 pygame.draw.rect(screen, "white", button_Box, 6, 10)
                 screen.blit(button, (button_Box))
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            STAGE_INDEX = 0
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if button_Box.collidepoint(event.pos):
+                            STAGE_INDEX = 0
 
         #Chuyển trạng thái game
         for event in pygame.event.get():
