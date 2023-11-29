@@ -4,12 +4,33 @@ import tkinter.messagebox
 import os
 import time
 
+# Định nghĩa hàm đóng cửa sổ
+def close_window():
+    root.destroy()
+
+# Định nghĩa các hàm di chuyển cửa sổ trong khi không có thanh tiêu đề
+def start_move(event):
+    root.x = event.x
+    root.y = event.y
+
+def stop_move(event):
+    global root
+    root.x = None
+    root.y = None
+
+def do_move(event):
+    dx = event.x - root.x
+    dy = event.y - root.y
+    x = root.winfo_x() + dx
+    y = root.winfo_y() + dy
+    root.geometry(f"+{x}+{y}")
+
 # Định nghĩa lớp LoginRegisterMenu
 class LoginRegisterMenu:
     # Hàm khởi tạo
     def __init__(self, root):
         self.root = root  # Lưu trữ tham chiếu đến cửa sổ gốc
-        self.root.geometry('400x500')  # Đặt kích thước cửa sổ
+        self.root.geometry('300x400')  # Đặt kích thước cửa sổ
         self.frame = tk.Frame(self.root)  # Tạo một frame để chứa các widget
         self.frame.pack()  # Đóng gói frame vào cửa sổ
 
@@ -88,6 +109,11 @@ class LoginRegisterMenu:
 
 # Tạo một cửa sổ gốc
 root = tk.Tk()
+#Loại bỏ thanh tiêu đề
+root.overrideredirect(True)
+root.bind("<ButtonPress-1>", start_move)
+root.bind("<ButtonRelease-1>", stop_move)
+root.bind("<B1-Motion>", do_move)
 # Tạo một đối tượng LoginRegisterMenu và truyền cửa sổ gốc vào hàm khởi tạo
 app = LoginRegisterMenu(root)
 # Bắt đầu vòng lặp sự kiện của cửa sổ gốc
