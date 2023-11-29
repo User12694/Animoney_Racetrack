@@ -86,7 +86,7 @@ STAGE_INDEX = 0
 def main():
     while True:
         #Check đăng nhập
-        if not check_if_login:
+        if not login_lock:
             break
         #nhạc nền + âm lượng
         Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
