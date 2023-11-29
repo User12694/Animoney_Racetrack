@@ -33,15 +33,15 @@ scoreBoard = KieuChu2.render("Money: ", False, (0, 255, 255))
 scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
 
 #Nhân vật (Sau này có thể đặt vào trong class để dễ quản lý)
-Character1_Speed = 5
+Character1_Speed = 4
 Character1_Suf = CreateImg('assets/characters/Testchar.png')
 Character1_Box = Character1_Suf.get_rect(midbottom = (50, 300))
 Character1_Run = True
 
 #Lucky box
 activateLuckyBox = False
-luckyBox_Pos = random.randint(100, 400)
-luckyBox_Effect = random.randint(0, 1)
+luckyBox_Pos = random.randint(150, 400)
+luckyBox_Effect = random.randint(0, 2)
 luckyBox = CreateImg("assets/item/luckyBox.png")
 luckyBox_Box = luckyBox.get_rect(midbottom = (luckyBox_Pos, 300))
 
@@ -59,77 +59,87 @@ Background = CreateImg('assets/background/background(800x600).png')
 FinishLine = CreateImg('assets/terrains/FinishLine.png')
 FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.9, 0))
 
-#Hàm pause(đang bị lỗi)
-Pause = False
+#Các trạng thái
+DizzyTime = 60
+ActivateDizzy = False
+
+#Trạng thái game
+STAGE = ["GamePlay", "Pause"]
+STAGE_INDEX = 0
 
 #Đây là main loop
 def main():
     while True:
-        #Pause (Đang bị lỗi)
-        global Pause
-        if Pause:
-            while Pause:
-                screen.fill('black')
-                button = KieuChu1.render("Quit", False, 'white')
-                button_Box = button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        sys.exit()
-                    if event.type == pygame.K_ESCAPE:
-                        Pause = False
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if button_Box.collidepoint(event.pos):
-                            Pause = False
-                pygame.display.update()
-                clock.tick(60)
-
-        #Ảnh nền
-        screen.blit(Background,(0,0))
-        screen.blit(FinishLine, FinishLine_Box)
-
-        #Nhân vật + nhạc khi win (test)
-        global Character1_Speed
-        global Character1_Run
-        global Victory_sound_Play
-        screen.blit(Character1_Suf, Character1_Box)
-        if Character1_Run:
-            Character1_Box.x += Character1_Speed
-        if Character1_Box.right == FinishLine_Box.right:
-            Character1_Run = False
-            if Victory_sound_Play:
-                Victory_sound.play()
-                Victory_sound_Play = False
-
-        #Lucky box
-        global activateLuckyBox
-        if not activateLuckyBox:
-            screen.blit(luckyBox, luckyBox_Box)
-        if Character1_Box.colliderect(luckyBox_Box):
-            if not activateLuckyBox:
-            #Kích hoạt hiệu ứng(Tạm)
-                Character1_Speed = Character1_Speed - 3
-                activateLuckyBox = True
-                # Khoan có lỗi gì đó :))
-                # match luckyBox_Effect:
-                #     case 1:
-                #         Character1_Speed -= 3
-                #         break
-                #     case 2:
-                #         Character1_Speed += 5
-                #         break
-
-        #Bảng điểm
-        pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
-        screen.blit(scoreBoard, scoreBoard_Box)
+        #Kích thước màn hình
+        global WINDOW_SIZE_INDEX
         
+        #Trạng thái game
+        global STAGE_INDEX
+        
+        match STAGE[STAGE_INDEX]:
+            case "GamePlay":
+                #Ảnh nền
+                screen.blit(Background,(0,0))
+                screen.blit(FinishLine, FinishLine_Box)
 
-        #Chữ chạy
-        screen.blit(ChuChay1_surface, ChuChay1_Box)
-        ChuChay1_Box.x -= 2
-        if ChuChay1_Box.right <= 0:
-            ChuChay1_Box.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+                #Nhân vật + nhạc khi win (test)
+                global Character1_Speed
+                global Character1_Run
+                global Victory_sound_Play
+                screen.blit(Character1_Suf, Character1_Box)
+                if Character1_Run:
+                    Character1_Box.x += Character1_Speed
+                if Character1_Box.x > FinishLine_Box.x:
+                    Character1_Run = False
+                    if Victory_sound_Play:
+                        Victory_sound.play()
+                        Victory_sound_Play = False
 
+                #Lucky box
+                global ActivateDizzy
+                global activateLuckyBox
+                global DizzyTime
+                if not activateLuckyBox:
+                    screen.blit(luckyBox, luckyBox_Box)
+                if Character1_Box.colliderect(luckyBox_Box):
+                    if not activateLuckyBox:
+                        #Kích hoạt hiệu ứng(Tạm)
+                        match luckyBox_Effect:
+                            case 0:
+                                Character1_Speed -= 2
+                            case 1:
+                                Character1_Speed += 3
+                            case 2:
+                                ActivateDizzy = True
+
+                        activateLuckyBox = True
+                #Choáng
+                if ActivateDizzy == True:
+                    Character1_Speed = 0
+                    DizzyTime -= 1
+                if DizzyTime == 0:
+                    Character1_Speed += 3
+                    DizzyTime = 150
+                    ActivateDizzy = False
+
+                #Bảng điểm
+                pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
+                screen.blit(scoreBoard, scoreBoard_Box)
+                
+
+                #Chữ chạy
+                screen.blit(ChuChay1_surface, ChuChay1_Box)
+                ChuChay1_Box.x -= 2
+                if ChuChay1_Box.right <= 0:
+                    ChuChay1_Box.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+            case "Pause":
+                screen.fill('black')
+                button = KieuChu2.render("Countinue", False, "white")
+                button_Box = button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
+                pygame.draw.rect(screen, "white", button_Box, 6, 10)
+                screen.blit(button, (button_Box))
+
+        #Chuyển trạng thái game
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -137,12 +147,13 @@ def main():
             # Nhấn phím ESC sẽ kích hoạt Pause
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    Pause = True
+                    STAGE_INDEX = 1
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if button_Box.collidepoint(event.pos):
+                    STAGE_INDEX = 0
             # Code để tìm vị trí cụ thể trên màn hình
             # if event.type == pygame.MOUSEMOTION:
             #     print(event.pos)
-
-        
 
         pygame.display.update()
         clock.tick(60)
