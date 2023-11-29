@@ -19,7 +19,7 @@ class LoginRegisterMenu:
         self.password_label = tk.Label(self.frame, text="Password")  # Nhãn cho trường nhập mật khẩu
         self.password_entry = tk.Entry(self.frame, show="*")  # Trường nhập mật khẩu
         self.login_button = tk.Button(self.frame, text="Login", command=self.login)  # Nút đăng nhập
-        self.switch_button = tk.Button(self.frame, text="Register", command=self.switch_to_register)  # Nút chuyển đổi giữa đăng nhập và đăng ký
+        self.switch_button = tk.Button(self.frame, text="Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
 
         # Đóng gói các widget vào frame
         self.username_label.pack()

@@ -10,7 +10,7 @@ WINDOW_SIZE_INDEX = 0
 
 #Một số biến được sử dụng
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX])
-pygame.display.set_caption("Race game")
+pygame.display.set_caption("Animoney RaceTrack")
 clock = pygame.time.Clock()
 
 #Hàm tạo ảnh
