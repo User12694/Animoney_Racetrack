@@ -1,4 +1,5 @@
 import sys, pygame, random
+from LoginSignup import *
 
 #Khởi tạo tất cả
 pygame.init()
@@ -28,8 +29,9 @@ ChuChay1_surface = KieuChu1.render("THIS IS GROUP 12'S AMAZING RACE GAME!!!", Fa
 ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
 
 #Chữ các thứ
+Player_money = 0
 KieuChu2 = pygame.font.SysFont('Verdana', 40, bold=True)
-scoreBoard = KieuChu2.render("Money: ", False, (0, 255, 255))
+scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
 scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
 
 #Nhân vật (Sau này có thể đặt vào trong class để dễ quản lý)
@@ -122,7 +124,8 @@ def main():
                     DizzyTime = 150
                     ActivateDizzy = False
 
-                #Bảng điểm
+                #Bảng tiền
+                global Money
                 pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
                 screen.blit(scoreBoard, scoreBoard_Box)
                 
