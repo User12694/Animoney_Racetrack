@@ -48,16 +48,19 @@ class LoginRegisterMenu:
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
         repeat_password = self.repeat_password_entry.get()  # Lấy mật khẩu nhập lại từ trường nhập liệu
-        if os.path.exists(f"{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
-            tk.messagebox.showerror("Username existed!", "Username existed!")  # Hiển thị thông báo lỗi
-        elif password == repeat_password:  # Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp không
-            with open(f"{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
-                file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
-                file.write("5000")  # Ghi "5000" vào dòng thứ hai của file
-            tk.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
-            self.switch_to_login()  # Chuyển về chế độ đăng nhập
+        if username == "" or password == "" or repeat_password == "":
+            tk.messagebox.showerror("Have blank emulation!", "Have blank emulation!")
         else:
-            tk.messagebox.showerror("Passwords do not match!", "Passwords do not match!")  # Hiển thị thông báo lỗi
+            if os.path.exists(f"{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
+                tk.messagebox.showerror("Username existed!", "Username existed!")  # Hiển thị thông báo lỗi
+            elif password == repeat_password:  # Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp không
+                with open(f"{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
+                    file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
+                    file.write("5000")  # Ghi "5000" vào dòng thứ hai của file
+                tk.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
+                self.switch_to_login()  # Chuyển về chế độ đăng nhập
+            else:
+                tk.messagebox.showerror("Passwords do not match!", "Passwords do not match!")  # Hiển thị thông báo lỗi
 
     # Hàm chuyển đổi sang chế độ đăng ký
     def switch_to_register(self):
