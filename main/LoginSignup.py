@@ -55,8 +55,8 @@ class LoginRegisterMenu:
     def login(self):
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
-        if os.path.exists(f"{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
-            with open(f"{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
+        if os.path.exists(f"assets/player/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
+            with open(f"assets/player/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
                 if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
                     tk.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
                     login_lock = False
@@ -74,10 +74,10 @@ class LoginRegisterMenu:
         if username == "" or password == "" or repeat_password == "":
             tk.messagebox.showerror("Have blank emulation!", "Have blank emulation!")
         else:
-            if os.path.exists(f"{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
+            if os.path.exists(f"assets/player/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
                 tk.messagebox.showerror("Username existed!", "Username existed!")  # Hiển thị thông báo lỗi
             elif password == repeat_password:  # Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp không
-                with open(f"{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
+                with open(f"assets/player/{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
                     file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
                     file.write("5000")  # Ghi "5000" vào dòng thứ hai của file
                 tk.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
