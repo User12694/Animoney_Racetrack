@@ -37,7 +37,6 @@ class LoginRegisterMenu:
             with open(f"{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
                 if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
                     tk.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
-                    time.sleep(5)  # Đợi 5 giây
                     self.root.quit()  # Thoát chương trình
                 else:
                     tk.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
