@@ -1,4 +1,5 @@
 import sys, pygame, random
+import pygame_menu
 from LoginSignup import *
 
 #Khởi tạo tất cả
@@ -12,7 +13,6 @@ WINDOW_SIZE_INDEX = 0
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX])
 pygame.display.set_caption("Animoney RaceTrack")
 clock = pygame.time.Clock()
-
 #Hàm tạo ảnh
 def CreateImg(Address):
     Img = pygame.image.load(Address).convert_alpha()

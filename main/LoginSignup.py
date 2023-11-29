@@ -9,6 +9,7 @@ login_lock = True
 def close_window():
     root.destroy()
 
+'''
 # Định nghĩa các hàm di chuyển cửa sổ trong khi không có thanh tiêu đề
 def start_move(event):
     root.x = event.x
@@ -26,6 +27,7 @@ def do_move(event):
     y = root.winfo_y() + dy
     root.geometry(f"+{x}+{y}")
 
+'''
 # Định nghĩa lớp LoginRegisterMenu
 class LoginRegisterMenu:
     # Hàm khởi tạo
@@ -41,7 +43,7 @@ class LoginRegisterMenu:
         self.password_label = tk.Label(self.frame, text="Password")  # Nhãn cho trường nhập mật khẩu
         self.password_entry = tk.Entry(self.frame, show="*")  # Trường nhập mật khẩu
         self.login_button = tk.Button(self.frame, text="Login", command=self.login)  # Nút đăng nhập
-        self.switch_button = tk.Button(self.frame, text="Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
+        self.switch_button = tk.Button(self.frame, text="Don't have one? Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
 
         # Đóng gói các widget vào frame
         self.username_label.pack()
@@ -88,7 +90,7 @@ class LoginRegisterMenu:
     # Hàm chuyển đổi sang chế độ đăng ký
     def switch_to_register(self):
         self.login_button.config(text="Register", command=self.register)  # Thay đổi nút đăng nhập thành nút đăng ký
-        self.switch_button.config(text="Login", command=self.switch_to_login)  # Thay đổi nút chuyển đổi thành nút đăng nhập
+        self.switch_button.config(text="Already have an account? Login", command=self.switch_to_login)  # Thay đổi nút chuyển đổi thành nút đăng nhập
         self.repeat_password_label = tk.Label(self.frame, text="Repeat Password")  # Tạo nhãn cho trường nhập lại mật khẩu
         self.repeat_password_entry = tk.Entry(self.frame, show="*")  # Tạo trường nhập lại mật khẩu
         self.repeat_password_label.pack()  # Đóng gói nhãn vào frame
@@ -101,7 +103,7 @@ class LoginRegisterMenu:
     # Hàm chuyển đổi sang chế độ đăng nhập
     def switch_to_login(self):
         self.login_button.config(text="Login", command=self.login)  # Thay đổi nút đăng ký thành nút đăng nhập
-        self.switch_button.config(text="Register", command=self.switch_to_register)  # Thay đổi nút chuyển đổi thành nút đăng ký
+        self.switch_button.config(text="Don't have one? Register", command=self.switch_to_register)  # Thay đổi nút chuyển đổi thành nút đăng ký
         self.repeat_password_label.pack_forget()  # Loại bỏ nhãn khỏi frame
         self.repeat_password_entry.pack_forget()  # Loại bỏ trường nhập liệu khỏi frame
         self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
@@ -112,10 +114,12 @@ class LoginRegisterMenu:
 # Tạo một cửa sổ gốc
 root = tk.Tk()
 #Loại bỏ thanh tiêu đề
+'''
 root.overrideredirect(True)
 root.bind("<ButtonPress-1>", start_move)
 root.bind("<ButtonRelease-1>", stop_move)
 root.bind("<B1-Motion>", do_move)
+'''
 # Tạo một đối tượng LoginRegisterMenu và truyền cửa sổ gốc vào hàm khởi tạo
 app = LoginRegisterMenu(root)
 # Bắt đầu vòng lặp sự kiện của cửa sổ gốc
