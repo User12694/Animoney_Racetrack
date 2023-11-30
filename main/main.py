@@ -70,6 +70,7 @@ Running = True
 def main():
     global Running
     global screen
+    global WINDOW_SIZE_INDEX
     while Running:
         # Check đăng nhập
         if not login_lock:
