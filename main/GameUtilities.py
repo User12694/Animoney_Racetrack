@@ -3,12 +3,12 @@ import pygame_menu
 from LoginSignup import *
 
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
-WINDOW_SIZES = [(1920, 1080)]
+WINDOW_SIZES = [(800, 600), (1920, 1080)]
 WINDOW_SIZE_INDEX = 0
 
 #Khởi tạo các thứ
 pygame.init()
-screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX])
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 
@@ -40,8 +40,9 @@ Char4_Run = True
 Char5_Run = True
 
 #Các class
-class player:
+class player(pygame.sprite.Sprite):
     def __init__(self, speed, x, y, number, run, image):
+        super().__init__()
         self.speed = speed
         self.x = x
         self.y = y
@@ -51,18 +52,18 @@ class player:
         self.image= pygame.image.load(image)
         self.rect= self.image.get_rect(center = (x, y))
         self.count_run = 0
-    def draw(self):
-        MAP = MAPS[MAP_INDEX]
-        if self.count_run > 3:
-            self.walkCount = 0
-        if MAP == 1:
-            if self.number == 1:
-                if self.run:
-                    screen.blit(CharsMap1[0][self.count_run % 4], (self.x, self.y))
-                    self.count_run += 1
+    # def draw(self):
+    #     MAP = MAPS[MAP_INDEX]
+    #     if self.count_run > 3:
+    #         self.walkCount = 0
+    #     if MAP == 1:
+    #         if self.number == 1:
+    #             if self.run:
+    #                 screen.blit(CharsMap1[0][self.count_run % 4], (self.x, self.y))
+    #                 self.count_run += 1
 
-                else:
-                    screen.blit(CharsMap1[0][0], (self.x, self.y))
+    #             else:
+    #                 screen.blit(CharsMap1[0][0], (self.x, self.y))
     #         if self.number == 2:
     #             if self.run:
     #                 screen.blit(Char2Map1[self.count_run % 3], (self.x, self.y))
@@ -87,3 +88,15 @@ class player:
     #                 self.count_run += 1
     #             else:
     #                 screen.blit(Char5Map1[0], (self.x, self.y))
+
+Char1 = pygame.sprite.GroupSingle()
+Char1.add(player(Speed[0], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.5, 1, Char1_Run, CharsMap1[0][0]))
+# Char2 = pygame.sprite.GroupSingle()
+# Char2.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 2, Char2_Run, CharsMap1[0][0]))
+# Char3 = pygame.sprite.GroupSingle()
+# Char3.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 3, Char3_Run, CharsMap1[0][0]))
+# Char4 = pygame.sprite.GroupSingle()
+# Char4.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 4, Char4_Run, CharsMap1[0][0]))
+# Char5 = pygame.sprite.GroupSingle()
+# Char5.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 5, Char5_Run, CharsMap1[0][0]))
+

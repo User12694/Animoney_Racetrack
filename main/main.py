@@ -13,7 +13,7 @@ def WriteText(Text, Font, Color, x, y):
 #Chữ chạy (Chủ yếu để trang trí)
 KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
 ChuChay1_surface = KieuChu1.render("THIS IS GROUP 12'S AMAZING RACE GAME!!!", False, (255, 102, 0))
-ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.1))
+ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
 
 #Chữ các thứ
 Player_money = 0
@@ -37,7 +37,7 @@ pygame.mixer.music.load('assets/sounds/Panorama.wav')
 pygame.mixer.music.play(loops = -1)
 
 #Ảnh
-Background = CreateImg('assets/background/background(800x600).png')
+Background = CreateImg('assets/background/background.png')
 
 #FinishLine(Test)
 FinishLine = CreateImg('assets/terrains/FinishLine.png')
@@ -69,23 +69,11 @@ Running = True
 #Đây là main loop
 def main():
     global Running
+    global screen
     while Running:
         # Check đăng nhập
         if not login_lock:
             Running = False
-        #Nhân vật
-
-        Char1 = player(Speed[0], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.5, 1, Char1_Run, CharsMap1[0][0])
-        # Char2 = player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 2, Char2_Run, CharsMap1[0][0])
-        # Char3 = player(Speed[2], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.7, 3, Char3_Run, CharsMap1[0][0])
-        # Char4 = player(Speed[3], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.8, 4, Char4_Run, CharsMap1[0][0])
-        # Char5 = player(Speed[4], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.9, 5, Char5_Run, CharsMap1[0][0])
-        
-        Char1.draw()
-        # Char2.draw()
-        # Char3.draw()
-        # Char4.draw()
-        # Char5.draw()
 
         #nhạc nền + âm lượng
         Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
@@ -99,6 +87,14 @@ def main():
                 #Ảnh nền
                 screen.blit(Background,(0,0))
                 screen.blit(FinishLine, FinishLine_Box)
+
+                #Nhân vật
+                
+                Char1.draw(screen)
+                # Char2.draw(screen)
+                # Char3.draw(screen)
+                # Char4.draw(screen)
+                # Char5.draw(screen)
 
                 #Nhân vật + nhạc khi win (test)
                 # global Victory_sound_Play
@@ -212,6 +208,8 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.VIDEORESIZE:
+                screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
             # Nhấn phím ESC sẽ kích hoạt Pause
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
