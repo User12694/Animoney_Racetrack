@@ -4,7 +4,7 @@ import tkinter.messagebox
 import os
 import time
 
-login_lock = True
+login_lock = False
 # Định nghĩa hàm đóng cửa sổ
 def close_window():
     root.destroy()
@@ -61,7 +61,8 @@ class LoginRegisterMenu:
             with open(f"assets/player/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
                 if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
                     tk.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
-                    login_lock = False
+                    global login_lock
+                    login_lock = True
                     self.root.quit()  # Thoát chương trình
                 else:
                     tk.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
