@@ -3,7 +3,7 @@ import pygame_menu
 from LoginSignup import *
 
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
-WINDOW_SIZES = [(800, 600), (1920, 1080)]
+WINDOW_SIZES = [(1920, 1080)]
 WINDOW_SIZE_INDEX = 0
 
 #Khởi tạo các thứ

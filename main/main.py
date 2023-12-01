@@ -19,7 +19,7 @@ ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_IND
 Player_money = 0
 KieuChu2 = pygame.font.SysFont('Verdana', 40, bold=True)
 scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
-scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
+scoreBoard_Box = scoreBoard.get_rect(bottomleft = (0, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
 
 #Lucky box
 activateLuckyBox = False
@@ -71,6 +71,7 @@ def main():
     global Running
     global screen
     global WINDOW_SIZE_INDEX
+    global login_lock
     while Running:
         # Check đăng nhập
         if not login_lock:
@@ -182,7 +183,7 @@ def main():
             case "Pause":
                 screen.fill('black')
                 #Countinue button
-                Countinue_Button = KieuChu2.render("Countinue", False, "white")
+                Countinue_Button = KieuChu2.render("Continue", False, "white")
                 Countinue_Button_Box = Countinue_Button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
                 pygame.draw.rect(screen, "white", Countinue_Button_Box, 6, 10)
                 screen.blit(Countinue_Button, (Countinue_Button_Box))
