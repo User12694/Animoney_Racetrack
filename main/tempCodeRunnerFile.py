@@ -1,2 +1,1 @@
-if not login_lock:
-        #     break
+Char1.update()

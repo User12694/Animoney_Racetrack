@@ -98,6 +98,12 @@ def main():
                 # Char4.draw(screen)
                 # Char5.draw(screen)
 
+                Char1.update()
+                # Char2.update()
+                # Char3.update()
+                # Char4.update()
+                # Char5.update()
+
                 #Nhân vật + nhạc khi win (test)
                 # global Victory_sound_Play
                 # if Char1_Box.x > FinishLine_Box.x:
