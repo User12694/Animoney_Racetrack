@@ -1,3 +1,2 @@
-bal Pause
-        if Pause:
-            Pause()
+if not login_lock:
+        #     break
