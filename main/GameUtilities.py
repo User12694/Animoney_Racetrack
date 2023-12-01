@@ -49,7 +49,7 @@ class player(pygame.sprite.Sprite):
         self.run = run
         self.count_run = 0
         self.image= pygame.image.load(image)
-        self.rect= self.image.get_rect(center = (x, y))
+        self.rect= self.image.get_rect(bottom = (x, y))
         self.count_run = 0
     def animation(self):
         #Vẽ nhân vật
@@ -96,6 +96,18 @@ class player(pygame.sprite.Sprite):
         self.animation()
         self.move()
 
+class Object(pygame.sprite.Sprite):
+    def __init__(self, name, x, y, image):
+        super().__init__()
+        self.x = x
+        self.y = y
+        if self.name == "FinishLine":
+            self.image = self.image= pygame.image.load(image)
+            self.rect= self.image.get_rect(topleft = (x, y))
+    def animation(self):
+        screen.blit(self.image, (self.x, self.y))
+    def update(self):
+        self.animation()
 
 Char1 = pygame.sprite.GroupSingle()
 Char1.add(player(Speed[0], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.5, 1, Char1_Run, CharsMap1[0][0]))

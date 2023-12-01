@@ -39,10 +39,6 @@ pygame.mixer.music.play(loops = -1)
 #Ảnh
 Background = CreateImg('assets/background/background.png')
 
-#FinishLine(Test)
-FinishLine = CreateImg('assets/terrains/FinishLine.png')
-FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.9, 0))
-
 #Trạng thái game
 STAGE = ["GamePlay", "Pause"]
 STAGE_INDEX = 0
