@@ -84,8 +84,8 @@ def main():
             case "GamePlay":
                 #Ảnh nền
                 screen.blit(Background,(0,0))
-                screen.blit(FinishLine, FinishLine_Box)
-
+                FinishLine = Object("FinishLine", 0, WINDOW_SIZES[WINDOW_SIZE_INDEX] * 0.9, "assets/terrains/FinishLine.png")
+                FinishLine.update()
                 #Nhân vật
                 
                 Char1.draw(screen)
