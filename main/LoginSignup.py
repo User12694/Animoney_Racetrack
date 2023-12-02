@@ -1,5 +1,5 @@
 # Import các thư viện cần thiết
-import cv2
+# import cv2. Thư viện này không hoạt động trên một số máy của nhóm. 
 import numpy as np
 import tkinter as tk
 import tkinter.messagebox
@@ -7,16 +7,18 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import os
 import time
-import findPicture as fp
+# import findPicture as fp . Tạm thời disbale tính năng nhận diện hình ảnh
 import fnmatch
 
+# Các khai báo cho biến toàn cục
 login_lock = False
-img = fp.Browse()
+# img = fp.Browse() # Kiểm tra file được tìm thấy không
 img_label = None
-confirm_button = None
+# confirm_button = None Nút xác nhận được gắn hàm kiểm tra trong FindPicture.py (hiện bị disable)
 main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/player/'
 
-
+def disable_event():
+    pass  
 def filePath():
     anh = "captured_image.png"
 
@@ -51,7 +53,7 @@ class LoginRegisterMenu:
         self.password_entry = tk.Entry(self.frame, show="*")  # Trường nhập mật khẩu
         self.login_button = tk.Button(self.frame, text="Login", command=self.login)  # Nút đăng nhập
         self.switch_button = tk.Button(self.frame, text="Don't have one? Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
-        self.open_button = tk.Button(self.frame,text="Other choice? Browse...",command = self.open_image)
+        # self.open_button = tk.Button(self.frame,text="Other choice? Browse...",command = self.open_image)
         self.emptyname_error = tk.Label(self.frame,text="Error! Name must be filled!")
         
         # Đóng gói các widget vào frame
@@ -63,10 +65,9 @@ class LoginRegisterMenu:
         self.password_entry.pack()
         self.login_button.pack()
         self.switch_button.pack()
-        self.open_button.pack()
+        # self.open_button.pack()
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
-
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
         if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
@@ -114,11 +115,11 @@ class LoginRegisterMenu:
         self.repeat_password_entry.pack()  # Đóng gói trường nhập liệu vào frame
         self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
         self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
-        self.open_button.pack_forget()
+        # self.open_button.pack_forget()
         self.emptyname_error.pack_forget()
         self.login_button.pack()  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
-        self.open_button.pack() # Đóng gói nút mở ảnh vào frame
+        # self.open_button.pack() # Đóng gói nút mở ảnh vào frame
 
     # Hàm chuyển đổi sang chế độ đăng nhập
     def switch_to_login(self):
@@ -129,12 +130,12 @@ class LoginRegisterMenu:
         self.repeat_password_entry.pack_forget()  # Loại bỏ trường nhập liệu khỏi frame
         self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
         self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
-        self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi frame
+        # self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi frame
         self.emptyname_error.pack_forget()
         self.login_button.pack()  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
-        self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
-    # Hàm dùng để mở ảnh 
+        # self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
+    '''# Hàm dùng để mở ảnh 
     def open_image(self):
         
         file_path = filedialog.askopenfilename(filetypes=[('Image Files', '*.jpg')])
@@ -164,11 +165,12 @@ class LoginRegisterMenu:
                     print("Confirm!")
                     
             else:
-                self.emptyname_error.pack(pady = 10)
-                   
+                self.emptyname_error.pack(pady = 10)'''
+           
 # Tạo một cửa sổ gốc
 root = tk.Tk()
 root.wm_iconbitmap('assets/icon/ic_launcher.png')
+root.protocol("WM_DELETE_WINDOW", disable_event)
 root.title("Animoney RaceTrack - Login")
 # Tạo một đối tượng LoginRegisterMenu và truyền cửa sổ gốc vào hàm khởi tạo
 app = LoginRegisterMenu(root)
