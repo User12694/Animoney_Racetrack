@@ -1,0 +1,66 @@
+import pygame  # Import thư viện pygame
+import sys  # Import thư viện sys
+
+class RedLine:  # Tạo class RedLine
+    def __init__(self, screen, speed=2):  # Hàm khởi tạo
+        self.screen = screen  # Lưu trữ đối tượng screen
+        self.speed = speed  # Lưu trữ tốc độ di chuyển của đường
+        self.x = 0  # Vị trí ban đầu của đường
+
+    def update(self):  # Hàm cập nhật trạng thái của đường
+        pygame.draw.line(self.screen, (255, 0, 0), (self.x, 0), (self.x, self.screen.get_height()), 20)  # Vẽ đường
+        self.x += self.speed  # Cập nhật vị trí của đường
+        if self.x > self.screen.get_width():  # Nếu đường đã chạy qua bên phải cửa sổ
+            self.x = 0  # Đặt lại vị trí của đường
+            return True  # Trả về True để thông báo rằng đường đã chạy qua bên phải cửa sổ
+        return False  # Trả về False nếu đường chưa chạy qua bên phải cửa sổ
+
+class Overlay:  # Tạo class Overlay
+    def __init__(self, screen):  # Hàm khởi tạo
+        self.screen = screen  # Lưu trữ đối tượng screen
+        self.font = pygame.font.Font(None, 36)  # Tạo font chữ
+        self.exit_button = pygame.Rect(0, 0, 200, 50)  # Tạo nút Exit
+        self.exit_button.center = (self.screen.get_width() // 2, self.screen.get_height() // 2)  # Đặt vị trí cho nút Exit
+
+    def update(self):  # Hàm cập nhật trạng thái của Overlay
+        self.screen.fill((0, 0, 0))  # Xóa màn hình
+        text = self.font.render("Complete", 1, (10, 10, 10))  # Tạo chữ "Complete"
+        self.screen.blit(text, (self.screen.get_width() // 2 - text.get_width() // 2, self.screen.get_height() // 2 - text.get_height() // 2 - self.exit_button.height // 2))  # Vẽ chữ "Complete" lên màn hình
+        pygame.draw.rect(self.screen, (255, 0, 0), self.exit_button, 0)  # Vẽ nút Exit
+        text = self.font.render("Exit", 1, (10, 10, 10))  # Tạo chữ "Exit"
+        self.screen.blit(text, (self.screen.get_width() // 2 - text.get_width() // 2, self.screen.get_height() // 2 + text.get_height() // 2))  # Vẽ chữ "Exit" lên nút Exit
+
+def main():  # Hàm main
+    pygame.init()  # Khởi tạo pygame
+    screen = pygame.display.set_mode((1920, 1080))  # Tạo cửa sổ với kích thước 1920x1080
+    clock = pygame.time.Clock()  # Tạo đối tượng clock để giới hạn FPS
+    red_line = RedLine(screen)  # Tạo đối tượng red_line
+    overlay = None  # Khởi tạo overlay là None
+
+    while True:  # Vòng lặp chính
+        for event in pygame.event.get():  # Xử lý các sự kiện
+            if event.type == pygame.QUIT:  # Nếu sự kiện là QUIT (nhấn nút đóng cửa sổ)
+                pygame.quit()  # Thoát pygame
+                sys.exit()  # Thoát chương trình
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:  # Nếu sự kiện là nhấn nút cách
+                if overlay is None:  # Nếu overlay là None
+                    overlay = Overlay(screen)  # Tạo đối tượng overlay
+                else:  # Nếu overlay không phải là None
+                    overlay = None  # Đặt overlay về None
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Nếu sự kiện là nhấn chuột trái
+                if overlay is not None and overlay.exit_button.collidepoint(pygame.mouse.get_pos()):  # Nếu overlay không phải là None và chuột đang ở trên nút Exit
+                    pygame.quit()  # Thoát pygame
+                    sys.exit()  # Thoát chương trình
+
+        if overlay is None:  # Nếu overlay là None
+            screen.fill((0, 0, 0))  # Xóa màn hình
+            if red_line.update():  # Cập nhật trạng thái của red_line, nếu red_line đã chạy qua bên phải cửa sổ
+                overlay = Overlay(screen)  # Tạo đối tượng overlay
+        else:  # Nếu overlay không phải là None
+            overlay.update()  # Cập nhật trạng thái của overlay
+
+        pygame.display.flip()  # Cập nhật màn hình
+        clock.tick(60)  # Giới hạn FPS là 60
+
+if __name__ == "__main__":
+    main()  # Gọi hàm main
