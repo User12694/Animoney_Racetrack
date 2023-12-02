@@ -16,7 +16,7 @@ login_lock = False
 img_label = None
 # confirm_button = None Nút xác nhận được gắn hàm kiểm tra trong FindPicture.py (hiện bị disable)
 main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/player/'
-
+bg_color = "#2b95d1"
 def disable_event():
     pass  
 def filePath():
@@ -29,7 +29,6 @@ def filePath():
     print("Đuôi file:", duoi_file)
     imgpath = f'{ten}.{duoi_file}'
     return imgpath
-
 # Định nghĩa lớp LoginRegisterMenu
 class LoginRegisterMenu:
     # Hàm khởi tạo
@@ -38,18 +37,18 @@ class LoginRegisterMenu:
         self.img_label = None
         self.img_display = None
         self.confirm_button = None
-        logo = Image.open("assets/icon/ic_launcher.png")
+        logo = Image.open("assets/icon/banner.png")
         self.logo = ImageTk.PhotoImage(logo)
         self.root.geometry('400x600')  # Đặt kích thước cửa sổ
-        self.frame = tk.Frame(self.root)  # Tạo một frame để chứa các widget
+        self.frame = tk.Frame(self.root,bg=bg_color)  # Tạo một frame để chứa các widget
         self.frame.pack()  # Đóng gói frame vào cửa sổ
 
         # Tạo các widget và đóng gói chúng vào frame
         self.game_logo = tk.Label(self.frame, image=self.logo)
-        self.username_label = tk.Label(self.frame, text="Username")  # Nhãn cho trường nhập tên người dùng
-        self.note_label = tk.Label(self.frame,text="(If you login by face, username must be filled)")
+        self.username_label = tk.Label(self.frame, text="Username", bg=bg_color)  # Nhãn cho trường nhập tên người dùng
+        self.note_label = tk.Label(self.frame,text="(If you login by face, username must be filled)",bg=bg_color)
         self.username_entry = tk.Entry(self.frame)  # Trường nhập tên người dùng
-        self.password_label = tk.Label(self.frame, text="Password")  # Nhãn cho trường nhập mật khẩu
+        self.password_label = tk.Label(self.frame, text="Password",bg=bg_color)  # Nhãn cho trường nhập mật khẩu
         self.password_entry = tk.Entry(self.frame, show="*")  # Trường nhập mật khẩu
         self.login_button = tk.Button(self.frame, text="Login", command=self.login)  # Nút đăng nhập
         self.switch_button = tk.Button(self.frame, text="Don't have one? Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
@@ -63,7 +62,7 @@ class LoginRegisterMenu:
         self.username_entry.pack()
         self.password_label.pack()
         self.password_entry.pack()
-        self.login_button.pack()
+        self.login_button.pack(pady=10)
         self.switch_button.pack()
         # self.open_button.pack()
     # Hàm xử lý sự kiện đăng nhập
@@ -110,7 +109,7 @@ class LoginRegisterMenu:
         self.login_button.config(text="Register", command=self.register)  # Thay đổi nút đăng nhập thành nút đăng ký
         self.switch_button.config(text="Already have an account? Login", command=self.switch_to_login)  # Thay đổi nút chuyển đổi thành nút đăng nhập
         self.note_label.config(text="(If you register by face, username must be filled.)")
-        self.repeat_password_label = tk.Label(self.frame, text="Repeat Password")  # Tạo nhãn cho trường nhập lại mật khẩu
+        self.repeat_password_label = tk.Label(self.frame, text="Repeat Password",bg=bg_color)  # Tạo nhãn cho trường nhập lại mật khẩu
         self.repeat_password_entry = tk.Entry(self.frame, show="*")  # Tạo trường nhập lại mật khẩu
         self.repeat_password_label.pack()  # Đóng gói nhãn vào frame
         self.repeat_password_entry.pack()  # Đóng gói trường nhập liệu vào frame
@@ -118,7 +117,7 @@ class LoginRegisterMenu:
         self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
         # self.open_button.pack_forget()
         self.emptyname_error.pack_forget()
-        self.login_button.pack()  # Đóng gói nút đăng nhập vào frame
+        self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
         # self.open_button.pack() # Đóng gói nút mở ảnh vào frame
 
@@ -133,7 +132,7 @@ class LoginRegisterMenu:
         self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
         # self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi frame
         self.emptyname_error.pack_forget()
-        self.login_button.pack()  # Đóng gói nút đăng nhập vào frame
+        self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
         # self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
     '''# Hàm dùng để mở ảnh 
@@ -167,12 +166,13 @@ class LoginRegisterMenu:
                     
             else:
                 self.emptyname_error.pack(pady = 10)'''
-           
+
 # Tạo một cửa sổ gốc
 root = tk.Tk()
 root.wm_iconbitmap('assets/icon/ic_launcher.png')
-root.protocol("WM_DELETE_WINDOW", disable_event)
+# root.protocol("WM_DELETE_WINDOW", disable_event)
 root.title("Animoney RaceTrack - Login")
+root.config(bg=bg_color)
 # Tạo một đối tượng LoginRegisterMenu và truyền cửa sổ gốc vào hàm khởi tạo
 app = LoginRegisterMenu(root)
 # Bắt đầu vòng lặp sự kiện của cửa sổ gốc
