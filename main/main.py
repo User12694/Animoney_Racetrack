@@ -1,10 +1,5 @@
 from GameUtilities import *
 
-#Hàm tạo ảnh
-def CreateImg(Address):
-    Img = pygame.image.load(Address).convert_alpha()
-    return Img
-
 # #Hàm viết chữ
 # def WriteText(Text, Font, Color, x, y):
 #     Txt = Font.render(Text, False, Color)
@@ -16,25 +11,11 @@ scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
 scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
 
 #Lucky box
-activateLuckyBox = False
-luckyBox_Pos = random.randint(150, 400)
-luckyBox_Effect = random.randint(0, 2)
-luckyBox = CreateImg("assets/item/luckyBox.png")
-luckyBox_Box = luckyBox.get_rect(midbottom = (luckyBox_Pos, 300))
-
-#Âm thanh
-VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-VOLUME_INDEX = 4
-Victory_sound_Play = True
-pygame.mixer.music.load('assets/sounds/Panorama.wav')
-pygame.mixer.music.play(loops = -1)
-
-#Ảnh
-Background = CreateImg('assets/background/background.png')
-
-#Trạng thái game
-STAGE = ["GamePlay", "Pause"]
-STAGE_INDEX = 0
+# activateLuckyBox = False
+# luckyBox_Pos = random.randint(150, 400)
+# luckyBox_Effect = random.randint(0, 2)
+# luckyBox = CreateImg("assets/item/luckyBox.png")
+# luckyBox_Box = luckyBox.get_rect(midbottom = (luckyBox_Pos, 300))
 
 # #Các trạng thái
 # Char1_TempSpeed = Speed[0]
@@ -51,9 +32,6 @@ STAGE_INDEX = 0
 # DizzyTime = 60
 # DizzyTimeConst = DizzyTime
 # ActivateDizzy = False
-
-#Quit
-Running = True
 
 #Đây là main loop
 def main():
@@ -173,8 +151,7 @@ def main():
                 #Bảng tiền
                 pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
                 screen.blit(scoreBoard, scoreBoard_Box)
-                
-
+            #Tạm dừng trò chơi
             case "Pause":
                 screen.fill('black')
                 #Countinue button

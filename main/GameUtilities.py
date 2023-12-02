@@ -16,10 +16,25 @@ screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZAB
 KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
 KieuChu2 = pygame.font.SysFont('arial', 40, bold=True)
 
+#Âm thanh
+VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+VOLUME_INDEX = 4
+Victory_sound_Play = True
+pygame.mixer.music.load('assets/sounds/Panorama.wav')
+pygame.mixer.music.play(loops = -1)
+
+#Ảnh
+Background = pygame.image.load('assets/background/background.png').convert_alpha()
+
 
 #Chọn map
 MAPS = [0, 1, 2, 3, 4]
 MAP_INDEX = 0
+
+#Trạng thái game
+Running = True
+STAGE = ["GamePlay", "Pause"]
+STAGE_INDEX = 0
 
 #Các ảnh cần dùng đến
 #1. Nhân vật (Đặt tên theo dạng Char#Map#_#)
