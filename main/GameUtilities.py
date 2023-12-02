@@ -121,10 +121,10 @@ class IG_Object(pygame.sprite.Sprite):
         self.image = self.pic
         self.rect= self.image.get_rect(topleft = (x, y))
     def move(self):
-        self.rect.x -= 2
-        if self.rect.right <= 0:
-            self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
-            self.kill()
+        if self.name == "ChuChay":
+            self.rect.x -= 2
+            if self.rect.right <= 0:
+                self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
     def update(self):
         if self.name == "ChuChay":
             self.move()
