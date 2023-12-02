@@ -1,4 +1,4 @@
-import sys, pygame, random
+import pygame, random
 import pygame_menu
 from LoginSignup import *
 
@@ -8,7 +8,7 @@ pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
-WINDOW_SIZES = [(800, 500), (1920, 1080)]
+WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (1920, 1080)]
 WINDOW_SIZE_INDEX = 0
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 

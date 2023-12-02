@@ -33,6 +33,7 @@ scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0
 # DizzyTimeConst = DizzyTime
 # ActivateDizzy = False
 
+
 #Đây là main loop
 def main():
     global Running
@@ -157,13 +158,13 @@ def main():
                 #Countinue button
                 Countinue_Button = KieuChu2.render("Continue", False, "white")
                 Countinue_Button_Box = Countinue_Button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
-                pygame.draw.rect(screen, "white", Countinue_Button_Box, 6, 10)
+                pygame.draw.rect(screen, "white", Countinue_Button_Box, 2, 10)
                 screen.blit(Countinue_Button, (Countinue_Button_Box))
                 
                 #Quit button
                 Quit_Button = KieuChu2.render("Quit", False, "white")
                 Quit_Button_Box = Quit_Button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2 + 70))
-                pygame.draw.rect(screen, "white", Quit_Button_Box, 6, 10)
+                pygame.draw.rect(screen, "white", Quit_Button_Box, 2, 10)
                 screen.blit(Quit_Button, (Quit_Button_Box))
 
                 for event in pygame.event.get():
@@ -180,10 +181,10 @@ def main():
         #Chuyển trạng thái game
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                Running = False
             if event.type == pygame.VIDEORESIZE:
                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                WINDOW_SIZE_INDEX = 1
             # Nhấn phím ESC sẽ kích hoạt Pause
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -194,4 +195,5 @@ def main():
 
         pygame.display.update()
         clock.tick(60)
+    pygame.quit()
 main()
