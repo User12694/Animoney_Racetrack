@@ -5,19 +5,13 @@ def CreateImg(Address):
     Img = pygame.image.load(Address).convert_alpha()
     return Img
 
-#Hàm viết chữ
-def WriteText(Text, Font, Color, x, y):
-    Txt = Font.render(Text, False, Color)
-    screen.blit(Txt, (x, y))
-
-#Chữ chạy (Chủ yếu để trang trí)
-KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
-ChuChay1_surface = KieuChu1.render("THIS IS GROUP 12'S AMAZING RACE GAME!!!", False, (255, 102, 0))
-ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
+# #Hàm viết chữ
+# def WriteText(Text, Font, Color, x, y):
+#     Txt = Font.render(Text, False, Color)
+#     screen.blit(Txt, (x, y))
 
 #Chữ các thứ
 Player_money = 0
-KieuChu2 = pygame.font.SysFont('Verdana', 40, bold=True)
 scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
 scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
 
@@ -31,7 +25,6 @@ luckyBox_Box = luckyBox.get_rect(midbottom = (luckyBox_Pos, 300))
 #Âm thanh
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 VOLUME_INDEX = 4
-Victory_sound = pygame.mixer.Sound('assets/sounds/Victorious.ogg')
 Victory_sound_Play = True
 pygame.mixer.music.load('assets/sounds/Panorama.wav')
 pygame.mixer.music.play(loops = -1)
@@ -69,14 +62,13 @@ def main():
     global WINDOW_SIZE_INDEX
     global login_lock
     while Running:
+        #Chỉnh âm lượng
+        pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
+
         # Check đăng nhập
         if not login_lock:
             Running = False
 
-        #nhạc nền + âm lượng
-        Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
-
-        
         #Trạng thái game
         global STAGE_INDEX
         
@@ -84,11 +76,10 @@ def main():
             case "GamePlay":
                 #Ảnh nền
                 screen.blit(Background,(0,0))
-                FinishLine = object("FinishLine", 0, WINDOW_SIZES[WINDOW_SIZE_INDEX] * 0.9, "assets/terrains/FinishLine.png")
-                FinishLine.update()
-                object_group.draw(screen)
+                IG_Objects.draw(screen)
+                IG_Objects.update()
+
                 #Nhân vật
-                
                 Char1.draw(screen)
                 # Char2.draw(screen)
                 # Char3.draw(screen)
@@ -102,14 +93,20 @@ def main():
                 # Char5.update()
 
                 #Nhân vật + nhạc khi win (test)
-                # global Victory_sound_Play
-                # if Char1_Box.x > FinishLine_Box.x:
-                #     Char1Map1_Run = False
-                #     if Victory_sound_Play:
-                #         pygame.mixer.music.stop()
-                #         pygame.mixer.music.unload()
-                #         Victory_sound.play()
-                #         Victory_sound_Play = False
+                global Victory_sound_Play
+                FinishLine_Pass1 = FinishLine_Pass(Char1, IG_Objects)
+                # FinishLine_Pass2 = FinishLine_Pass(Char2, IG_Objects)
+                # FinishLine_Pass3 = FinishLine_Pass(Char3, IG_Objects)
+                # FinishLine_Pass4 = FinishLine_Pass(Char4, IG_Objects)
+                # FinishLine_Pass5 = FinishLine_Pass(Char5, IG_Objects)
+
+                if FinishLine_Pass1: #or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5
+                    if Victory_sound_Play:
+                        pygame.mixer.music.stop()
+                        pygame.mixer.music.unload()
+                        pygame.mixer.music.load('assets/sounds/Victorious.ogg')
+                        pygame.mixer.music.play(loop = 0)
+                        Victory_sound_Play = False
                         
 
                 # #Lucky box
@@ -178,11 +175,6 @@ def main():
                 screen.blit(scoreBoard, scoreBoard_Box)
                 
 
-                #Chữ chạy
-                screen.blit(ChuChay1_surface, ChuChay1_Box)
-                ChuChay1_Box.x -= 2
-                if ChuChay1_Box.right <= 0:
-                    ChuChay1_Box.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
             case "Pause":
                 screen.fill('black')
                 #Countinue button

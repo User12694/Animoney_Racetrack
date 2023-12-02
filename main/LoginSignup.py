@@ -74,6 +74,7 @@ class LoginRegisterMenu:
             with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
                 if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
                     tk.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
+                    global login_lock
                     login_lock = True
                     self.root.quit()  # Thoát chương trình
                 else:
