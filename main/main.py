@@ -73,7 +73,7 @@ def main():
     global WINDOW_SIZE_INDEX
     while Running:
         # Check đăng nhập
-        if not login_lock:
+        if login_lock:
             Running = False
 
         #nhạc nền + âm lượng

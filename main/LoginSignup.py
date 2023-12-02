@@ -16,9 +16,6 @@ img_label = None
 confirm_button = None
 main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/player/'
 
-# Định nghĩa hàm đóng cửa sổ
-def close_window():
-    root.destroy()
 
 def filePath():
     anh = "captured_image.png"
@@ -69,6 +66,7 @@ class LoginRegisterMenu:
         self.open_button.pack()
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
+
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
         if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
