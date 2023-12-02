@@ -90,7 +90,7 @@ class player(pygame.sprite.Sprite):
 
     def move(self):
         if self.run:
-            self.x += self.speed
+            self.rect.x += self.speed
 
     def update(self):
         self.animation()
@@ -135,7 +135,7 @@ IG_Objects.add(IG_Object('ChuChay', WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0, 'None
 
 def FinishLine_Pass(player, IG_Objects):
     for IG_Object in IG_Objects:
-        if IG_Object.name == "FinishLine" and pygame.sprite.spritecollide(player.sprite, IG_Objects, False):
-            player.run = False
+        if IG_Object.name == "FinishLine" and player.sprite.rect.x > IG_Object.rect.x:
+            player.sprite.run = False
             return True
     return False

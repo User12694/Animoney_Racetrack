@@ -105,7 +105,7 @@ def main():
                         pygame.mixer.music.stop()
                         pygame.mixer.music.unload()
                         pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-                        pygame.mixer.music.play(loop = 0)
+                        pygame.mixer.music.play(loops = 0)
                         Victory_sound_Play = False
                         
 
