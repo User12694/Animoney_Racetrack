@@ -12,7 +12,6 @@ def Browse():
     for player_directory_name in os.listdir(main_directory_path):
         player_directory_path = os.path.join(main_directory_path, player_directory_name)
 
-        
         # Kiểm tra xem đường dẫn hiện tại có phải là thư mục không
         if os.path.isdir(player_directory_path):
             # Duyệt qua tất cả các file trong thư mục con
