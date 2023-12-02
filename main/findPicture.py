@@ -6,6 +6,9 @@ main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/pl
 
 # Duyệt qua tất cả các thư mục con trong thư mục chính
 def Browse():
+    image_list = []  # Danh sách chứa các ảnh
+    image_path_list = []  # Danh sách chứa các đường dẫn đến các tệp ảnh
+
     for player_directory_name in os.listdir(main_directory_path):
         player_directory_path = os.path.join(main_directory_path, player_directory_name)
 
@@ -20,5 +23,10 @@ def Browse():
 
                     # Mở file ảnh và lưu vào biến
                     image = Image.open(image_path)
-                    print(f'Found image: {image_path}')      
-image = Browse()
+
+                    # Thêm ảnh và đường dẫn đến danh sách tương ứng
+                    image_list.append(image)
+                    image_path_list.append(image_path)
+
+    print(f'Found {len(image_list)} images')
+    return image_list, image_path_list
