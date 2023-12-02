@@ -32,21 +32,16 @@ Char1Map1 = ['assets/characters/Char1Map1_1.png', 'assets/characters/Char1Map1_2
 #Nhân vật
 CharsMap1 = [Char1Map1]
 Speed = [2, 2, 2, 2, 2]
-Char1_Run = True
-Char2_Run = True
-Char3_Run = True
-Char4_Run = True
-Char5_Run = True
 
 #Các class
 class player(pygame.sprite.Sprite):
-    def __init__(self, speed, x, y, number, run, image):
+    def __init__(self, speed, x, y, number, image):
         super().__init__()
         self.speed = speed
         self.x = x
         self.y = y
         self.number = number
-        self.run = run
+        self.run = True
         self.count_run = 0
         self.image= pygame.image.load(image).convert_alpha()
         self.rect= self.image.get_rect(bottom = (x, y))
@@ -106,14 +101,15 @@ class object(pygame.sprite.Sprite):
             self.rect= self.image.get_rect(topleft = (x, y))
 
 Char1 = pygame.sprite.GroupSingle()
-Char1.add(player(Speed[0], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.5, 1, Char1_Run, CharsMap1[0][0]))
+Char1.add(player(Speed[0], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.5, 1, CharsMap1[0][0]))
 # Char2 = pygame.sprite.GroupSingle()
-# Char2.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 2, Char2_Run, CharsMap1[0][0]))
+# Char2.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 2, CharsMap1[0][0]))
 # Char3 = pygame.sprite.GroupSingle()
-# Char3.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 3, Char3_Run, CharsMap1[0][0]))
+# Char3.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 3, CharsMap1[0][0]))
 # Char4 = pygame.sprite.GroupSingle()
-# Char4.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 4, Char4_Run, CharsMap1[0][0]))
+# Char4.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 4, CharsMap1[0][0]))
 # Char5 = pygame.sprite.GroupSingle()
-# Char5.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 5, Char5_Run, CharsMap1[0][0]))
+# Char5.add(player(Speed[1], WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.6, 5, CharsMap1[0][0]))
 
 object_group = pygame.sprite.Group()
+object_group.add(object('FinishLine', WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.1, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.5, 'assets/terrains/FinishLine.png'))
