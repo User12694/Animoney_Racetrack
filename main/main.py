@@ -39,10 +39,6 @@ pygame.mixer.music.play(loops = -1)
 #Ảnh
 Background = CreateImg('assets/background/background.png')
 
-#FinishLine(Test)
-FinishLine = CreateImg('assets/terrains/FinishLine.png')
-FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.9, 0))
-
 #Trạng thái game
 STAGE = ["GamePlay", "Pause"]
 STAGE_INDEX = 0
@@ -71,9 +67,10 @@ def main():
     global Running
     global screen
     global WINDOW_SIZE_INDEX
+    global login_lock
     while Running:
         # Check đăng nhập
-        if login_lock:
+        if not login_lock:
             Running = False
 
         #nhạc nền + âm lượng
@@ -87,8 +84,9 @@ def main():
             case "GamePlay":
                 #Ảnh nền
                 screen.blit(Background,(0,0))
-                screen.blit(FinishLine, FinishLine_Box)
-
+                FinishLine = object("FinishLine", 0, WINDOW_SIZES[WINDOW_SIZE_INDEX] * 0.9, "assets/terrains/FinishLine.png")
+                FinishLine.update()
+                object_group.draw(screen)
                 #Nhân vật
                 
                 Char1.draw(screen)
@@ -96,6 +94,12 @@ def main():
                 # Char3.draw(screen)
                 # Char4.draw(screen)
                 # Char5.draw(screen)
+
+                Char1.update()
+                # Char2.update()
+                # Char3.update()
+                # Char4.update()
+                # Char5.update()
 
                 #Nhân vật + nhạc khi win (test)
                 # global Victory_sound_Play
@@ -182,7 +186,7 @@ def main():
             case "Pause":
                 screen.fill('black')
                 #Countinue button
-                Countinue_Button = KieuChu2.render("Countinue", False, "white")
+                Countinue_Button = KieuChu2.render("Continue", False, "white")
                 Countinue_Button_Box = Countinue_Button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
                 pygame.draw.rect(screen, "white", Countinue_Button_Box, 6, 10)
                 screen.blit(Countinue_Button, (Countinue_Button_Box))
