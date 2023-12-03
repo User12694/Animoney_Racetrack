@@ -1,4 +1,4 @@
-from GameUtilities import *
+from GameInit import *
 
 #Đây là main loop
 def main():
