@@ -14,6 +14,7 @@ global VOLUME_INDEX
 VOLUME_INDEX = 4
 global present_volume
 present_volume = VOLUME[VOLUME_INDEX]
+global menu_track
 #Quy định màu mặc định cho nút
 button_color = (12, 53, 106) 
 #Quy định các đối tượng dùng để tạo nút bấm cho menu
@@ -69,13 +70,11 @@ class PressedTime:
         if event.type == pygame.KEYDOWN:
             self.count = self.count + 1
 #Minh họa cho class chính. Có thể thay thế bằng bất kì đối tượng hay chương trình nào
-#
 class MainloopClass:
     def __init__(self):
         self.active = True
         self.x_position = 20 
         
-
     def draw(self, screen):
         pygame.draw.line(screen, (255, 0, 0), (self.x_position, 20), (self.x_position, 1060), 5)
         self.x_position += 5
@@ -148,12 +147,16 @@ class VolumeSettingClass:
         self.minusVol_button = Button(805,480,50,50,'-') #Các nút +, - để tăng giảm âm lượng
         self.plusVol_button = Button(935,480,50,50,'+')
         self.display_volume_label = Label((805 + 935) / 2,480,50,50, f"{present_volume * 100}") # Trường hiển thị âm lượng hiện tại
-        self.color = (73, 73, 73) 
+        
         self.isMute = False #Các biến khai báo. Ở đây là biến xác định xem có đang tắt âm hay không
         #Các khai báo cho xác định âm lượng của âm thanh
         self.volume_list = VOLUME 
         self.volume = present_volume
         self.previous_volume = self.volume
+        #Các khai báo cho màu
+        self.color = (12, 53, 106) 
+        self.highlighted_color = (240, 178, 39)
+        self.muted_color = (179,19,18)
     #Hàm vẽ các đối tượng trên màn hình
     def draw(self, screen):
         #Vẽ lớp phủ hình chữ nhật kích thước bằng kích thước cửa sổ hiện hành
@@ -200,39 +203,50 @@ class VolumeSettingClass:
             # Hàm kiểm tra xem nút Mute có được nhấn hay không:     
             if self.mute_button.isOver(pos):
                 if self.isMute == False:
-                    self.isMute = True
+                    self.isMute = True #Trả về True cho isMute rồi thực hiện lệnh setvolume về 0
                     if self.isMute:
                         self.mute_button.text = 'Muted' 
+                        self.mute_button.color = self.muted_color
                         self.volume = present_volume #Lưu trữ giá trị âm lượng
                         present_volume = 0
+                        self.display_volume_label.text = "0" #Đưa giá trị âm lượng về 0
                         pygame.mixer.music.set_volume(present_volume)
+                #Kiểm tra xem liệu có nhấn lại nút tắt âm hay nhấn nút cộng trừ hay không
                 elif self.isMute == True:
                     self.isMute = False
                     if not self.isMute:
                         self.mute_button.text = 'Mute'
+                        self.mute_button.color = self.color
                         present_volume=self.volume  # Khôi phục giá trị âm lượng
+                        self.display_volume_label.text = f'{present_volume * 100}' #Khôi phục giá trị hiển thị âm lượng hiện tại
                         pygame.mixer.music.set_volume(present_volume)    
         # Kiểm tra xem có đang rê chuột trên nút hay không
         if event.type == pygame.MOUSEMOTION:
             #Cấu trúc chung của nhóm này là khi phát hiện con trở nằm trên thuộc tính nút, nút sẽ đổi sang màu vàng, ngược lại thì giữ nguyên
             if self.esc_button.isOver(pos):
-                self.esc_button.color = (240, 178, 39)
+                self.esc_button.color = self.highlighted_color
             else:
-                self.esc_button.color = (12, 53, 106)
+                self.esc_button.color = self.color
             if self.mute_button.isOver(pos):
-                self.mute_button.color = (240, 178, 39)
+                self.mute_button.color = self.highlighted_color
             else:
-                self.mute_button.color = (12, 53, 106)
+                if self.mute_button.text == "Muted":
+                    self.mute_button.color = self.muted_color
+                elif self.mute_button.text == "Mute":
+                    self.mute_button.color = self.color
         return self
-
+#Quy định đối tượng màn hình cài đặt kích thước cửa sổ
 class WindowModeSettingClass:
     def __init__(self):
-        self.label1 = Label(835, 300, 125, 50, 'Window Mode')
-        self.button1 = Button(835, 360, 125, 50, 'Window')
-        self.label2 = Label(835, 420, 125, 50, 'Screen Ratio')
-        self.button2 = Button(835, 480, 125, 50, '1920x1080')
-        self.esc_button = Button(235,150,60,50,'Back')
-
+        #Khởi tạo các thuộc tính
+        self.label1 = Label(835, 300, 125, 50, 'Window Mode') # Dòng chữ "Window Mode"
+        self.button1 = Button(835, 360, 125, 50, 'Window') # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
+        self.label2 = Label(835, 420, 125, 50, 'Screen Ratio') # Dòng chữ "Screen Ratio"
+        self.button2 = Button(835, 480, 125, 50, '1920x1080') # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
+        self.esc_button = Button(235,150,60,50,'Back') # Nút quay về
+        self.color = (12, 53, 106)
+        self.highlighted_color = (240, 178, 39)
+    #Vẽ các thuộc tính lên bề mặt
     def draw(self, screen):
         pygame.draw.rect(screen,(44,150,210),pygame.Rect(0,0,1920,1080))
         self.label1.draw(screen)
@@ -240,10 +254,13 @@ class WindowModeSettingClass:
         self.label2.draw(screen)
         self.button2.draw(screen)
         self.esc_button.draw(screen)
-
+    #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
+        #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
+        #Kiểm tra xem có nhấn chuột không
         if event.type == pygame.MOUSEBUTTONDOWN:
+            #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.button1.isOver(pos):
                 # Thêm mã để thay đổi chế độ cửa sổ tại đây
                 pass
@@ -251,35 +268,40 @@ class WindowModeSettingClass:
                 # Thêm mã để thay đổi tỷ lệ màn hình tại đây
                 pass
             if self.esc_button.isOver(pos):
-                return SettingClass()
+                return SettingClass() #Trả về màn hình cài đặt
+        # Kiểm tra xem có đang rê chuột trên nút hay không
         if event.type == pygame.MOUSEMOTION:
+            #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
+            # Điểm chung của các thuộc tính ở đây là: Nếu được rê chuột lên thì chuyển thành màu vàng, không thì trả về màu hiện tại
             if self.button1.isOver(pos):
-                self.button1.color = (240, 178, 39)
+                self.button1.color =  self.highlighted_color
             else:
-                self.button1.color = (12, 53, 106)
+                self.button1.color = self.color
             if self.button2.isOver(pos):
-                self.button2.color = (240, 178, 39)
+                self.button2.color = self.highlighted_color
             else:
-                self.button2.color = (12, 53, 106)
+                self.button2.color = self.color
             if self.esc_button.isOver(pos):
-                self.esc_button.color = (240, 178, 39)
+                self.esc_button.color = self.highlighted_color
             else:
-                self.esc_button.color = (12, 53, 106)
+                self.esc_button.color = self.color
         return self
-
+# Lớp menu chính
 class MenuClass: 
+    #Khởi tạo các thuộc tính
     def __init__(self):
-        self.playButton = Button(835, 450, 125, 50, 'Play game')
-        self.settingsButton = Button(835, 530, 125, 50, 'Settings')
-        self.quitButton = Button(835, 610, 125, 50, 'Quit')
-
+        self.playButton = Button(835, 450, 125, 50, 'Play game') # Nút có dòng chữ "Play game"
+        self.settingsButton = Button(835, 530, 125, 50, 'Settings') # Nút có dòng chữ "Settings"
+        self.quitButton = Button(835, 610, 125, 50, 'Quit') # Nút có dòng chữ "Quit"
+        self.color = (12, 53, 106)
+        self.highlighted_color = (240, 178, 39)
+    #Vẽ các thuộc tính lên màn hình
     def draw(self, screen):
-        
         pygame.draw.rect(screen,(44,150,210),pygame.Rect(0,0,1920,1080))
         self.playButton.draw(screen)
         self.settingsButton.draw(screen)
         self.quitButton.draw(screen)
-
+    # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
         pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -292,25 +314,29 @@ class MenuClass:
                 sys.exit()
         if event.type == pygame.MOUSEMOTION:
             if self.playButton.isOver(pos):
-                self.playButton.color = (240, 178, 39)
+                self.playButton.color = self.highlighted_color
             else:
-                self.playButton.color = (12, 53, 106)
+                self.playButton.color = self.color
             if self.settingsButton.isOver(pos):
-                self.settingsButton.color = (240, 178, 39)
+                self.settingsButton.color = self.highlighted_color
             else:
-                self.settingsButton.color = (12, 53, 106)
+                self.settingsButton.color = self.color
             if self.quitButton.isOver(pos):
-                self.quitButton.color = (240, 178, 39)
+                self.quitButton.color = self.highlighted_color
             else:
-                self.quitButton.color = (12, 53, 106)
+                self.quitButton.color = self.color
         return self
 class PauseClass:
     def __init__(self):
+        self.continueLabel = Label(835, 250, 125, 50, 'Want to continue?')
         self.continueButton = Button(835, 300, 125, 50, 'Continue')
         self.quitButton = Button(835, 360, 125, 50, 'Quit')
+        self.color = (12, 53, 106)
+        self.highlighted_color = (240, 178, 39)
 
     def draw(self, screen):
         pygame.draw.rect(screen,(44,150,210),pygame.Rect(0,0,1920,1080))
+        self.continueLabel.draw(screen)
         self.continueButton.draw(screen)
         self.quitButton.draw(screen)
 
@@ -323,13 +349,13 @@ class PauseClass:
                 return QuitConfirmClass()
         if event.type == pygame.MOUSEMOTION:
             if self.continueButton.isOver(pos):
-                self.continueButton.color = (240, 178, 39)
+                self.continueButton.color = self.highlighted_color
             else:
-                self.continueButton.color = (12, 53, 106)
+                self.continueButton.color = self.color
             if self.quitButton.isOver(pos):
-                self.quitButton.color = (240, 178, 39)
+                self.quitButton.color = self.highlighted_color
             else:
-                self.quitButton.color = (12, 53, 106)
+                self.quitButton.color = self.color
         return self
 
 class QuitConfirmClass:
@@ -337,6 +363,8 @@ class QuitConfirmClass:
         self.label = Label(835, 300, 125, 50, 'Want to back the Menu Screen?')
         self.yesButton = Button(835, 360, 125, 50, 'Yes')
         self.noButton = Button(835, 420, 125, 50, 'No')
+        self.color = (12, 53, 106)
+        self.highlighted_color = (240, 178, 39)
 
     def draw(self, screen):
         pygame.draw.rect(screen,(44,150,210),pygame.Rect(0,0,1920,1080))
@@ -353,66 +381,39 @@ class QuitConfirmClass:
                 return PauseClass()
         if event.type == pygame.MOUSEMOTION:
             if self.yesButton.isOver(pos):
-                self.yesButton.color = (240, 178, 39)
+                self.yesButton.color = self.highlighted_color
             else:
-                self.yesButton.color = (12, 53, 106)
+                self.yesButton.color = self.color
             if self.noButton.isOver(pos):
-                self.noButton.color = (240, 178, 39)
+                self.noButton.color = self.highlighted_color
             else:
-                self.noButton.color = (12, 53, 106)
+                self.noButton.color = self.color
         return self
-
-class VolumeSlider:
-    def __init__(self, x, y, width, height):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = (73, 73, 73)
-        self.slider_rect = pygame.Rect(x, y, width // 10, height)
-        self.slider_color = (189, 189, 189)
-        self.dragging = False
-        self.volume = 0.5
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
-        pygame.draw.rect(screen, self.slider_color, self.slider_rect)
-
-    def update(self, event):
-        pos = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.slider_rect.collidepoint(event.pos):
-                self.dragging = True
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self.dragging = False
-        if event.type == pygame.MOUSEMOTION:
-            if self.dragging:
-                x, _ = event.pos
-                x = min(max(x, self.rect.left), self.rect.right - self.slider_rect.width) #Chỉ trả về giá trị quan trọng là x, giá trị biến còn lại không quan tâm
-                self.slider_rect.x = x
-                self.volume = (x - self.rect.left) / (self.rect.width - self.slider_rect.width)
-                pygame.mixer.music.set_volume(self.volume)
 
 def main(): #Hàm chính của vòng lặp
     #Khởi tạo pygame và pygame.mixer để chạy vòng lặp với tạo mixer cho nhạc
     pygame.init()
     pygame.mixer.init()
-    menu_track = pygame.mixer.music.load(my_sound)
-    pygame.mixer.music.play()
-    pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
-    screen = pygame.display.set_mode((1920, 1080))
-    clock = pygame.time.Clock()
+    menu_track = pygame.mixer.music.load(my_sound) #Load nhạc
+    pygame.mixer.music.play() #Lên nhạc
+    pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX]) #Đặt âm lượng mặc định
+    screen = pygame.display.set_mode((1920, 1080)) #Đặt cửa sổ mặc định
+    clock = pygame.time.Clock() #Đặt đồng hồ
+    #Lớp phủ xuất hiện đầu tiên chính là màn hình cài đặt
     current_class = MenuClass()
+#Vòng lặp chính
+    while True:  # Vòng lặp vô hạn, chương trình sẽ chạy cho đến khi có sự kiện thoát
+        for event in pygame.event.get():  # Duyệt qua tất cả sự kiện đang chờ xử lý trong hàng đợi sự kiện của Pygame
+            if event.type == pygame.QUIT:  # Nếu sự kiện là loại thoát (như nhấn nút đóng cửa sổ)
+                pygame.quit()  # Thoát khỏi Pygame
+                sys.exit()  # Thoát khỏi chương trình
+            current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            current_class = current_class.update(event)
+        screen.fill((0, 0, 0))  # Điền màn hình với màu đen
+        current_class.draw(screen)  # Vẽ đối tượng hiện tại lên màn hình
 
-        screen.fill((0, 0, 0))
-        current_class.draw(screen)
-
-        pygame.display.flip()
-        clock.tick(60)
+        pygame.display.flip()  # Cập nhật toàn bộ cửa sổ
+        clock.tick(60)  # Đảm bảo chương trình chạy không quá 60 khung hình/giây
 
 if __name__ == "__main__":
     main()
