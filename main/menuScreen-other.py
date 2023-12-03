@@ -1,5 +1,6 @@
 import pygame
 import sys
+
 # Quy định kích thước cửa sổ
 WINDOWS_SCREEN_SIZE = [(1920,1080),(1366,768)]
 global WINDOWS_INDEX
@@ -136,26 +137,28 @@ class SettingClass: #Khởi tạo các nút, label và Button.
 class VolumeSettingClass:
     #Khai báo các thuộc tính của class: 
     def __init__(self):
-        #Khởi tạo các thuộc tính. Chú ý 
+        # Khởi tạo các thuộc tính. 
+        # Chú ý các thành phần như âm lượng hiện tại và chỉ số âm lượng được đánh dấu toàn cục. Sau này sẽ thêm các thuộc tính WINDOW
         global present_volume
         global VOLUME_INDEX
         self.label1 = Label(835,300,125,50,'Mute Volume') # Dòng chữ 'Mute Volume' 
         self.esc_button = Button(235,150,60,50,'Back')    # Nút có chữ 'Back'
         self.mute_button = Button(835,360,125,50, "Mute") # Nút có chữ 'Mute'
-        self.label2 = Label(835,420,125,50,'Volume')     
-        self.minusVol_button = Button(805,480,50,50,'-')
+        self.label2 = Label(835,420,125,50,'Volume')     # dòng chữ "Volume"
+        self.minusVol_button = Button(805,480,50,50,'-') #Các nút +, - để tăng giảm âm lượng
         self.plusVol_button = Button(935,480,50,50,'+')
-        self.display_volume_label = Label((805 + 935) / 2,480,50,50, f"{present_volume * 100}")
-        self.color = (73, 73, 73)
-        self.isMute = False
-        self.mute_count = 0
-        self.volume_list = VOLUME
-        self.volume_index = VOLUME_INDEX
+        self.display_volume_label = Label((805 + 935) / 2,480,50,50, f"{present_volume * 100}") # Trường hiển thị âm lượng hiện tại
+        self.color = (73, 73, 73) 
+        self.isMute = False #Các biến khai báo. Ở đây là biến xác định xem có đang tắt âm hay không
+        #Các khai báo cho xác định âm lượng của âm thanh
+        self.volume_list = VOLUME 
         self.volume = present_volume
         self.previous_volume = self.volume
-        
+    #Hàm vẽ các đối tượng trên màn hình
     def draw(self, screen):
+        #Vẽ lớp phủ hình chữ nhật kích thước bằng kích thước cửa sổ hiện hành
         pygame.draw.rect(screen,(44,150,210),pygame.Rect(0,0,WINDOWS_SCREEN_SIZE[WINDOWS_INDEX][0],WINDOWS_SCREEN_SIZE[WINDOWS_INDEX][1]))
+        #Vẽ các thuộc tính khác đã nêu
         self.label1.draw(screen)
         self.label2.draw(screen)
         self.esc_button.draw(screen)
@@ -163,35 +166,44 @@ class VolumeSettingClass:
         self.plusVol_button.draw(screen)
         self.minusVol_button.draw(screen)
         self.display_volume_label.draw(screen)
-
+    #Cập nhật các trạng thái. Khai báo biến toàn cục là để giữ trạng thái âm lượng
     def update(self, event):
+        #Đánh dấu toàn cục cho thuộc tính
         global present_volume
         global VOLUME_INDEX
+        #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
+        #Kiểm tra xem có nhấn chuột không
         if event.type == pygame.MOUSEBUTTONDOWN:
+            #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.esc_button.isOver(pos):
-                return SettingClass()
-            if self.plusVol_button.isOver(pos):
+                return SettingClass() #Nếu nhấn chuột vào esc_button, trả về màn hình cài đặt
+            #Kiểm tra xem các nút cộng, trừ, có được nhấn hay không
+            if self.plusVol_button.isOver(pos): 
+                # Kiểm tra chỉ số VOLUME_INDEX. Chừa giá trị biên phải ra vì khi điều kiện thỏa mãn 
+                # VOLUME_INDEX + 1 vượt quá chỉ số max của list
                 if 0 <= VOLUME_INDEX < len(self.volume_list) -1:
-                    VOLUME_INDEX += 1
-                    self.volume = self.volume_list[VOLUME_INDEX]
+                    VOLUME_INDEX += 1 #Lưu trữ các giá trị ra biến toàn cục
+                    self.volume = self.volume_list[VOLUME_INDEX] #gán giá trị cho biến volume của class
                     present_volume = self.volume
-                    pygame.mixer.music.set_volume(present_volume)
+                    pygame.mixer.music.set_volume(present_volume) #Đặt âm lượng theo giá trị vừa gán
                     self.display_volume_label.text = f'{present_volume * 100}'
             if self.minusVol_button.isOver(pos):
+                # Kiểm tra chỉ số VOLUME_INDEX. Chừa giá trị biên trái ra vì khi điều kiện thỏa mãn 
+                # VOLUME_INDEX - 1 vượt quá chỉ số min của list
                 if len(self.volume_list) - 1 >= VOLUME_INDEX > 0 :
-                    self.volume_index -= 1
-                    VOLUME_INDEX -= 1
-                    self.volume = self.volume_list[VOLUME_INDEX]
+                    VOLUME_INDEX -= 1 #Lưu trữ các giá trị ra biến toàn cục
+                    self.volume = self.volume_list[VOLUME_INDEX] #gán giá trị cho biến volume của class
                     present_volume = self.volume
-                    pygame.mixer.music.set_volume(present_volume)
-                    self.display_volume_label.text = f'{present_volume * 100}'
-                
+                    pygame.mixer.music.set_volume(present_volume) #Đặt âm lượng theo giá trị vừa gán
+                    self.display_volume_label.text = f'{present_volume * 100}' #Đặt nội dung label hiển thị âm lượng là âm lượng hiện tại
+            # Hàm kiểm tra xem nút Mute có được nhấn hay không:     
             if self.mute_button.isOver(pos):
                 if self.isMute == False:
                     self.isMute = True
                     if self.isMute:
-                        self.mute_button.text = 'Muted'
+                        self.mute_button.text = 'Muted' 
+                        self.volume = present_volume #Lưu trữ giá trị âm lượng
                         present_volume = 0
                         pygame.mixer.music.set_volume(present_volume)
                 elif self.isMute == True:
@@ -200,8 +212,9 @@ class VolumeSettingClass:
                         self.mute_button.text = 'Mute'
                         present_volume=self.volume  # Khôi phục giá trị âm lượng
                         pygame.mixer.music.set_volume(present_volume)    
-        
+        # Kiểm tra xem có đang rê chuột trên nút hay không
         if event.type == pygame.MOUSEMOTION:
+            #Cấu trúc chung của nhóm này là khi phát hiện con trở nằm trên thuộc tính nút, nút sẽ đổi sang màu vàng, ngược lại thì giữ nguyên
             if self.esc_button.isOver(pos):
                 self.esc_button.color = (240, 178, 39)
             else:
