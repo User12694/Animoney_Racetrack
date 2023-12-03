@@ -2,6 +2,7 @@ from GameUtilities import *
 
 #Đây là main loop
 def main():
+    #chạy menu
     menu()
 main()
 

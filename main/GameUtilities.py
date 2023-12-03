@@ -153,43 +153,43 @@ def FinishLine_Pass(player, IG_Objects):
     return False
 
 #Class trò chơi dùng để hiển thị menu, check keys các thứ (Đang làm chưa xài)
-class Main():
-    #Khởi tao + các biến sử dụng trong class
-    global login_lock, Victory_sound_Play, screen
-    def __init__(self):
-        pygame.init()
-        self.Running = True
-        self.Play = True
-        self.ESC = False
+# class Main():
+#     #Khởi tao + các biến sử dụng trong class
+#     global login_lock, Victory_sound_Play, screen
+#     def __init__(self):
+#         pygame.init()
+#         self.Running = True
+#         self.Play = True
+#         self.ESC = False
 
-    def loop(self):
-        while self.Running:
-            self.check_events()
-            if self.Play:
-                self.Playing()
-            if self.ESC:
-                self.Pause()
-            pygame.display.update()
-            clock.tick(60)
-        pygame.quit()
+#     def loop(self):
+#         while self.Running:
+#             self.check_events()
+#             if self.Play:
+#                 self.Playing()
+#             if self.ESC:
+#                 self.Pause()
+#             pygame.display.update()
+#             clock.tick(60)
+#         pygame.quit()
             
-    #Kiểm tra điều kiện
-    def check_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.Running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.ESC = True
+#     #Kiểm tra điều kiện
+#     def check_events(self):
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 self.Running = False
+#             if event.type == pygame.KEYDOWN:
+#                 if event.key == pygame.K_ESCAPE:
+#                     self.ESC = True
 
-            # Resize cửa sổ nếu cần
-            # if event.type == pygame.VIDEORESIZE:
-            #     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            #     WINDOW_SIZE_INDEX = 1
+#             Resize cửa sổ nếu cần
+#             if event.type == pygame.VIDEORESIZE:
+#                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+#                 WINDOW_SIZE_INDEX = 1
             
-            # Code để tìm vị trí cụ thể trên màn hình
-            # if event.type == pygame.MOUSEMOTION:
-            #     print(event.pos)
+#             Code để tìm vị trí cụ thể trên màn hình
+#             if event.type == pygame.MOUSEMOTION:
+#                 print(event.pos)
     
                     
 
@@ -253,8 +253,8 @@ def menu():
 
         screen.blit(Background, (0, 0))
 
-        menu_title = KieuChu1.render("MENU", False, "white")
-        menu_title_rect = menu_title.get_rect(center = (screen.get_width() / 2 - 100, screen.get_height() / 2 - 100))
+        menu_title = KieuChu1.render("MENU", False, "black")
+        menu_title_rect = menu_title.get_rect(center = (screen.get_width() / 2, screen.get_height() / 2 - 50))
         
         screen.blit(menu_title, menu_title_rect)
 
@@ -272,7 +272,7 @@ def menu():
                 if PLAY_BUTTON.CheckClick(mouse_pos):
                     Play()
                 if SETTINGS_BUTTON.CheckClick(mouse_pos):
-                    pass
+                    Settings()
                 if QUIT_BUTTON.CheckClick(mouse_pos):
                     pygame.quit()
                     sys.exit()
@@ -284,17 +284,15 @@ def Settings():
     #check events
     while True:
         mouse_pos = pygame.mouse.get_pos()
+        screen.blit(Background,(0,0))
 
-        screen.fill("white")
-
-        Settings_text = KieuChu1.render("This is the OPTIONS screen.", True, "Black")
-        Settings_text_rect = Settings_text.get_rect(center=(640, 260))
+        Settings_text = KieuChu1.render("SETTINGS", True, "Black")
+        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
         screen.blit(Settings_text, Settings_text_rect)
 
-        Return_To_Menu = Button(image="assets/icon/button", pos=(640, 460), text_input="BACK", font=KieuChu1, base_color="Black", hovering_color="Green")
-
+        Return_To_Menu = Button(image= pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2), textIn="BACK", font=KieuChu1, base_color="Black", active_color="white")
         Return_To_Menu.DoiMau(mouse_pos)
-        Return_To_Menu.update(screen)
+        Return_To_Menu.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -302,7 +300,7 @@ def Settings():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if Return_To_Menu.CheckClick(mouse_pos):
-                    menu()
+                    return
 
         pygame.display.update()
         clock.tick(60)
@@ -404,9 +402,52 @@ def Play():
         #     Char1Map1_Speed = Char1_TempSpeed
         #     DizzyTime = DizzyTimeConst
         #     ActivateDizzy = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Pause_Game()
 
         #Bảng tiền
         pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
         screen.blit(scoreBoard, scoreBoard_Box)
+
+        pygame.display.update()
+        clock.tick(60)
+
+def Pause_Game():
+     while True:
+        screen.blit(Background,(0,0))
+
+        Settings_text = KieuChu1.render("PAUSE GAME", True, "Black")
+        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
+        screen.blit(Settings_text, Settings_text_rect)
+
+        mouse_pos = pygame.mouse.get_pos()
+        RETURN_TO_GAME = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2), textIn="CONTINUE", font=KieuChu1, base_color="Black", active_color="white")
+        QUIT = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2 + 50), textIn="QUIT", font=KieuChu1, base_color="Black", active_color="white")
+
+        BUTTONS = [RETURN_TO_GAME, QUIT]
+
+        for button in BUTTONS:
+            button.DoiMau(mouse_pos)
+            button.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if RETURN_TO_GAME.CheckClick(mouse_pos):
+                    return
+                if QUIT.CheckClick(mouse_pos):
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return
+
         pygame.display.update()
         clock.tick(60)
