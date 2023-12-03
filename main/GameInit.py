@@ -1,53 +1,4 @@
-import pygame_menu, pygame, random, sys
-from LoginSignup import *
 from GameFunctions import *
-
-#Khởi tạo các thứ
-pygame.init()
-pygame.display.set_caption("Race game")
-clock = pygame.time.Clock()
-
-#Âm thanh
-VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-VOLUME_INDEX = 4
-
-#Chọn map
-MAPS = [0, 1, 2, 3, 4]
-MAP_INDEX = 0
-
-#Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
-WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0]]
-WINDOW_SIZE_INDEX = 0
-screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
-
-#Kiểu chữ
-KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
-KieuChu2 = pygame.font.SysFont('arial', 40, bold=True)
-
-#Chữ các thứ
-Player_money = 0
-scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
-scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
-
-#Ảnh
-Background = pygame.image.load('assets/background/background.png').convert_alpha()
-
-#Các ảnh cần dùng đến
-#1. Nhân vật (Đặt tên theo dạng Char#Map#_#)
-Char1Map1 = ['assets/characters/Char1Map1_1.png', 'assets/characters/Char1Map1_2.png',
-            'assets/characters/Char1Map1_3.png', 'assets/characters/Char1Map1_4.png']
-# Char2Map1 = ['assets/characters/Char2Map1_1.png', 'assets/characters/Char2Map_2.png',
-#             'assets/characters/Char2Map1_3.png', 'assets/characters/Char2Map1_4.png']
-# Char3Map1 = ['assets/characters/Char3Map1_1.png', 'assets/characters/Char3Map_2.png',
-#             'assets/characters/Char3Map1_3.png', 'assets/characters/Char3Map1_4.png']
-# Char4Map1 = ['assets/characters/Char4Map1_1.png', 'assets/characters/Char4Map_2.png',
-#             'assets/characters/Char4Map1_3.png', 'assets/characters/Char4Map1_4.png']
-# Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map_2.png',
-#             'assets/characters/Char5Map1_3.png', pygame.image.load('assets/characters/Char5Map1_4.png']
-
-#Nhân vật
-CharsMap1 = [Char1Map1]
-Speed = [2, 2, 2, 2, 2]
 
 #Các nhân vật trong game
 class player(pygame.sprite.Sprite):
@@ -108,15 +59,15 @@ class player(pygame.sprite.Sprite):
         self.move()
 
 Char1 = pygame.sprite.GroupSingle()
-Char1.add(player(speed = Speed[0], pos = (screen.get_width() * 0.1, screen.get_height() * 0.3), number = 0, image = CharsMap1[0][0]))
+Char1.add(player(speed = Speed[0], pos = (screen.get_width() * 0.1, screen.get_height() * 0.55), number = 0, image = CharsMap1[0][0]))
 # Char2 = pygame.sprite.GroupSingle()
-# Char2.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.45), number = 1, image = CharsMap1[0][0]))
+# Char2.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.66), number = 1, image = CharsMap1[0][0]))
 # Char3 = pygame.sprite.GroupSingle()
-# Char3.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.6), number = 2, image = CharsMap1[0][0]))
+# Char3.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.76), number = 2, image = CharsMap1[0][0]))
 # Char4 = pygame.sprite.GroupSingle()
-# Char4.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.75), number = 3, image = CharsMap1[0][0]))
+# Char4.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.87), number = 3, image = CharsMap1[0][0]))
 # Char5 = pygame.sprite.GroupSingle()
-# Char5.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.9), number = 4, image = CharsMap1[0][0]))
+# Char5.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.98), number = 4, image = CharsMap1[0][0]))
 
 #Các đối tượng trong game
 class IG_Object(pygame.sprite.Sprite):
@@ -125,24 +76,47 @@ class IG_Object(pygame.sprite.Sprite):
         self.x = pos[0]
         self.y = pos[1]
         self.name = name
-        if self.name == "FinishLine":
+        if self.name == "LuckyBox":
             self.pic= pygame.image.load(image).convert_alpha()
+            self.image = self.pic
+            self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         elif self.name == "ChuChay":
             self.pic = KieuChu1.render("THIS IS GROUP 12'S AMAZING RACE GAME!!!", False, (255, 102, 0))
-        self.image = self.pic
-        self.rect= self.image.get_rect(topleft = (self.x, self.y))
+            self.image = self.pic
+            self.rect= self.image.get_rect(topleft = (self.x, self.y))
     def move(self):
         if self.name == "ChuChay":
             self.rect.x -= 2
             if self.rect.right <= 0:
-                self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+                self.rect.x = screen.get_width()
     def update(self):
         if self.name == "ChuChay":
             self.move()
 
+#Add object
 IG_Objects = pygame.sprite.Group()
-IG_Objects.add(IG_Object(name = 'FinishLine', pos = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.9, 0), image = 'assets/terrains/FinishLine.png'))
-IG_Objects.add(IG_Object( name = 'ChuChay', pos = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0), image = 'None'))
+LuckyBox_Spawn = [0.2, 0.25, 0.3, 4.5, 4.5, 0.5, 0.55, 0.6, 0.6, 0.62, 0.65, 0.66, 0.7, 0.75, 0.75, 0.8, 0.8, 0.8] #Các biến để random vị trí lucky box
+IG_Objects.add(IG_Object(name = 'LuckyBox',
+                         pos = (screen.get_width() * random.choice(LuckyBox_Spawn),
+                         screen.get_height() * 0.55),
+                         image = 'assets/item/luckybox.png'))
+IG_Objects.add(IG_Object(name = 'LuckyBox', 
+                         pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
+                         screen.get_height() * 0.66), 
+                         image = 'assets/item/luckybox.png'))
+IG_Objects.add(IG_Object(name = 'LuckyBox', 
+                         pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
+                         screen.get_height() * 0.76), 
+                         image = 'assets/item/luckybox.png'))
+IG_Objects.add(IG_Object(name = 'LuckyBox', 
+                         pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
+                         screen.get_height() * 0.87), 
+                         image = 'assets/item/luckybox.png'))
+IG_Objects.add(IG_Object(name = 'LuckyBox', 
+                         pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
+                         screen.get_height() * 0.98), 
+                         image = 'assets/item/luckybox.png'))
+IG_Objects.add(IG_Object( name = 'ChuChay', pos = (screen.get_width(), 0), image = 'None'))
 
 #Class nút
 class Button():
@@ -188,6 +162,7 @@ class Button():
 #Menu khi mới vào trò chơi
 def menu():
     #Các loại nút
+    print(screen.get_width(), screen.get_height())
     PLAY_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 50), textIn = "PLAY", font = KieuChu1, base_color= "black", active_color = "white")
     SETTINGS_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 100), textIn = "SETTINGS", font = KieuChu1, base_color= "black", active_color = "white")
     QUIT_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 150), textIn = "QUIT", font = KieuChu1, base_color = "black", active_color = "white")
@@ -262,7 +237,17 @@ def Play():
     while True:
         
         #Ảnh nền
-        screen.blit(Background,(0,0))
+        if MAP_INDEX == 1:
+             screen.blit(MAPS[0],(0,0))
+        if MAP_INDEX == 2:
+             screen.blit(MAPS[1],(0,0))
+        if MAP_INDEX == 3:
+             screen.blit(MAPS[2],(0,0))
+        if MAP_INDEX == 4:
+             screen.blit(MAPS[3],(0,0))
+        if MAP_INDEX == 5:
+             screen.blit(MAPS[4],(0,0))
+
         IG_Objects.draw(screen)
         IG_Objects.update()
 
@@ -280,11 +265,11 @@ def Play():
         # Char5.update()
 
         #Nhân vật + nhạc khi win (test)
-        FinishLine_Pass1 = FinishLine_Pass(Char1, IG_Objects) #Gọi hàm ở GameFunctions
-        # FinishLine_Pass2 = FinishLine_Pass(Char2, IG_Objects)
-        # FinishLine_Pass3 = FinishLine_Pass(Char3, IG_Objects)
-        # FinishLine_Pass4 = FinishLine_Pass(Char4, IG_Objects)
-        # FinishLine_Pass5 = FinishLine_Pass(Char5, IG_Objects)
+        FinishLine_Pass1 = FinishLine_Pass(Char1) #Gọi hàm ở GameFunctions
+        # FinishLine_Pass2 = FinishLine_Pass(Char2)
+        # FinishLine_Pass3 = FinishLine_Pass(Char3)
+        # FinishLine_Pass4 = FinishLine_Pass(Char4)
+        # FinishLine_Pass5 = FinishLine_Pass(Char5)
 
         if FinishLine_Pass1 and Victory_sound_Play: #or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5
             pygame.mixer.music.load('assets/sounds/Victorious.ogg')
@@ -361,8 +346,8 @@ def Play():
                     Pause_Game()
 
         #Bảng tiền
-        pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
-        screen.blit(scoreBoard, scoreBoard_Box)
+        # pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
+        # screen.blit(scoreBoard, scoreBoard_Box)
 
         pygame.display.update()
         clock.tick(60)
