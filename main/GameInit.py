@@ -1,4 +1,60 @@
-from GameFunctions import *
+import pygame_menu, pygame, random, sys
+from LoginSignup import *
+#Khởi tạo các thứ
+pygame.init()
+pygame.display.set_caption("Race game")
+clock = pygame.time.Clock()
+
+#Âm thanh
+VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+VOLUME_INDEX = 4
+
+#Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
+WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0]]
+WINDOW_SIZE_INDEX = 0
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
+
+#Kiểu chữ
+KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
+KieuChu2 = pygame.font.SysFont('arial', 40, bold=True)
+
+#Chữ các thứ
+Player_money = 0
+scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
+scoreBoard_Box = scoreBoard.get_rect(center = (screen.get_width() * 0.13, screen.get_height() * 0.92))
+
+#Ảnh các loại
+Background = pygame.image.load('assets/background/background.png').convert_alpha()
+
+map1 = pygame.image.load('assets/background/map1.png').convert_alpha()
+map1 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map2 = pygame.image.load('assets/background/map2.png').convert_alpha()
+map2 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map3 = pygame.image.load('assets/background/map3.png').convert_alpha()
+map3 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map4 = pygame.image.load('assets/background/map4.png').convert_alpha()
+map4 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map5 = pygame.image.load('assets/background/map5.png').convert_alpha()
+map5 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+MAPS = [map1, map2, map3, map4, map5]
+MAP_INDEX = 1
+
+#Các ảnh cần dùng đến
+#1. Nhân vật (Đặt tên theo dạng Char#Map#_#)
+Char1Map1 = ['assets/characters/Char1Map1_1.png', 'assets/characters/Char1Map1_2.png',
+            'assets/characters/Char1Map1_3.png', 'assets/characters/Char1Map1_4.png']
+Char2Map1 = ['assets/characters/Char2Map1_1.png', 'assets/characters/Char2Map1_2.png',
+            'assets/characters/Char2Map1_3.png', 'assets/characters/Char2Map1_4.png']
+Char3Map1 = ['assets/characters/Char3Map1_1.png', 'assets/characters/Char3Map1_2.png',
+            'assets/characters/Char3Map1_3.png', 'assets/characters/Char3Map1_4.png']
+Char4Map1 = ['assets/characters/Char4Map1_1.png', 'assets/characters/Char4Map1_2.png',
+            'assets/characters/Char4Map1_3.png', 'assets/characters/Char4Map1_4.png']
+Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2.png',
+            'assets/characters/Char5Map1_3.png', 'assets/characters/Char5Map1_4.png']
+
+#Nhân vật
+CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
+Speed = [2.5, 2.5, 2.5, 2.5, 2.5]
 
 #Các nhân vật trong game
 class player(pygame.sprite.Sprite):
@@ -178,236 +234,3 @@ class Button():
 # 3. Update button
 # 	button.update()
 # 	button.DoiMau(pygame.mouse.get_pos())
-
-#Menu khi mới vào trò chơi
-def menu():
-    #Các loại nút
-    PLAY_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 50), textIn = "PLAY", font = KieuChu1, base_color= "black", active_color = "white")
-    SETTINGS_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 100), textIn = "SETTINGS", font = KieuChu1, base_color= "black", active_color = "white")
-    QUIT_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 150), textIn = "QUIT", font = KieuChu1, base_color = "black", active_color = "white")
-    BUTTONS = [PLAY_BUTTON, SETTINGS_BUTTON, QUIT_BUTTON]
-    pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
-    pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
-    pygame.mixer.music.play(loops = -1)
-    while True:
-        # Check đăng nhập
-        if not login_lock:
-            pygame.quit()
-            sys.exit()
-
-        screen.blit(Background, (0, 0))
-
-        menu_title = KieuChu1.render("MENU", False, "black")
-        menu_title_rect = menu_title.get_rect(center = (screen.get_width() / 2, screen.get_height() / 2 - 50))
-        
-        screen.blit(menu_title, menu_title_rect)
-
-        mouse_pos = pygame.mouse.get_pos()
-
-        for button in BUTTONS:
-            button.DoiMau(mouse_pos)
-            button.update()
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BUTTON.CheckClick(mouse_pos):
-                    Play()
-                if SETTINGS_BUTTON.CheckClick(mouse_pos):
-                    Settings()
-                if QUIT_BUTTON.CheckClick(mouse_pos):
-                    pygame.quit()
-                    sys.exit()
-        pygame.display.update()
-        clock.tick(60)
-
-#Tạm dừng trò chơi
-def Settings():
-    #check events
-    while True:
-        mouse_pos = pygame.mouse.get_pos()
-        screen.blit(Background,(0,0))
-
-        Settings_text = KieuChu1.render("SETTINGS", True, "Black")
-        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
-        screen.blit(Settings_text, Settings_text_rect)
-
-        Return_To_Menu = Button(image= pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2), textIn="BACK", font=KieuChu1, base_color="Black", active_color="white")
-        Return_To_Menu.DoiMau(mouse_pos)
-        Return_To_Menu.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if Return_To_Menu.CheckClick(mouse_pos):
-                    return
-
-        pygame.display.update()
-        clock.tick(60)
-
-def Play():
-    pygame.mixer.music.load('assets/sounds/set1.mp3')
-    pygame.mixer.music.play(loops = -1)
-    Victory_sound_Play = True
-    while True:
-        
-        #Ảnh nền
-        if MAP_INDEX == 1:
-             screen.blit(MAPS[0],(0,0))
-        if MAP_INDEX == 2:
-             screen.blit(MAPS[1],(0,0))
-        if MAP_INDEX == 3:
-             screen.blit(MAPS[2],(0,0))
-        if MAP_INDEX == 4:
-             screen.blit(MAPS[3],(0,0))
-        if MAP_INDEX == 5:
-             screen.blit(MAPS[4],(0,0))
-
-        IG_Objects.draw(screen)
-        IG_Objects.update()
-
-        #Nhân vật
-        Char1.draw(screen)
-        Char2.draw(screen)
-        Char3.draw(screen)
-        Char4.draw(screen)
-        Char5.draw(screen)
-
-        Char1.update()
-        Char2.update()
-        Char3.update()
-        Char4.update()
-        Char5.update()
-
-        #Check win + nhạc khi win (test)
-        FinishLine_Pass1 = FinishLine_Pass(Char1) #Gọi hàm ở GameFunctions
-        FinishLine_Pass2 = FinishLine_Pass(Char2)
-        FinishLine_Pass3 = FinishLine_Pass(Char3)
-        FinishLine_Pass4 = FinishLine_Pass(Char4)
-        FinishLine_Pass5 = FinishLine_Pass(Char5)
-
-        if FinishLine_Pass1 and Victory_sound_Play: #or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5
-            pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-            pygame.mixer.music.play(loops = 0)
-            Victory_sound_Play = False
-                
-
-        # #Lucky box
-        # global activateLuckyBox
-
-        # global SlowTime
-        # global ActivateSlow
-
-        # global SpeedTime
-        # global ActivateSpeed
-
-        # global ActivateDizzy
-        # global DizzyTime
-        
-        activate_LuckyBox1 = Lucky_Box(Char1, IG_Objects)
-        activate_LuckyBox2 = Lucky_Box(Char2, IG_Objects)
-        activate_LuckyBox3 = Lucky_Box(Char3, IG_Objects)
-        activate_LuckyBox4 = Lucky_Box(Char4, IG_Objects)
-        activate_LuckyBox5 = Lucky_Box(Char5, IG_Objects)
-
-        # if not activateLuckyBox:
-        #     screen.blit(luckyBox, luckyBox_Box)
-        # if Char1_Box.colliderect(luckyBox_Box):
-        #     if not activateLuckyBox:
-        #         #Kích hoạt hiệu ứng(Tạm)
-        #         match luckyBox_Effect:
-        #             case 0:
-        #                 ActivateSlow = True
-        #             case 1:
-        #                 ActivateSpeed = True
-        #             case 2:
-        #                 ActivateDizzy = True
-
-        #         activateLuckyBox = True
-
-        # global Char1_TempSpeed #Cái này để lưu tốc chạy cơ bản của nhân vật ở ngoài hàm main
-        # global Activated
-
-        # #Làm chậm
-        # if ActivateSlow == True:
-        #     if not Activated:
-        #         Char1Map1_Speed -= 2
-        #         Activated = True
-        #     SlowTime -= 1
-        # if SlowTime == 0:
-        #     SlowTime = SlowTimeConst
-        #     Char1Map1_Speed = Char1_TempSpeed
-        #     ActivateSlow = False
-        
-        # #Tăng tốc
-        # if ActivateSpeed == True:
-        #     if not Activated:
-        #         Char1Map1_Speed += 3
-        #         Activated = True
-        #     SpeedTime -= 1
-        # if SpeedTime == 0:
-        #     SpeedTime = DizzyTimeConst
-        #     Char1Map1_Speed = Char1_TempSpeed
-        #     ActivateSpeed = False
-
-        # #Choáng
-        # if ActivateDizzy == True:
-        #     Char1Map1_Speed = 0
-        #     DizzyTime -= 1
-        # if DizzyTime == 0:
-        #     Char1Map1_Speed = Char1_TempSpeed
-        #     DizzyTime = DizzyTimeConst
-        #     ActivateDizzy = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    Pause_Game()
-
-        #Bảng tiền
-        # pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
-        # screen.blit(scoreBoard, scoreBoard_Box)
-
-        pygame.display.update()
-        clock.tick(60)
-
-def Pause_Game():
-     while True:
-        screen.blit(Background,(0,0))
-
-        Settings_text = KieuChu1.render("PAUSE GAME", True, "Black")
-        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
-        screen.blit(Settings_text, Settings_text_rect)
-        #Các nút ở trong Pause menu
-        mouse_pos = pygame.mouse.get_pos()
-        RETURN_TO_GAME = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2), textIn="CONTINUE", font=KieuChu1, base_color="Black", active_color="white")
-        QUIT = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2 + 50), textIn="QUIT", font=KieuChu1, base_color="Black", active_color="white")
-
-        BUTTONS = [RETURN_TO_GAME, QUIT]
-
-        for button in BUTTONS:
-            button.DoiMau(mouse_pos)
-            button.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if RETURN_TO_GAME.CheckClick(mouse_pos):
-                    return
-                if QUIT.CheckClick(mouse_pos):
-                    pygame.quit()
-                    sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return
-
-        pygame.display.update()
-        clock.tick(60)
