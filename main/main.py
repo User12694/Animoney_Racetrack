@@ -2,6 +2,10 @@ from GameFunctions import *
 
 #Đây là main loop
 def main():
+    global login_lock
+    if not login_lock:
+        pygame.quit()
+        sys.exit()
     #Lớp phủ xuất hiện đầu tiên chính là màn hình cài đặt
     current_class = MenuClass()
     #Vòng lặp chính
