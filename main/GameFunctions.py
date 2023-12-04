@@ -214,14 +214,15 @@ def Pause_Game():
         screen.blit(Background,(0,0))
 
         Settings_text = KieuChu1.render("PAUSE GAME", True, "Black")
-        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
+        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 100))
         screen.blit(Settings_text, Settings_text_rect)
         #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
+        RETURN_TO_MENU = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 - 50), text_base_color="Black", text_active_color="white", textIn="RETURN TO MENU")
         RETURN_TO_GAME = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="CONTINUE")
         QUIT = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 + 50), text_base_color="Black", text_active_color="white", textIn="QUIT")
 
-        BUTTONS = [RETURN_TO_GAME, QUIT]
+        BUTTONS = [RETURN_TO_MENU, RETURN_TO_GAME, QUIT]
 
         for button in BUTTONS:
             button.update(mouse_pos)
@@ -236,6 +237,8 @@ def Pause_Game():
                 if QUIT.CheckClick(mouse_pos):
                     pygame.quit()
                     sys.exit()
+                if RETURN_TO_MENU.CheckClick(mouse_pos):
+                    menu()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return
