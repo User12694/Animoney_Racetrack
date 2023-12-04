@@ -1,1 +1,1 @@
-from LoginSignup import *
+pygame.display.flip()

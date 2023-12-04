@@ -15,8 +15,8 @@ WINDOW_SIZE_INDEX = 0
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 
 #Kiểu chữ
-KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
-KieuChu2 = pygame.font.SysFont('arial', 40, bold=True)
+KieuChu1 = pygame.font.SysFont('./assets/font/SVN-Retron_2000.ttf',60)
+KieuChu2 = pygame.font.SysFont('./assets/font/FVF Fernando 08',60)
 
 #Chữ các thứ
 Player_money = 0
@@ -54,7 +54,10 @@ Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2
 
 #Nhân vật
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
-Speed = [2.5, 2.5, 2.5, 2.5, 2.5]
+Random_Speed = [2, 2, 2.1, 2.2, 2.2, 2.25, 2.3, 2.3]
+Speed = []
+for x in range(5):
+    Speed.append(random.choice(Random_Speed))
 
 #Các nhân vật trong game
 class player(pygame.sprite.Sprite):
@@ -116,31 +119,31 @@ class player(pygame.sprite.Sprite):
 
 Char1 = pygame.sprite.GroupSingle()
 Char1.add(player(speed = Speed[0], 
-                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.55), 
+                 pos = (screen.get_width() * 0.02, screen.get_height() * 0.55), 
                  number = 0, 
                  image = CharsMap1[0][0], 
                  map = 0))
 Char2 = pygame.sprite.GroupSingle()
 Char2.add(player(speed = Speed[1], 
-                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.66), 
+                 pos = (screen.get_width() * 0.02, screen.get_height() * 0.66), 
                  number = 1, 
                  image = CharsMap1[1][0], 
                  map = 0))
 Char3 = pygame.sprite.GroupSingle()
 Char3.add(player(speed = Speed[2], 
-                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.76), 
+                 pos = (screen.get_width() * 0.02, screen.get_height() * 0.76), 
                  number = 2, 
                  image = CharsMap1[2][0], 
                  map = 0))
 Char4 = pygame.sprite.GroupSingle()
 Char4.add(player(speed = Speed[3], 
-                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.87), 
+                 pos = (screen.get_width() * 0.02, screen.get_height() * 0.87), 
                  number = 3, 
                  image = CharsMap1[3][0], 
                  map = 0))
 Char5 = pygame.sprite.GroupSingle()
 Char5.add(player(speed = Speed[4], 
-                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.98), 
+                 pos = (screen.get_width() * 0.02, screen.get_height() * 0.98), 
                  number = 4, 
                  image = CharsMap1[4][0], 
                  map = 0))
@@ -195,39 +198,42 @@ IG_Objects.add(IG_Object(name = 'LuckyBox',
 IG_Objects.add(IG_Object( name = 'ChuChay', pos = (screen.get_width(), 0), image = 'None'))
 
 #Class nút
+BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
 class Button():
-	def __init__(self, image, pos, textIn, font, base_color, active_color):
-		self.image = image
-		self.x = pos[0]
-		self.y = pos[1]
-		self.font = font
-		self.base_color, self.active_color = base_color, active_color
-		self.textIn = textIn
-		self.text = self.font.render(self.textIn, True, self.base_color)
-		if self.image is None:
-			self.image = self.text
-		self.rect = self.image.get_rect(center=(self.x, self.y))
-		self.text_rect = self.text.get_rect(center=(self.x, self.y))
+    def __init__(self, pos, text_base_color, text_active_color, textIn = None, font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 16)):
+        self.image = pygame.image.load(BUTTON_STATE[0]).convert_alpha()
+        self.x = pos[0]
+        self.y = pos[1]
+        self.font = font
+        self.base_color, self.active_color = text_base_color, text_active_color
+        self.textIn = textIn
+        self.text = self.font.render(self.textIn, True, self.base_color)
+        self.text_rect = self.text.get_rect(center=(self.x, self.y))
+        self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
+        self.rect = self.image.get_rect(center=(self.x, self.y))
 
-	def update(self):
-		screen.blit(self.image, self.rect)
-		screen.blit(self.text, self.text_rect)
+    def CheckClick(self, position):
+        if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
+            return True
+        return False
+    
+    def update(self, position):
+        if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
+            self.image = pygame.image.load(BUTTON_STATE[2]).convert_alpha()
+            self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
+            self.text = self.font.render(self.textIn, True, self.active_color)
+        else:
+            self.image = pygame.image.load(BUTTON_STATE[0]).convert_alpha()
+            self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
+            self.text = self.font.render(self.textIn, True, self.base_color)
+        screen.blit(self.image, self.rect)
+        screen.blit(self.text, self.text_rect)
 
-	def CheckClick(self, position):
-		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
-			return True
-		return False
-
-	def DoiMau(self, position):
-		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
-			self.text = self.font.render(self.textIn, True, self.active_color)
-		else:
-			self.text = self.font.render(self.textIn, True, self.base_color)
+    
 
 #Cách xài class button
 # 1. Khởi tạo nút
-# button_surface = pygame.image.load("button.png")
-# button = Button(button_surface, (400, 300), "Button", KieuChu1, "black", "white")
+# button = Button((400, 300), "black", "white", "Chữ", Ảnh)
 # 2. Check click
 #     if event.type == pygame.MOUSEBUTTONDOWN:
 #         button.CheckClick(pygame.mouse.get_pos())

@@ -16,9 +16,9 @@ def FinishLine_Pass(player):
 #Menu khi mới vào trò chơi
 def menu():
     #Các loại nút
-    PLAY_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 50), textIn = "PLAY", font = KieuChu1, base_color= "black", active_color = "white")
-    SETTINGS_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 100), textIn = "SETTINGS", font = KieuChu1, base_color= "black", active_color = "white")
-    QUIT_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 150), textIn = "QUIT", font = KieuChu1, base_color = "black", active_color = "white")
+    PLAY_BUTTON = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 + 50), text_base_color= "black", text_active_color = "white", textIn = "PLAY")
+    SETTINGS_BUTTON = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 + 100), text_base_color= "black", text_active_color = "white", textIn = "SETTINGS")
+    QUIT_BUTTON = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 + 150), text_base_color = "black", text_active_color = "white", textIn = "QUIT")
     BUTTONS = [PLAY_BUTTON, SETTINGS_BUTTON, QUIT_BUTTON]
     pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
     pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
@@ -39,8 +39,7 @@ def menu():
         mouse_pos = pygame.mouse.get_pos()
 
         for button in BUTTONS:
-            button.DoiMau(mouse_pos)
-            button.update()
+            button.update(mouse_pos)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -68,9 +67,8 @@ def Settings():
         Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
         screen.blit(Settings_text, Settings_text_rect)
 
-        Return_To_Menu = Button(image= pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2), textIn="BACK", font=KieuChu1, base_color="Black", active_color="white")
-        Return_To_Menu.DoiMau(mouse_pos)
-        Return_To_Menu.update()
+        Return_To_Menu = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_text_active_color="white", textIn="BACK")
+        Return_To_Menu.update(mouse_pos)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -220,14 +218,13 @@ def Pause_Game():
         screen.blit(Settings_text, Settings_text_rect)
         #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
-        RETURN_TO_GAME = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2), textIn="CONTINUE", font=KieuChu1, base_color="Black", active_color="white")
-        QUIT = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2 + 50), textIn="QUIT", font=KieuChu1, base_color="Black", active_color="white")
+        RETURN_TO_GAME = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="CONTINUE")
+        QUIT = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 + 50), text_base_color="Black", text_active_color="white", textIn="QUIT")
 
         BUTTONS = [RETURN_TO_GAME, QUIT]
 
         for button in BUTTONS:
-            button.DoiMau(mouse_pos)
-            button.update()
+            button.update(mouse_pos)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
