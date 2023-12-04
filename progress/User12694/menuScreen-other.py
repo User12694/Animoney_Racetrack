@@ -189,6 +189,10 @@ class VolumeSettingClass:
                     VOLUME_INDEX += 1 #Lưu trữ các giá trị ra biến toàn cục
                     self.volume = self.volume_list[VOLUME_INDEX] #gán giá trị cho biến volume của class
                     present_volume = self.volume
+                    self.isMute = False
+                    if not self.isMute:
+                        self.mute_button.text = 'Mute'
+                        self.mute_button.color = self.color
                     pygame.mixer.music.set_volume(present_volume) #Đặt âm lượng theo giá trị vừa gán
                     self.display_volume_label.text = f'{present_volume * 100}'
             if self.minusVol_button.isOver(pos):
@@ -198,6 +202,10 @@ class VolumeSettingClass:
                     VOLUME_INDEX -= 1 #Lưu trữ các giá trị ra biến toàn cục
                     self.volume = self.volume_list[VOLUME_INDEX] #gán giá trị cho biến volume của class
                     present_volume = self.volume
+                    self.isMute = False
+                    if not self.isMute:
+                        self.mute_button.text = 'Mute'
+                        self.mute_button.color = self.color
                     pygame.mixer.music.set_volume(present_volume) #Đặt âm lượng theo giá trị vừa gán
                     self.display_volume_label.text = f'{present_volume * 100}' #Đặt nội dung label hiển thị âm lượng là âm lượng hiện tại
             # Hàm kiểm tra xem nút Mute có được nhấn hay không:     
@@ -246,6 +254,7 @@ class WindowModeSettingClass:
         self.esc_button = Button(235,150,60,50,'Back') # Nút quay về
         self.color = (12, 53, 106)
         self.highlighted_color = (240, 178, 39)
+        self.button2_active = True
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, screen):
         pygame.draw.rect(screen,(44,150,210),pygame.Rect(0,0,1920,1080))
@@ -262,10 +271,10 @@ class WindowModeSettingClass:
         if event.type == pygame.MOUSEBUTTONDOWN:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.button1.isOver(pos):
-                # Thêm mã để thay đổi chế độ cửa sổ tại đây
+                #Kiểm tra xem nút đầu tiên có được nhấn hay không
+                self.button2_active = not self.button2_active
                 pass
             if self.button2.isOver(pos):
-                # Thêm mã để thay đổi tỷ lệ màn hình tại đây
                 pass
             if self.esc_button.isOver(pos):
                 return SettingClass() #Trả về màn hình cài đặt
