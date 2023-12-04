@@ -13,32 +13,12 @@ def FinishLine_Pass(player):
         return True
     return False
 
-#Tạm dừng trò chơi
-def Settings(): #Chuẩn bị bỏ
-    #check events
-    while True:
-        screen.blit(Background,(0,0))
-
-        Settings_text = KieuChu1.render("SETTINGS", True, "Black")
-        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 * 0.8))
-        screen.blit(Settings_text, Settings_text_rect)
-
-        Return_To_Menu = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="BACK")
-        Return_To_Menu.update(mouse_pos)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if Return_To_Menu.CheckClick(mouse_pos):
-                    return
-
-        pygame.display.update()
-        clock.tick(60)
 
 #Gameplay
+CheckPass = True
+
 def Play():
+    global CheckPass
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
     Victory_sound_Play = True
@@ -80,9 +60,11 @@ def Play():
         FinishLine_Pass5 = FinishLine_Pass(Char5)
 
         if FinishLine_Pass1 and Victory_sound_Play or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5:
-            pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-            pygame.mixer.music.play(loops = 0)
-            Victory_sound_Play = False
+            if CheckPass:
+                pygame.mixer.music.load('assets/sounds/Victorious.ogg')
+                pygame.mixer.music.play(loops = 0)
+                Victory_sound_Play = False
+                CheckPass = False
                 
         
         activate_LuckyBox1 = Lucky_Box(Char1, IG_Objects)
