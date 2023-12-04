@@ -5,9 +5,10 @@ pygame.init()
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 
-#Âm thanh
+#Màn hình cài đặt âm lượng
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 VOLUME_INDEX = 4
+present_volume = VOLUME[VOLUME_INDEX]
 
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
 WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0]]
@@ -54,10 +55,9 @@ Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2
 
 #Nhân vật
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
-Random_Speed = [2, 2, 2.1, 2.2, 2.2, 2.25, 2.3, 2.3]
 Speed = []
 for x in range(5):
-    Speed.append(random.choice(Random_Speed))
+    Speed.append(random.uniform(2.0, 4.0))
 
 #Các nhân vật trong game
 class player(pygame.sprite.Sprite):
@@ -195,12 +195,12 @@ IG_Objects.add(IG_Object(name = 'LuckyBox',
                          pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
                          screen.get_height() * 0.98), 
                          image = 'assets/item/luckyBox.png'))
-IG_Objects.add(IG_Object( name = 'ChuChay', pos = (screen.get_width(), 0), image = 'None'))
+IG_Objects.add(IG_Object(name = 'ChuChay', pos = (screen.get_width(), 0), image = 'None'))
 
 #Class nút
 BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
 class Button():
-    def __init__(self, pos, text_base_color, text_active_color, textIn = None, font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 16)):
+    def __init__(self, pos, text_base_color, text_active_color, textIn = None, font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 30)):
         self.image = pygame.image.load(BUTTON_STATE[0]).convert_alpha()
         self.x = pos[0]
         self.y = pos[1]
@@ -210,10 +210,13 @@ class Button():
         self.text = self.font.render(self.textIn, True, self.base_color)
         self.text_rect = self.text.get_rect(center=(self.x, self.y))
         self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
-        self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.rect = self.image.get_rect(center=(self.x, self.y * 1.01))
 
     def CheckClick(self, position):
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
+            self.image = pygame.image.load(BUTTON_STATE[1]).convert_alpha()
+            self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
+            pygame.time.wait(200)
             return True
         return False
     
@@ -229,8 +232,6 @@ class Button():
         screen.blit(self.image, self.rect)
         screen.blit(self.text, self.text_rect)
 
-    
-
 #Cách xài class button
 # 1. Khởi tạo nút
 # button = Button((400, 300), "black", "white", "Chữ", Ảnh)
@@ -240,3 +241,22 @@ class Button():
 # 3. Update button
 # 	button.update()
 # 	button.DoiMau(pygame.mouse.get_pos())
+
+#Quy định các thuộc tính chỉ tạo dòng chữ hiển thị trong menu
+class Label: 
+    # Khởi tạo các thuộc tính tương tự như các thuộc tính của Button
+    def __init__(self, x, y, width, height, text=None):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+        self.font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf',40) #Font mặc định
+    # gọi hàm vẽ các Label, gồm các tham số như chính đối tượng Label, cửa sổ màn hình và đường viền, mặc định là None.
+    def draw(self, screen):
+        if self.text: # Kiểm tra xem có text được đưa vào hay không
+            text = self.font.render(self.text, 1, '#ffffff') #Màu text là màu đen, bật khử răng cưa cho text, áp dụng cho tất cả các text trong class
+            screen.blit(text, (self.x + (self.width / 2 - text.get_width() / 2), self.y + (self.height / 2 - text.get_height() / 2)))  #Đưa chữ lên cửa sổ màn hình
+
+#Cách xài class label
+#label = Label(x, y, width, height, "Chữ")

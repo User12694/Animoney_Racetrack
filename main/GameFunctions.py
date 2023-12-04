@@ -13,58 +13,14 @@ def FinishLine_Pass(player):
         return True
     return False
 
-#Menu khi mới vào trò chơi
-def menu():
-    #Các loại nút
-    PLAY_BUTTON = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 + 50), text_base_color= "black", text_active_color = "white", textIn = "PLAY")
-    SETTINGS_BUTTON = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 + 100), text_base_color= "black", text_active_color = "white", textIn = "SETTINGS")
-    QUIT_BUTTON = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 + 150), text_base_color = "black", text_active_color = "white", textIn = "QUIT")
-    BUTTONS = [PLAY_BUTTON, SETTINGS_BUTTON, QUIT_BUTTON]
-    pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
-    pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
-    pygame.mixer.music.play(loops = -1)
-    while True:
-        # Check đăng nhập
-        if not login_lock:
-            pygame.quit()
-            sys.exit()
-
-        screen.blit(Background, (0, 0))
-
-        menu_title = KieuChu1.render("MENU", False, "black")
-        menu_title_rect = menu_title.get_rect(center = (screen.get_width() / 2, screen.get_height() / 2 - 50))
-        
-        screen.blit(menu_title, menu_title_rect)
-
-        mouse_pos = pygame.mouse.get_pos()
-
-        for button in BUTTONS:
-            button.update(mouse_pos)
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BUTTON.CheckClick(mouse_pos):
-                    Play()
-                if SETTINGS_BUTTON.CheckClick(mouse_pos):
-                    Settings()
-                if QUIT_BUTTON.CheckClick(mouse_pos):
-                    pygame.quit()
-                    sys.exit()
-        pygame.display.update()
-        clock.tick(60)
-
 #Tạm dừng trò chơi
-def Settings():
+def Settings(): #Chuẩn bị bỏ
     #check events
     while True:
-        mouse_pos = pygame.mouse.get_pos()
         screen.blit(Background,(0,0))
 
         Settings_text = KieuChu1.render("SETTINGS", True, "Black")
-        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
+        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 * 0.8))
         screen.blit(Settings_text, Settings_text_rect)
 
         Return_To_Menu = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="BACK")
@@ -81,6 +37,7 @@ def Settings():
         pygame.display.update()
         clock.tick(60)
 
+#Gameplay
 def Play():
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
@@ -122,23 +79,11 @@ def Play():
         FinishLine_Pass4 = FinishLine_Pass(Char4)
         FinishLine_Pass5 = FinishLine_Pass(Char5)
 
-        if FinishLine_Pass1 and Victory_sound_Play: #or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5
+        if FinishLine_Pass1 and Victory_sound_Play or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5:
             pygame.mixer.music.load('assets/sounds/Victorious.ogg')
             pygame.mixer.music.play(loops = 0)
             Victory_sound_Play = False
                 
-
-        # #Lucky box
-        # global activateLuckyBox
-
-        # global SlowTime
-        # global ActivateSlow
-
-        # global SpeedTime
-        # global ActivateSpeed
-
-        # global ActivateDizzy
-        # global DizzyTime
         
         activate_LuckyBox1 = Lucky_Box(Char1, IG_Objects)
         activate_LuckyBox2 = Lucky_Box(Char2, IG_Objects)
@@ -146,61 +91,19 @@ def Play():
         activate_LuckyBox4 = Lucky_Box(Char4, IG_Objects)
         activate_LuckyBox5 = Lucky_Box(Char5, IG_Objects)
 
-        # if not activateLuckyBox:
-        #     screen.blit(luckyBox, luckyBox_Box)
-        # if Char1_Box.colliderect(luckyBox_Box):
-        #     if not activateLuckyBox:
-        #         #Kích hoạt hiệu ứng(Tạm)
-        #         match luckyBox_Effect:
-        #             case 0:
-        #                 ActivateSlow = True
-        #             case 1:
-        #                 ActivateSpeed = True
-        #             case 2:
-        #                 ActivateDizzy = True
-
-        #         activateLuckyBox = True
-
-        # global Char1_TempSpeed #Cái này để lưu tốc chạy cơ bản của nhân vật ở ngoài hàm main
-        # global Activated
-
-        # #Làm chậm
-        # if ActivateSlow == True:
-        #     if not Activated:
-        #         Char1Map1_Speed -= 2
-        #         Activated = True
-        #     SlowTime -= 1
-        # if SlowTime == 0:
-        #     SlowTime = SlowTimeConst
-        #     Char1Map1_Speed = Char1_TempSpeed
-        #     ActivateSlow = False
         
-        # #Tăng tốc
-        # if ActivateSpeed == True:
-        #     if not Activated:
-        #         Char1Map1_Speed += 3
-        #         Activated = True
-        #     SpeedTime -= 1
-        # if SpeedTime == 0:
-        #     SpeedTime = DizzyTimeConst
-        #     Char1Map1_Speed = Char1_TempSpeed
-        #     ActivateSpeed = False
-
-        # #Choáng
-        # if ActivateDizzy == True:
-        #     Char1Map1_Speed = 0
-        #     DizzyTime -= 1
-        # if DizzyTime == 0:
-        #     Char1Map1_Speed = Char1_TempSpeed
-        #     DizzyTime = DizzyTimeConst
-        #     ActivateDizzy = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    Pause_Game()
+                    Back_To_Menu = Pause_Game()
+                    if Back_To_Menu:
+                        pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
+                        pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
+                        pygame.mixer.music.play(loops = -1)
+                        return
 
         #Bảng tiền
         # pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
@@ -209,13 +112,10 @@ def Play():
         pygame.display.update()
         clock.tick(60)
 
+#Tạm dừng trò chơi
 def Pause_Game():
      while True:
         screen.blit(Background,(0,0))
-
-        Settings_text = KieuChu1.render("PAUSE GAME", True, "Black")
-        Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 100))
-        screen.blit(Settings_text, Settings_text_rect)
         #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
         RETURN_TO_MENU = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 - 50), text_base_color="Black", text_active_color="white", textIn="RETURN TO MENU")
@@ -238,7 +138,8 @@ def Pause_Game():
                     pygame.quit()
                     sys.exit()
                 if RETURN_TO_MENU.CheckClick(mouse_pos):
-                    menu()
+                    if QuitConfirm():
+                        return True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return
@@ -246,45 +147,186 @@ def Pause_Game():
         pygame.display.update()
         clock.tick(60)
 
-#Class trò chơi dùng để hiển thị menu, check keys các thứ (Đang làm chưa xài)
-# class Main():
-#     #Khởi tao + các biến sử dụng trong class
-#     global login_lock, Victory_sound_Play, screen
-#     def __init__(self):
-#         pygame.init()
-#         self.Running = True
-#         self.Play = True
-#         self.ESC = False
+def QuitConfirm():
+    while True:
+        screen.blit(Background,(0,0))
+        mouse_pos = pygame.mouse.get_pos()
+        #Các nút trong quit confirm
+        Promptlabel = Label(screen.get_width() / 2 * 0.85, screen.get_height() / 2 * 0.7, 125, 50, 'Want to back the Menu Screen?')
+        yesButton = Button(pos=(screen.get_width() / 2 * 1.2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="YES")
+        noButton = Button(pos=(screen.get_width() / 2 * 0.8, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="NO")
 
-#     def loop(self):
-#         while self.Running:
-#             self.check_events()
-#             if self.Play:
-#                 self.Playing()
-#             if self.ESC:
-#                 self.Pause()
-#             pygame.display.update()
-#             clock.tick(60)
-#         pygame.quit()
-            
-#     #Kiểm tra điều kiện
-#     def check_events(self):
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 self.Running = False
-#             if event.type == pygame.KEYDOWN:
-#                 if event.key == pygame.K_ESCAPE:
-#                     self.ESC = True
+        Promptlabel.draw(screen)
+        yesButton.update(mouse_pos)
+        noButton.update(mouse_pos)
 
-#             Resize cửa sổ nếu cần
-#             if event.type == pygame.VIDEORESIZE:
-#                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-#                 WINDOW_SIZE_INDEX = 1
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if yesButton.CheckClick(mouse_pos):
+                    return True
+                if noButton.CheckClick(mouse_pos):
+                    return False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return False
+
+        pygame.display.update()
+        clock.tick(60)
+
+
+# Lớp menu chính
+class MenuClass: 
+    #Khởi tạo các thuộc tính
+    def __init__(self):
+        pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
+        pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
+        pygame.mixer.music.play(loops = -1)
+        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.8), text_base_color= "black", text_active_color = "white", textIn = "PLAY") # Nút có dòng chữ "Play game"
+        self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), text_base_color= "black", text_active_color = "white", textIn = "SETTINGS") # Nút có dòng chữ "Settings"
+        self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color = "black", text_active_color = "white", textIn = "QUIT") # Nút có dòng chữ "Quit"
+    #Vẽ các thuộc tính lên màn hình
+    def draw(self, mouse_pos):
+        screen.blit(Background, (0, 0))
+        self.playButton.update(mouse_pos)
+        self.settingsButton.update(mouse_pos)
+        self.quitButton.update(mouse_pos)
+
+    # Cập nhật các trạng thái của thuộc tính
+    def update(self, event):
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if self.playButton.CheckClick(pos):
+                Play()
+            if self.settingsButton.CheckClick(pos):
+                return SettingClass()
+            if self.quitButton.CheckClick(pos):
+                pygame.quit()
+                sys.exit()
             
-#             Code để tìm vị trí cụ thể trên màn hình
-#             if event.type == pygame.MOUSEMOTION:
-#                 print(event.pos)
+        return self
+
+class SettingClass: #Khởi tạo các nút, label và Button. 
+    def __init__(self):
+        self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.8), text_base_color="Black", text_active_color="white", textIn="SOUND")
+        self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="SCREEN")
+        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color="Black", text_active_color="white", textIn="BACK")
+    #Vẽ các lớp phủ, các nút và chữ
+    def draw(self, mouse_pos):
+        screen.blit(Background,(0,0)) #Tạo một lớp phủ hình chữ nhật kích thước tối đa
+        #Vẽ nút
+        self.soundButton.update(mouse_pos)
+        self.screenButton.update(mouse_pos)
+        self.escButton.update(mouse_pos)
+    #Cập nhật trạng thái của class
+    def update(self, event):
+        mouse_pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            # Kiểm tra các đối tượng như nút chọn Âm lượng, chọn tùy chọn Màn hình, nút thoát; có được nhấn hay không. 
+            # Nếu có thì trả về class tương ứng
+            if self.soundButton.CheckClick(mouse_pos):
+                return VolumeSettingClass()
+            if self.screenButton.CheckClick(mouse_pos):
+                pass
+                # return WindowModeSettingClass()
+            if self.escButton.CheckClick(mouse_pos):
+                return MenuClass()
+        return self
+
+
+class VolumeSettingClass:
+    #Khai báo các thuộc tính của class: 
+    def __init__(self):
+        # Khởi tạo các thuộc tính. 
+        # Chú ý các thành phần như âm lượng hiện tại và chỉ số âm lượng được đánh dấu toàn cục. Sau này sẽ thêm các thuộc tính WINDOW
+        global present_volume, VOLUME_INDEX
+        self.label1 = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2 * 0.4,125,50,'Mute Volume') # Dòng chữ 'Mute Volume'  
+        self.esc_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.5),"black", "white",'Back')    # Nút có chữ 'Back'
+        self.mute_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 0.75),"black", "white", "Mute") # Nút có chữ 'Mute'
+        self.label2 = Label(screen.get_width() / 2 * 0.92, screen.get_height() / 2 * 0.8,125,50,'Volume')     # dòng chữ "Volume"
+        self.minusVol_button = Button((screen.get_width() / 2 * 0.8, screen.get_height() / 2 * 0.85),"black", "white",'-') #Các nút +, - để tăng giảm âm lượng
+        self.plusVol_button = Button((screen.get_width() / 2 * 1.2, screen.get_height() / 2 * 0.85),"black", "white",'+')
+        self.display_volume_label = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2,50,50, f"{present_volume * 100}") # Trường hiển thị âm lượng hiện tại
+        
+        self.isMute = False #Các biến khai báo. Ở đây là biến xác định xem có đang tắt âm hay không
+        #Các khai báo cho xác định âm lượng của âm thanh
+        self.volume_list = VOLUME
+        self.volume = present_volume
+        self.previous_volume = self.volume
+        
+    #Hàm vẽ các đối tượng trên màn hình
+    def draw(self, mouse_pos):
+        #Vẽ lớp phủ hình chữ nhật kích thước bằng kích thước cửa sổ hiện hành
+        screen.blit(Background,(0,0))
+        #Vẽ các thuộc tính khác đã nêu
+        self.label1.draw(screen)
+        self.label2.draw(screen)
+        self.esc_button.update(mouse_pos)
+        self.mute_button.update(mouse_pos)
+        self.plusVol_button.update(mouse_pos)
+        self.minusVol_button.update(mouse_pos)
+        self.display_volume_label.draw(screen)
+    #Cập nhật các trạng thái. Khai báo biến toàn cục là để giữ trạng thái âm lượng
+    def update(self, event):
+        global present_volume
+        global VOLUME_INDEX
+        #Lấy vị trí đầu con trỏ chuột
+        pos = pygame.mouse.get_pos()
+        #Kiểm tra xem có nhấn chuột không
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
+            if self.esc_button.CheckClick(pos):
+                return SettingClass() #Nếu nhấn chuột vào esc_button, trả về màn hình cài đặt
+            #Kiểm tra xem các nút cộng, trừ, có được nhấn hay không
+            if self.plusVol_button.CheckClick(pos): 
+                # Kiểm tra chỉ số VOLUME_INDEX. Chừa giá trị biên phải ra vì khi điều kiện thỏa mãn 
+                # VOLUME_INDEX + 1 vượt quá chỉ số max của list
+                if 0 <= VOLUME_INDEX < len(self.volume_list) -1:
+                    VOLUME_INDEX += 1 #Lưu trữ các giá trị ra biến toàn cục
+                    self.volume = self.volume_list[VOLUME_INDEX] #gán giá trị cho biến volume của class
+                    present_volume = self.volume
+                    self.isMute = False
+                    if not self.isMute:
+                        self.mute_button.textIn = 'Mute'
+                    pygame.mixer.music.set_volume(present_volume) #Đặt âm lượng theo giá trị vừa gán
+                    self.display_volume_label.text = f'{present_volume * 100}'
+            if self.minusVol_button.CheckClick(pos):
+                # Kiểm tra chỉ số VOLUME_INDEX. Chừa giá trị biên trái ra vì khi điều kiện thỏa mãn 
+                # VOLUME_INDEX - 1 vượt quá chỉ số min của list
+                if len(self.volume_list) - 1 >= VOLUME_INDEX > 0 :
+                    VOLUME_INDEX -= 1 #Lưu trữ các giá trị ra biến toàn cục
+                    self.volume = self.volume_list[VOLUME_INDEX] #gán giá trị cho biến volume của class
+                    present_volume = self.volume
+                    self.isMute = False
+                    if not self.isMute:
+                        self.mute_button.textIn = 'Mute'
+                    pygame.mixer.music.set_volume(present_volume) #Đặt âm lượng theo giá trị vừa gán
+                    self.display_volume_label.text = f'{present_volume * 100}' #Đặt nội dung label hiển thị âm lượng là âm lượng hiện tại
+            # Hàm kiểm tra xem nút Mute có được nhấn hay không:     
+            if self.mute_button.CheckClick(pos):
+                if self.isMute == False:
+                    self.isMute = True #Trả về True cho isMute rồi thực hiện lệnh setvolume về 0
+                    if self.isMute:
+                        self.mute_button.textIn = 'Muted' 
+                        self.volume = present_volume #Lưu trữ giá trị âm lượng
+                        present_volume = 0
+                        self.display_volume_label.text = "0" #Đưa giá trị âm lượng về 0
+                        pygame.mixer.music.set_volume(present_volume)
+                #Kiểm tra xem liệu có nhấn lại nút tắt âm hay nhấn nút cộng trừ hay không
+                elif self.isMute == True:
+                    self.isMute = False
+                    if not self.isMute:
+                        self.mute_button.textIn = 'Mute'
+                        present_volume=self.volume  # Khôi phục giá trị âm lượng
+                        self.display_volume_label.text = f'{present_volume * 100}' #Khôi phục giá trị hiển thị âm lượng hiện tại
+                        pygame.mixer.music.set_volume(present_volume)
+        return self
     
-                    
-
-
