@@ -67,7 +67,7 @@ def Settings():
         Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
         screen.blit(Settings_text, Settings_text_rect)
 
-        Return_To_Menu = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_text_active_color="white", textIn="BACK")
+        Return_To_Menu = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="BACK")
         Return_To_Menu.update(mouse_pos)
 
         for event in pygame.event.get():
