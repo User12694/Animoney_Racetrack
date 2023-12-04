@@ -19,6 +19,7 @@ CheckPass = True
 
 def Play():
     global CheckPass
+    pygame.mixer.music.set_volume(present_volume)
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
     Victory_sound_Play = True
