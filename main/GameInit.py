@@ -2,7 +2,7 @@ from GameFunctions import *
 
 #Các nhân vật trong game
 class player(pygame.sprite.Sprite):
-    def __init__(self, speed, pos, number, image):
+    def __init__(self, speed, pos, number, image, map):
         super().__init__()
         self.speed = speed
         self.x = pos[0]
@@ -13,42 +13,42 @@ class player(pygame.sprite.Sprite):
         self.image= pygame.image.load(image).convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.count_run = 0
+        self.map = map
     def animation(self):
         #Vẽ nhân vật
-        MAP = MAPS[MAP_INDEX]
         if self.count_run >= 3:
             self.count_run = 0
-        if MAP == 0:
+        if self.map == 0:
             if self.number == 0:
                 if self.run:
                     self.image = pygame.image.load(CharsMap1[0][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
                     self.image = pygame.image.load(CharsMap1[0][int(self.count_run)]).convert_alpha()
-            # if self.number == 1:
-            #     if self.run:
-            #         self.image = pygame.image.load(CharsMap2[0][int(self.count_run)]).convert_alpha()
-            #         self.count_run += 0.1
-            #     else:
-            #         self.image = pygame.image.load(CharsMap2[0][int(self.count_run)]).convert_alpha()
-            # if self.number == 2:
-            #     if self.run:
-            #         self.image = pygame.image.load(CharsMap3[0][int(self.count_run)]).convert_alpha()
-            #         self.count_run += 0.1
-            #     else:
-            #         self.image = pygame.image.load(CharsMap3[0][int(self.count_run)]).convert_alpha()
-            # if self.number == 3:
-            #     if self.run:
-            #         self.image = pygame.image.load(CharsMap4[0][int(self.count_run)]).convert_alpha()
-            #         self.count_run += 0.1
-            #     else:
-            #         self.image = pygame.image.load(CharsMap4[0][int(self.count_run)]).convert_alpha()
-            # if self.number == 4:
-            #     if self.run:
-            #         self.image = pygame.image.load(CharsMap5[0][int(self.count_run)]).convert_alpha()
-            #         self.count_run += 0.1
-            #     else:
-            #         self.image = pygame.image.load(CharsMap5[0][int(self.count_run)]).convert_alpha()
+            if self.number == 1:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap1[1][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap1[1][int(self.count_run)]).convert_alpha()
+            if self.number == 2:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap1[2][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap1[2][int(self.count_run)]).convert_alpha()
+            if self.number == 3:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap1[3][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap1[3][int(self.count_run)]).convert_alpha()
+            if self.number == 4:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap1[4][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap1[4][int(self.count_run)]).convert_alpha()
 
     def move(self):
         if self.run:
@@ -59,15 +59,35 @@ class player(pygame.sprite.Sprite):
         self.move()
 
 Char1 = pygame.sprite.GroupSingle()
-Char1.add(player(speed = Speed[0], pos = (screen.get_width() * 0.1, screen.get_height() * 0.55), number = 0, image = CharsMap1[0][0]))
-# Char2 = pygame.sprite.GroupSingle()
-# Char2.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.66), number = 1, image = CharsMap1[0][0]))
-# Char3 = pygame.sprite.GroupSingle()
-# Char3.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.76), number = 2, image = CharsMap1[0][0]))
-# Char4 = pygame.sprite.GroupSingle()
-# Char4.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.87), number = 3, image = CharsMap1[0][0]))
-# Char5 = pygame.sprite.GroupSingle()
-# Char5.add(player(speed = Speed[1], pos = (screen.get_width() * 0.1, screen.get_height() * 0.98), number = 4, image = CharsMap1[0][0]))
+Char1.add(player(speed = Speed[0], 
+                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.55), 
+                 number = 0, 
+                 image = CharsMap1[0][0], 
+                 map = 0))
+Char2 = pygame.sprite.GroupSingle()
+Char2.add(player(speed = Speed[1], 
+                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.66), 
+                 number = 1, 
+                 image = CharsMap1[1][0], 
+                 map = 0))
+Char3 = pygame.sprite.GroupSingle()
+Char3.add(player(speed = Speed[2], 
+                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.76), 
+                 number = 2, 
+                 image = CharsMap1[2][0], 
+                 map = 0))
+Char4 = pygame.sprite.GroupSingle()
+Char4.add(player(speed = Speed[3], 
+                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.87), 
+                 number = 3, 
+                 image = CharsMap1[3][0], 
+                 map = 0))
+Char5 = pygame.sprite.GroupSingle()
+Char5.add(player(speed = Speed[4], 
+                 pos = (screen.get_width() * 0.1, screen.get_height() * 0.98), 
+                 number = 4, 
+                 image = CharsMap1[4][0], 
+                 map = 0))
 
 #Các đối tượng trong game
 class IG_Object(pygame.sprite.Sprite):
@@ -99,23 +119,23 @@ LuckyBox_Spawn = [0.2, 0.25, 0.3, 4.5, 4.5, 0.5, 0.55, 0.6, 0.6, 0.62, 0.65, 0.6
 IG_Objects.add(IG_Object(name = 'LuckyBox',
                          pos = (screen.get_width() * random.choice(LuckyBox_Spawn),
                          screen.get_height() * 0.55),
-                         image = 'assets/item/luckybox.png'))
+                         image = 'assets/item/luckyBox.png'))
 IG_Objects.add(IG_Object(name = 'LuckyBox', 
                          pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
                          screen.get_height() * 0.66), 
-                         image = 'assets/item/luckybox.png'))
+                         image = 'assets/item/luckyBox.png'))
 IG_Objects.add(IG_Object(name = 'LuckyBox', 
                          pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
                          screen.get_height() * 0.76), 
-                         image = 'assets/item/luckybox.png'))
+                         image = 'assets/item/luckyBox.png'))
 IG_Objects.add(IG_Object(name = 'LuckyBox', 
                          pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
                          screen.get_height() * 0.87), 
-                         image = 'assets/item/luckybox.png'))
+                         image = 'assets/item/luckyBox.png'))
 IG_Objects.add(IG_Object(name = 'LuckyBox', 
                          pos = (screen.get_width() * random.choice(LuckyBox_Spawn), 
                          screen.get_height() * 0.98), 
-                         image = 'assets/item/luckybox.png'))
+                         image = 'assets/item/luckyBox.png'))
 IG_Objects.add(IG_Object( name = 'ChuChay', pos = (screen.get_width(), 0), image = 'None'))
 
 #Class nút
@@ -162,7 +182,6 @@ class Button():
 #Menu khi mới vào trò chơi
 def menu():
     #Các loại nút
-    print(screen.get_width(), screen.get_height())
     PLAY_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 50), textIn = "PLAY", font = KieuChu1, base_color= "black", active_color = "white")
     SETTINGS_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 100), textIn = "SETTINGS", font = KieuChu1, base_color= "black", active_color = "white")
     QUIT_BUTTON = Button(image = pygame.image.load("assets/icon/button.png"), pos = (screen.get_width() / 2, screen.get_height() / 2 + 150), textIn = "QUIT", font = KieuChu1, base_color = "black", active_color = "white")
@@ -253,23 +272,23 @@ def Play():
 
         #Nhân vật
         Char1.draw(screen)
-        # Char2.draw(screen)
-        # Char3.draw(screen)
-        # Char4.draw(screen)
-        # Char5.draw(screen)
+        Char2.draw(screen)
+        Char3.draw(screen)
+        Char4.draw(screen)
+        Char5.draw(screen)
 
         Char1.update()
-        # Char2.update()
-        # Char3.update()
-        # Char4.update()
-        # Char5.update()
+        Char2.update()
+        Char3.update()
+        Char4.update()
+        Char5.update()
 
-        #Nhân vật + nhạc khi win (test)
+        #Check win + nhạc khi win (test)
         FinishLine_Pass1 = FinishLine_Pass(Char1) #Gọi hàm ở GameFunctions
-        # FinishLine_Pass2 = FinishLine_Pass(Char2)
-        # FinishLine_Pass3 = FinishLine_Pass(Char3)
-        # FinishLine_Pass4 = FinishLine_Pass(Char4)
-        # FinishLine_Pass5 = FinishLine_Pass(Char5)
+        FinishLine_Pass2 = FinishLine_Pass(Char2)
+        FinishLine_Pass3 = FinishLine_Pass(Char3)
+        FinishLine_Pass4 = FinishLine_Pass(Char4)
+        FinishLine_Pass5 = FinishLine_Pass(Char5)
 
         if FinishLine_Pass1 and Victory_sound_Play: #or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5
             pygame.mixer.music.load('assets/sounds/Victorious.ogg')
@@ -289,6 +308,12 @@ def Play():
         # global ActivateDizzy
         # global DizzyTime
         
+        activate_LuckyBox1 = Lucky_Box(Char1, IG_Objects)
+        activate_LuckyBox2 = Lucky_Box(Char2, IG_Objects)
+        activate_LuckyBox3 = Lucky_Box(Char3, IG_Objects)
+        activate_LuckyBox4 = Lucky_Box(Char4, IG_Objects)
+        activate_LuckyBox5 = Lucky_Box(Char5, IG_Objects)
+
         # if not activateLuckyBox:
         #     screen.blit(luckyBox, luckyBox_Box)
         # if Char1_Box.colliderect(luckyBox_Box):
@@ -359,7 +384,7 @@ def Pause_Game():
         Settings_text = KieuChu1.render("PAUSE GAME", True, "Black")
         Settings_text_rect = Settings_text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 50))
         screen.blit(Settings_text, Settings_text_rect)
-
+        #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
         RETURN_TO_GAME = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2), textIn="CONTINUE", font=KieuChu1, base_color="Black", active_color="white")
         QUIT = Button(image=pygame.image.load("assets/icon/button.png"), pos=(screen.get_width() / 2, screen.get_height() / 2 + 50), textIn="QUIT", font=KieuChu1, base_color="Black", active_color="white")

@@ -44,29 +44,27 @@ MAP_INDEX = 1
 #1. Nhân vật (Đặt tên theo dạng Char#Map#_#)
 Char1Map1 = ['assets/characters/Char1Map1_1.png', 'assets/characters/Char1Map1_2.png',
             'assets/characters/Char1Map1_3.png', 'assets/characters/Char1Map1_4.png']
-# Char2Map1 = ['assets/characters/Char2Map1_1.png', 'assets/characters/Char2Map_2.png',
-#             'assets/characters/Char2Map1_3.png', 'assets/characters/Char2Map1_4.png']
-# Char3Map1 = ['assets/characters/Char3Map1_1.png', 'assets/characters/Char3Map_2.png',
-#             'assets/characters/Char3Map1_3.png', 'assets/characters/Char3Map1_4.png']
-# Char4Map1 = ['assets/characters/Char4Map1_1.png', 'assets/characters/Char4Map_2.png',
-#             'assets/characters/Char4Map1_3.png', 'assets/characters/Char4Map1_4.png']
-# Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map_2.png',
-#             'assets/characters/Char5Map1_3.png', pygame.image.load('assets/characters/Char5Map1_4.png']
+Char2Map1 = ['assets/characters/Char2Map1_1.png', 'assets/characters/Char2Map1_2.png',
+            'assets/characters/Char2Map1_3.png', 'assets/characters/Char2Map1_4.png']
+Char3Map1 = ['assets/characters/Char3Map1_1.png', 'assets/characters/Char3Map1_2.png',
+            'assets/characters/Char3Map1_3.png', 'assets/characters/Char3Map1_4.png']
+Char4Map1 = ['assets/characters/Char4Map1_1.png', 'assets/characters/Char4Map1_2.png',
+            'assets/characters/Char4Map1_3.png', 'assets/characters/Char4Map1_4.png']
+Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2.png',
+            'assets/characters/Char5Map1_3.png', 'assets/characters/Char5Map1_4.png']
 
 #Nhân vật
-CharsMap1 = [Char1Map1]
-Speed = [2, 2, 2, 2, 2]
+CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
+Speed = [2.5, 2.5, 2.5, 2.5, 2.5]
 
 #Check điều kiện thắng (Cái này xài cho lucky box đi)
-# def FinishLine_Pass(player, IG_Objects):
-#     for IG_Object in IG_Objects:
-#         if IG_Object.name == "FinishLine" and player.sprite.rect.x > IG_Object.rect.x:
-#             player.sprite.run = False
-#             return True
-#     return False
+def Lucky_Box(player, IG_Objects):
+    if pygame.sprite.spritecollide(player.sprite, IG_Objects, True):
+        return True
+    return False
 
 def FinishLine_Pass(player):
-    if player.sprite.rect.x > screen.get_width() * 0.98:
+    if player.sprite.rect.x > screen.get_width() * 0.96:
         player.sprite.run = False
         return True
     return False
