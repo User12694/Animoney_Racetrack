@@ -82,7 +82,7 @@ def Play():
                 if event.key == pygame.K_ESCAPE:
                     Back_To_Menu = Pause_Game()
                     if Back_To_Menu:
-                        pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
+                        pygame.mixer.music.set_volume(present_volume)
                         pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
                         pygame.mixer.music.play(loops = -1)
                         return
@@ -163,7 +163,8 @@ def QuitConfirm():
 class MenuClass: 
     #Khởi tạo các thuộc tính
     def __init__(self):
-        pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
+        global VOLUME_INDEX, present_volume
+        pygame.mixer.music.set_volume(present_volume)
         pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
         pygame.mixer.music.play(loops = -1)
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.8), text_base_color= "black", text_active_color = "white", textIn = "PLAY") # Nút có dòng chữ "Play game"
