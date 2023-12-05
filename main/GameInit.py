@@ -60,7 +60,7 @@ CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
 Speed = []
 for x in range(5):
     random.seed(datetime.now().timestamp())
-    Speed.append((random.randint(1, 999999999) % 5) / 4 + 2)
+    Speed.append(random.randint(2, 4))
     time.sleep(0.01)
 
 #Các nhân vật trong game
