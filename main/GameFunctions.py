@@ -1,15 +1,10 @@
-import pygame_menu, pygame, random, sys
+import pygame_menu, pygame, random, sys, time
 from GameInit import *
 
 #Check điều kiện thắng (Cái này xài cho lucky box đi)
-def Lucky_Box(player, IG_Objects):
-    if pygame.sprite.spritecollide(player.sprite, IG_Objects, True):
-        return True
-    return False
-
 def FinishLine_Pass(player):
-    if player.sprite.rect.x > screen.get_width() * 0.95:
-        player.sprite.run = False
+    if player.x > screen.get_width() * 0.95:
+        player.run = False
         return True
     return False
 
@@ -37,16 +32,10 @@ def Play():
         if MAP_INDEX == 5:
              screen.blit(MAPS[4],(0,0))
 
-        IG_Objects.draw(screen)
-        IG_Objects.update()
+        #Chữ chạy
+        ChuChay.update()
 
         #Nhân vật
-        Char1.draw(screen)
-        Char2.draw(screen)
-        Char3.draw(screen)
-        Char4.draw(screen)
-        Char5.draw(screen)
-
         Char1.update()
         Char2.update()
         Char3.update()
@@ -60,7 +49,7 @@ def Play():
         FinishLine_Pass4 = FinishLine_Pass(Char4)
         FinishLine_Pass5 = FinishLine_Pass(Char5)
 
-        if FinishLine_Pass1 and Victory_sound_Play or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5:
+        if (FinishLine_Pass1 or FinishLine_Pass2 or FinishLine_Pass3 or FinishLine_Pass4 or FinishLine_Pass5) and Victory_sound_Play:
             if CheckPass:
                 pygame.mixer.music.load('assets/sounds/Victorious.ogg')
                 pygame.mixer.music.play(loops = 0)
@@ -68,11 +57,11 @@ def Play():
                 CheckPass = False
                 
         
-        activate_LuckyBox1 = Lucky_Box(Char1, IG_Objects)
-        activate_LuckyBox2 = Lucky_Box(Char2, IG_Objects)
-        activate_LuckyBox3 = Lucky_Box(Char3, IG_Objects)
-        activate_LuckyBox4 = Lucky_Box(Char4, IG_Objects)
-        activate_LuckyBox5 = Lucky_Box(Char5, IG_Objects)
+        luckyBox1.update(Char1)
+        luckyBox2.update(Char2)
+        luckyBox3.update(Char3)
+        luckyBox4.update(Char4)
+        luckyBox5.update(Char5)
 
         
         for event in pygame.event.get():

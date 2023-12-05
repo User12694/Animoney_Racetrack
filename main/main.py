@@ -52,16 +52,7 @@ main()
 
 
 #Lucky Box
-        # global activateLuckyBox
-
-        # global SlowTime
-        # global ActivateSlow
-
-        # global SpeedTime
-        # global ActivateSpeed
-
-        # global ActivateDizzy
-        # global DizzyTime
+        
         # if not activateLuckyBox:
         #     screen.blit(luckyBox, luckyBox_Box)
         # if Char1_Box.colliderect(luckyBox_Box):
