@@ -1,4 +1,5 @@
 import pygame_menu, pygame, random, sys, time
+from datetime import datetime
 from LoginSignup import *
 #Khởi tạo các thứ
 pygame.init()
@@ -57,11 +58,10 @@ Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2
 #Nhân vật
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
 Speed = []
-RandomSpeed = [2, 2, 2, 2, 2, 2.1, 2.1, 2.1, 2.15, 2.15, 2.3, 2.3, 2.4, 2.4, 2.5, 2.6, 2.7, 2.8, 2.8, 2.8, 2.8, 2.8, 2.9, 3, 3, 3, 3]
 for x in range(5):
-    random.seed(time.time())
-    Speed.append(random.choice(RandomSpeed))
-    time.sleep(0.05)
+    random.seed(datetime.now().timestamp())
+    Speed.append((random.randint(1, 999999999) % 5) / 4 + 2)
+    time.sleep(0.01)
 
 #Các nhân vật trong game
 class player():
@@ -217,12 +217,21 @@ class LuckyBox():
         else:
             screen.blit(self.image, self.rect)
 
-LuckyBox_Spawn = [0.2, 0.25, 0.3, 4.5, 4.5, 0.5, 0.55, 0.6, 0.6, 0.62, 0.65, 0.66, 0.7, 0.75, 0.75, 0.8, 0.8, 0.8] #Các biến để random vị trí lucky box
-luckyBox1 = LuckyBox(pos = (screen.get_width() * random.choice(LuckyBox_Spawn), screen.get_height() * 0.55))
-luckyBox2 = LuckyBox(pos = (screen.get_width() * random.choice(LuckyBox_Spawn), screen.get_height() * 0.66))
-luckyBox3 = LuckyBox(pos = (screen.get_width() * random.choice(LuckyBox_Spawn), screen.get_height() * 0.76))
-luckyBox4 = LuckyBox(pos = (screen.get_width() * random.choice(LuckyBox_Spawn), screen.get_height() * 0.87))
-luckyBox5 = LuckyBox(pos = (screen.get_width() * random.choice(LuckyBox_Spawn), screen.get_height() * 0.98))
+luckyBox1 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.55))
+random.seed(datetime.now().timestamp())
+time.sleep(0.01)
+luckyBox2 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.66))
+random.seed(datetime.now().timestamp())
+time.sleep(0.01)
+luckyBox3 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.76))
+random.seed(datetime.now().timestamp())
+time.sleep(0.01)
+luckyBox4 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.87))
+random.seed(datetime.now().timestamp())
+time.sleep(0.01)
+luckyBox5 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.98))
+random.seed(datetime.now().timestamp())
+time.sleep(0.01)
 
 #Class nút
 BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
