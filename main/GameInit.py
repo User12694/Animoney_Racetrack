@@ -5,7 +5,7 @@ from LoginSignup import *
 pygame.init()
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
-
+random.seed(datetime.now().timestamp())
 
 #Màn hình cài đặt âm lượng
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
@@ -59,9 +59,7 @@ Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
 Speed = []
 for x in range(5):
-    random.seed(datetime.now().timestamp())
     Speed.append(random.randint(2, 4))
-    time.sleep(0.01)
 
 #Các nhân vật trong game
 class player():
@@ -218,20 +216,10 @@ class LuckyBox():
             screen.blit(self.image, self.rect)
 
 luckyBox1 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.55))
-random.seed(datetime.now().timestamp())
-time.sleep(0.01)
 luckyBox2 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.66))
-random.seed(datetime.now().timestamp())
-time.sleep(0.01)
 luckyBox3 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.76))
-random.seed(datetime.now().timestamp())
-time.sleep(0.01)
 luckyBox4 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.87))
-random.seed(datetime.now().timestamp())
-time.sleep(0.01)
 luckyBox5 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.98))
-random.seed(datetime.now().timestamp())
-time.sleep(0.01)
 
 #Class nút
 BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
