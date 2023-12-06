@@ -30,17 +30,17 @@ scoreBoard_Box = scoreBoard.get_rect(center = (screen.get_width() * 0.13, screen
 Background = pygame.image.load('assets/background/background.png').convert_alpha()
 
 map1 = pygame.image.load('assets/background/map1.png').convert_alpha()
-map1 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map1 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map2 = pygame.image.load('assets/background/map2.png').convert_alpha()
-map2 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map2 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map3 = pygame.image.load('assets/background/map3.png').convert_alpha()
-map3 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map3 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map4 = pygame.image.load('assets/background/map4.png').convert_alpha()
-map4 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map4 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map5 = pygame.image.load('assets/background/map5.png').convert_alpha()
-map5 = pygame.transform.smoothscale(map1, pygame.display.get_desktop_sizes()[0])
+map5 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 MAPS = [map1, map2, map3, map4, map5]
-MAP_INDEX = 1
+MAP_INDEX = 0
 
 #Các ảnh cần dùng đến
 #1. Nhân vật (Đặt tên theo dạng Char#Map#_#)

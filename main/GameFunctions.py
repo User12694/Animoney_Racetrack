@@ -2,23 +2,40 @@ import pygame_menu, pygame, random, sys, time
 from GameInit import *
 
 
-def Play():
+#Đếm ngược
+countDownCheck = True
+NumberCountDown = ["assets/background/1.png", "assets/background/2.png", "assets/background/3.png"]
+def count_down(countDownCheck):
+    for i in range(2, -1, -1):
+        screen.blit(MAPS[MAP_INDEX], (0, 0))
+        screen.blit(pygame.image.load(NumberCountDown[i]).convert_alpha(), (screen.get_width() / 2, screen.get_height() / 2))
+        pygame.display.update()
+        pygame.time.wait(1000)
     pygame.mixer.music.set_volume(present_volume)
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
+
+
+def Play():
+    global countDownCheck
     while True:
         
         #Ảnh nền
-        if MAP_INDEX == 1:
+        if MAP_INDEX == 0:
              screen.blit(MAPS[0],(0,0))
-        if MAP_INDEX == 2:
+        if MAP_INDEX == 1:
              screen.blit(MAPS[1],(0,0))
-        if MAP_INDEX == 3:
+        if MAP_INDEX == 2:
              screen.blit(MAPS[2],(0,0))
-        if MAP_INDEX == 4:
+        if MAP_INDEX == 3:
              screen.blit(MAPS[3],(0,0))
-        if MAP_INDEX == 5:
+        if MAP_INDEX == 4:
              screen.blit(MAPS[4],(0,0))
+        
+        #Đếm ngược trước khi vào game
+        if countDownCheck:
+            count_down(countDownCheck)
+            countDownCheck = False
 
         #Chữ chạy
         ChuChay.update()
@@ -43,6 +60,7 @@ def Play():
         Char4.update()
         Char5.update()
         
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
