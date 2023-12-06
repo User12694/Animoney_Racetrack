@@ -145,14 +145,14 @@ class player():
 
     def slow(self, activated):
         if not activated:
-            if self.speed <= 2:
+            if self.speed <= 3:
                 self.speed = 1
             else:
-                self.speed -= 2
+                self.speed -= 3
 
     def accelerate(self, activated):
         if not activated:
-            self.speed += 1
+            self.speed += 2
 
     def teleport(self, activated):
         if not activated:
@@ -215,7 +215,7 @@ class LuckyBox():
         self.active_effect = None #Kích hoạt hiệu ứng
         self.effect_duration = random.randint(1000, 3000) #Tính theo mili giây
         self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
-        self.effects = ["stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "teleport"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
+        self.effects = ["stun", "stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "accelerate", "teleport"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.tempSpeed = character.speed #Dùng để lưu tốc chạy của nhân vật tạm thời
