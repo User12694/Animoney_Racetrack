@@ -147,8 +147,10 @@ class player():
         if not activated:
             if self.speed <= 3:
                 self.speed = 1
+            elif self.speed >= 5:
+                self.speed -= 4
             else:
-                self.speed -= 3
+                self.speed -= 2
 
     def accelerate(self, activated):
         if not activated:
