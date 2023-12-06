@@ -55,15 +55,16 @@ Char4Map1 = ['assets/characters/Char4Map1_1.png', 'assets/characters/Char4Map1_2
 Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2.png',
             'assets/characters/Char5Map1_3.png', 'assets/characters/Char5Map1_4.png']
 
-#Nhân vật
+#Nhân vật, tốc độ
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
+RandSpeed = [2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5]
 Speed = []
 for x in range(5):
-    Speed.append(random.randint(2, 4))
-
+    Speed.append(random.choice(RandSpeed))
 
 #Ktra nhạc đã phát chưa
 Victory_sound_Play = True
+
 #List nhân vật thắng (Sẽ được thêm khi các nhân vật về đích)
 RankList = []
 #Các nhân vật trong game
@@ -148,7 +149,7 @@ class player():
 
     def accelerate(self, activated):
         if not activated:
-            self.speed += 2
+            self.speed += 1
 
     def teleport(self, activated):
         if not activated:
@@ -209,7 +210,7 @@ class LuckyBox():
         self.y = pos[1]
         self.activated = False #Cái này để check xem lucky box đã kích hoạt chưa
         self.active_effect = None #Kích hoạt hiệu ứng
-        self.effect_duration = 2000 #Tính theo mili giây
+        self.effect_duration = random.randint(1000, 3000) #Tính theo mili giây
         self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
         self.effects = ["stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "teleport"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
