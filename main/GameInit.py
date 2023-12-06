@@ -11,13 +11,13 @@ random.seed(datetime.now().timestamp())
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 VOLUME_INDEX = 4
 present_volume = VOLUME[VOLUME_INDEX]
-
+MenuSound = False
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
 WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 halfScreen_active = False
-
+gameSound = False
 
 #Kiểu chữ
 KieuChu1 = pygame.font.SysFont('./assets/font/SVN-Retron_2000.ttf',60)

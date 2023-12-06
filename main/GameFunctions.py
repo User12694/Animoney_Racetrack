@@ -6,6 +6,7 @@ from GameInit import *
 countDownCheck = True
 NumberCountDown = ["assets/background/start.png", "assets/background/1.png", "assets/background/2.png", "assets/background/3.png"]
 def count_down():
+    global gameSound
     for i in range(3, -1, -1):
         screen.blit(MAPS[MAP_INDEX], (0, 0))
         image = pygame.image.load(NumberCountDown[i]).convert_alpha()
@@ -17,12 +18,12 @@ def count_down():
     pygame.mixer.music.set_volume(present_volume)
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
+    gameSound = True
 
 
 def Play():
-    global countDownCheck
+    global countDownCheck, gameSound
     while True:
-        
         #Ảnh nền
         if MAP_INDEX == 0:
              screen.blit(MAPS[0],(0,0))
@@ -39,6 +40,12 @@ def Play():
         if countDownCheck:
             count_down()
             countDownCheck = False
+
+        if not gameSound:
+            pygame.mixer.music.set_volume(present_volume)
+            pygame.mixer.music.load('assets/sounds/set1.mp3')
+            pygame.mixer.music.play(loops = -1)
+            gameSound = True
 
         #Chữ chạy
         ChuChay.update()
@@ -154,9 +161,6 @@ class MenuClass:
     #Khởi tạo các thuộc tính
     def __init__(self):
         global VOLUME_INDEX, present_volume
-        pygame.mixer.music.set_volume(present_volume)
-        pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
-        pygame.mixer.music.play(loops = -1)
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.8), text_base_color= "black", text_active_color = "white", textIn = "PLAY") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), text_base_color= "black", text_active_color = "white", textIn = "SETTINGS") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color = "black", text_active_color = "white", textIn = "QUIT") # Nút có dòng chữ "Quit"
@@ -169,12 +173,20 @@ class MenuClass:
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
+        global MenuSound, gameSound
+        if not MenuSound:
+            pygame.mixer.music.set_volume(present_volume)
+            pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
+            pygame.mixer.music.play(loops = -1)
+            MenuSound = True
         pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if self.playButton.CheckClick(pos):
+                MenuSound = False
+                gameSound = False
                 Play()
             if self.settingsButton.CheckClick(pos):
                 return SettingClass()
