@@ -61,6 +61,11 @@ Speed = []
 for x in range(5):
     Speed.append(random.randint(2, 4))
 
+
+#Ktra nhạc đã phát chưa
+Victory_sound_Play = True
+#List nhân vật thắng (Sẽ được thêm khi các nhân vật về đích)
+RankList = []
 #Các nhân vật trong game
 class player():
     def __init__(self, speed, pos, number, image, map):
@@ -74,6 +79,7 @@ class player():
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.count_run = 0
         self.map = map
+        self.Finish = False
     def animation(self):
         #Vẽ nhân vật
         if self.count_run >= 3:
@@ -113,11 +119,40 @@ class player():
     def move(self):
         if self.run:
             self.rect.x += self.speed
+    #Check điều kiện thắng
+    def FinishLine_Pass(self):
+        global Victory_sound_Play
+        if self.rect.x > screen.get_width() * 0.95:
+            if not self.Finish:
+                RankList.append(Char1)
+                self.run = False
+                if Victory_sound_Play:
+                    pygame.mixer.music.load('assets/sounds/Victorious.ogg')
+                    pygame.mixer.music.play(loops = 0)
+                    Victory_sound_Play = False
+        
 
     def update(self):
         self.animation()
         self.move()
+        self.FinishLine_Pass()
         screen.blit(self.image, self.rect)
+
+    def stop(self, activated):
+        if not activated:
+            self.run = False
+
+    def slow(self, activated):
+        if not activated:
+            self.speed -= 2
+
+    def accelerate(self, activated):
+        if not activated:
+            self.speed += 2
+
+    def teleport(self, activated):
+        if not activated:
+            self.x = screen.get_width() * 0.95
 
 Char1 = player(speed = Speed[0], 
                  pos = (screen.get_width() * 0.01, screen.get_height() * 0.55), 
@@ -169,57 +204,58 @@ class IG_Objects():
 ChuChay = IG_Objects(name = 'ChuChay', pos = (screen.get_width(), 0))
 
 class LuckyBox():
-    def __init__(self, pos):
+    def __init__(self, pos, character):
         self.x = pos[0]
         self.y = pos[1]
         self.activated = False #Cái này để check xem lucky box đã kích hoạt chưa
+        self.active_effect = None #Kích hoạt hiệu ứng
+        self.effect_duration = 2000 #Tính theo mili giây
+        self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
+        self.effects = ["stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "teleport"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
-    def activateLuckyBox(self, char):
-        if char.rect.colliderect(self.rect):
-            self.activated = True
-    def update(self, char):
-        self.activateLuckyBox(char)
-        if self.activated:
-            pass
-            #Làm chậm
-            # if ActivateSlow == True:
-            #     if not Activated:
-            #         Char1Map1_Speed -= 2
-            #         Activated = True
-            #     SlowTime -= 1
-            # if SlowTime == 0:
-            #     SlowTime = SlowTimeConst
-            #     Char1Map1_Speed = Char1_TempSpeed
-            #     ActivateSlow = False
-            
-            # #Tăng tốc
-            # if ActivateSpeed == True:
-            #     if not Activated:
-            #         Char1Map1_Speed += 3
-            #         Activated = True
-            #     SpeedTime -= 1
-            # if SpeedTime == 0:
-            #     SpeedTime = DizzyTimeConst
-            #     Char1Map1_Speed = Char1_TempSpeed
-            #     ActivateSpeed = False
+        self.tempSpeed = character.speed #Dùng để lưu tốc chạy của nhân vật tạm thời
+        self.firstTime = True
 
-            # #Choáng
-            # if ActivateDizzy == True:
-            #     Char1Map1_Speed = 0
-            #     DizzyTime -= 1
-            # if DizzyTime == 0:
-            #     Char1Map1_Speed = Char1_TempSpeed
-            #     DizzyTime = DizzyTimeConst
-            #     ActivateDizzy = False
-        else:
+    def check_activate(self, character):
+        if character.rect.colliderect(self.rect) and (not self.activated):
+            self.activate_effect(character)
+            self.activated = True
+
+    def activate_effect(self, character):
+
+        self.active_effect = random.choice(self.effects)
+        self.activation_time = pygame.time.get_ticks()
+
+        if self.active_effect == "stun":
+            character.stop(self.activated)
+        elif self.active_effect == "slow":
+            character.slow(self.activated)
+        elif self.active_effect == "accelerate":
+            character.accelerate(self.activated)
+        elif self.active_effect == "teleport":
+            character.teleport(self.activated)
+
+    def update(self, character):
+        self.check_activate(character)
+
+        if self.active_effect is not None:
+            current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
+            elapsed_time = current_time - self.activation_time
+
+            if elapsed_time >= self.effect_duration:
+                self.active_effect = None
+                character.speed = self.tempSpeed
+                character.run = True
+
+        if not self.activated:
             screen.blit(self.image, self.rect)
 
-luckyBox1 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.55))
-luckyBox2 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.66))
-luckyBox3 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.76))
-luckyBox4 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.87))
-luckyBox5 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.98))
+luckyBox1 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.55), character = Char1)
+luckyBox2 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.66), character = Char2)
+luckyBox3 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.76), character = Char3)
+luckyBox4 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.87), character = Char4)
+luckyBox5 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.98), character = Char5)
 
 #Class nút
 BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút

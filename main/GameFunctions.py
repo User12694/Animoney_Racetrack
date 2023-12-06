@@ -1,13 +1,11 @@
 import pygame_menu, pygame, random, sys, time
 from GameInit import *
 
-#List nhân vật thắng (Sẽ được thêm khi các nhân vật về đích)
-RankList = []
+
 def Play():
     pygame.mixer.music.set_volume(present_volume)
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
-    Victory_sound_Play = True
     while True:
         
         #Ảnh nền
@@ -24,50 +22,6 @@ def Play():
 
         #Chữ chạy
         ChuChay.update()
-
-        #Nhân vật
-        Char1.update()
-        Char2.update()
-        Char3.update()
-        Char4.update()
-        Char5.update()
-
-        #Check win + nhạc khi win
-        FinishLine_Pass1 = FinishLine_Pass(Char1)
-        FinishLine_Pass2 = FinishLine_Pass(Char2)
-        FinishLine_Pass3 = FinishLine_Pass(Char3)
-        FinishLine_Pass4 = FinishLine_Pass(Char4)
-        FinishLine_Pass5 = FinishLine_Pass(Char5)
-
-
-        if FinishLine_Pass1:
-            if Victory_sound_Play:
-                RankList.append(Char1)
-                pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-                pygame.mixer.music.play(loops = 0)
-                Victory_sound_Play = False
-        if FinishLine_Pass2:
-            RankList.append(Char1)
-            if Victory_sound_Play:
-                pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-                pygame.mixer.music.play(loops = 0)
-                Victory_sound_Play = False
-            FinishLine_Pass2 = False
-        if FinishLine_Pass3:
-            if Victory_sound_Play:
-                pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-                pygame.mixer.music.play(loops = 0)
-                Victory_sound_Play = False
-        if FinishLine_Pass4:
-            if Victory_sound_Play:
-                pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-                pygame.mixer.music.play(loops = 0)
-                Victory_sound_Play = False
-        if FinishLine_Pass5:
-            if Victory_sound_Play:
-                pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-                pygame.mixer.music.play(loops = 0)
-                Victory_sound_Play = False
                 
         #Update lucky box
         luckyBox1.update(Char1)
@@ -76,6 +30,12 @@ def Play():
         luckyBox4.update(Char4)
         luckyBox5.update(Char5)
 
+        #Nhân vật
+        Char1.update()
+        Char2.update()
+        Char3.update()
+        Char4.update()
+        Char5.update()
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

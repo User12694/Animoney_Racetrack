@@ -1,223 +1,71 @@
-import sys, pygame, random
-from LoginSignup import *
+import pygame
+import sys
 
-#Khởi tạo tất cả
-pygame.init()
+class GameSelection:
+    def __init__(self):
+        pygame.init()
 
-#Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
-WINDOW_SIZES = [(800, 600), (1080, 720), (1366, 768), (1920, 1080)]
-WINDOW_SIZE_INDEX = 0
+        self.screen_width = 800
+        self.screen_height = 600
 
-#Một số biến được sử dụng
-screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX])
-pygame.display.set_caption("Race game")
-clock = pygame.time.Clock()
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        pygame.display.set_caption("Game Selection")
 
-#Hàm tạo ảnh
-def CreateImg(Address):
-    Img = pygame.image.load(Address).convert_alpha()
-    return Img
+        self.clock = pygame.time.Clock()
 
-#Hàm viết chữ
-def WriteText(Text, Font, Color, x, y):
-    Txt = Font.render(Text, False, Color)
-    screen.blit(Txt, (x, y))
+        # Mảng lưu thông tin về map và nhân vật
+        self.maps_and_characters = {
+            1: {"map": "Map 1", "characters": ["Character 1", "Character 2", "Character 3", "Character 4", "Character 5"]},
+            2: {"map": "Map 2", "characters": ["Character 6", "Character 7", "Character 8", "Character 9", "Character 10"]},
+            3: {"map": "Map 3", "characters": ["Character 11", "Character 12", "Character 13", "Character 14", "Character 15"]},
+            4: {"map": "Map 4", "characters": ["Character 16", "Character 17", "Character 18", "Character 19", "Character 20"]},
+            5: {"map": "Map 5", "characters": ["Character 21", "Character 22", "Character 23", "Character 24", "Character 25"]},
+        }
 
-#Chữ chạy (Chủ yếu để trang trí)
-KieuChu1 = pygame.font.SysFont('arial', 20, bold=True)
-ChuChay1_surface = KieuChu1.render("THIS IS GROUP 12'S AMAZING RACE GAME!!!", False, (255, 102, 0))
-ChuChay1_Box = ChuChay1_surface.get_rect(topleft = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
+        self.selected_map = None
+        self.selected_character = None
 
-#Chữ các thứ
-Player_money = 0
-KieuChu2 = pygame.font.SysFont('Verdana', 40, bold=True)
-scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
-scoreBoard_Box = scoreBoard.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.13, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.92))
+    def display_maps_and_characters(self):
+        print("Choose a map:")
+        for key, value in self.maps_and_characters.items():
+            print(f"{key}: {value['map']}")
 
-#Nhân vật (Sau này có thể đặt vào trong class để dễ quản lý)
-Character1_Speed = 2.5
-Character1_Suf = CreateImg('assets/characters/Testchar.png')
-Character1_Box = Character1_Suf.get_rect(midbottom = (50, 300))
-Character1_Run = True
+    def display_selected_options(self):
+        if self.selected_map is not None and self.selected_character is not None:
+            print(f"Selected Map: {self.maps_and_characters[self.selected_map]['map']}")
+            print(f"Selected Character: {self.selected_character}")
+            print("Press 'Enter' to start the game.")
+        else:
+            print("Please select a map and a character.")
 
-#Lucky box
-activateLuckyBox = False
-luckyBox_Pos = random.randint(150, 400)
-luckyBox_Effect = random.randint(0, 2)
-luckyBox = CreateImg("assets/item/luckyBox.png")
-luckyBox_Box = luckyBox.get_rect(midbottom = (luckyBox_Pos, 300))
+    def run(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-#Âm thanh
-VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-VOLUME_INDEX = 4
-Victory_sound = pygame.mixer.Sound('assets/sounds/Victorious.ogg')
-Victory_sound_Play = True
-pygame.mixer.music.load('assets/sounds/Panorama.wav')
-pygame.mixer.music.play(loops = -1)
+                elif event.type == pygame.KEYDOWN:
+                    if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5]:
+                        self.selected_map = event.key - pygame.K_0  # Convert key code to map number
+                        self.display_maps_and_characters()
 
-#Ảnh
-Background = CreateImg('assets/background/background(800x600).png')
+                    elif event.key in [pygame.K_q, pygame.K_w, pygame.K_e, pygame.K_r, pygame.K_t]:
+                        if self.selected_map is not None:
+                            character_index = event.key - pygame.K_q  # Convert key code to character index
+                            self.selected_character = self.maps_and_characters[self.selected_map]['characters'][character_index]
+                            self.display_selected_options()
 
-#FinishLine(Test)
-FinishLine = CreateImg('assets/terrains/FinishLine.png')
-FinishLine_Box = FinishLine.get_rect(topright = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.9, 0))
+                    elif event.key == pygame.K_RETURN:
+                        if self.selected_map is not None and self.selected_character is not None:
+                            print("Starting the game...")
+                            # Add code to start the game with the selected map and character
+                            pygame.quit()
+                            sys.exit()
 
-#Các trạng thái
-tempSpeed = Character1_Speed
-Activated = False
-#Làm chậm
-SlowTime = 180
-SlowTimeConst = SlowTime
-ActivateSlow = False
-#Tăng tốc
-SpeedTime = 20
-SpeedTimeConst = SpeedTime
-ActivateSpeed = False
-#Choáng
-DizzyTime = 60
-DizzyTimeConst = DizzyTime
-ActivateDizzy = False
+            pygame.display.flip()
+            self.clock.tick(30)
 
-#Trạng thái game
-STAGE = ["GamePlay", "Pause"]
-STAGE_INDEX = 0
-
-#Đây là main loop
-def main():
-    while True:
-        #nhạc nền + âm lượng
-        Victory_sound.set_volume(VOLUME[VOLUME_INDEX])
-
-        #Kích thước màn hình
-        global WINDOW_SIZE_INDEX
-        
-        #Trạng thái game
-        global STAGE_INDEX
-        
-        match STAGE[STAGE_INDEX]:
-            case "GamePlay":
-                #Ảnh nền
-                screen.blit(Background,(0,0))
-                screen.blit(FinishLine, FinishLine_Box)
-
-                #Nhân vật + nhạc khi win (test)
-                global Character1_Speed
-                global Character1_Run
-                global Victory_sound_Play
-                screen.blit(Character1_Suf, Character1_Box)
-                if Character1_Run:
-                    Character1_Box.x += Character1_Speed
-                if Character1_Box.x > FinishLine_Box.x:
-                    Character1_Run = False
-                    if Victory_sound_Play:
-                        pygame.mixer.music.stop()
-                        Victory_sound.play()
-                        Victory_sound_Play = False
-                        
-
-                #Lucky box
-                global activateLuckyBox
-
-                global SlowTime
-                global ActivateSlow
-
-                global SpeedTime
-                global ActivateSpeed
-
-                global ActivateDizzy
-                global DizzyTime
-                
-                if not activateLuckyBox:
-                    screen.blit(luckyBox, luckyBox_Box)
-                if Character1_Box.colliderect(luckyBox_Box):
-                    if not activateLuckyBox:
-                        #Kích hoạt hiệu ứng(Tạm)
-                        match luckyBox_Effect:
-                            case 0:
-                                ActivateSlow = True
-                            case 1:
-                                ActivateSpeed = True
-                            case 2:
-                                ActivateDizzy = True
-
-                        activateLuckyBox = True
-
-                global tempSpeed #Cái này để lưu tốc chạy cơ bản của nhân vật ở ngoài hàm main
-                global Activated
-                #Làm chậm
-                if ActivateSlow == True:
-                    if not Activated:
-                        Character1_Speed -= 2
-                        Activated = True
-                    SlowTime -= 1
-                if SlowTime == 0:
-                    SlowTime = SlowTimeConst
-                    Character1_Speed = tempSpeed
-                    ActivateSlow = False
-                
-                #Tăng tốc
-                if ActivateSpeed == True:
-                    if not Activated:
-                        Character1_Speed += 3
-                        Activated = True
-                    SpeedTime -= 1
-                if SpeedTime == 0:
-                    SpeedTime = DizzyTimeConst
-                    Character1_Speed = tempSpeed
-                    ActivateSpeed = False
-
-                #Choáng
-                if ActivateDizzy == True:
-                    Character1_Speed = 0
-                    DizzyTime -= 1
-                if DizzyTime == 0:
-                    Character1_Speed = tempSpeed
-                    DizzyTime = DizzyTimeConst
-                    ActivateDizzy = False
-
-                #Bảng tiền
-                pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
-                screen.blit(scoreBoard, scoreBoard_Box)
-                
-
-                #Chữ chạy
-                screen.blit(ChuChay1_surface, ChuChay1_Box)
-                ChuChay1_Box.x -= 2
-                if ChuChay1_Box.right <= 0:
-                    ChuChay1_Box.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
-            case "Pause":
-                screen.fill('black')
-                button = KieuChu2.render("Countinue", False, "white")
-                button_Box = button.get_rect(center = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / 2))
-                pygame.draw.rect(screen, "white", button_Box, 6, 10)
-                screen.blit(button, (button_Box))
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        sys.exit()
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_ESCAPE:
-                            STAGE_INDEX = 0
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if button_Box.collidepoint(event.pos):
-                            STAGE_INDEX = 0
-
-        #Chuyển trạng thái game
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            # Nhấn phím ESC sẽ kích hoạt Pause
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    STAGE_INDEX = 1
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if button_Box.collidepoint(event.pos):
-                    STAGE_INDEX = 0
-            # Code để tìm vị trí cụ thể trên màn hình
-            # if event.type == pygame.MOUSEMOTION:
-            #     print(event.pos)
-
-        pygame.display.update()
-        clock.tick(60)
-main()
+if __name__ == "__main__":
+    game = GameSelection()
+    game.run()
