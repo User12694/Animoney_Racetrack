@@ -57,7 +57,7 @@ Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2
 
 #Nhân vật, tốc độ
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
-RandSpeed = [2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5]
+RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
 Speed = []
 for x in range(5):
     Speed.append(random.choice(RandSpeed))
@@ -76,11 +76,12 @@ class player():
         self.number = number
         self.run = True
         self.count_run = 0
-        self.image= pygame.image.load(image).convert_alpha()
+        self.image = pygame.image.load(image).convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.count_run = 0
         self.map = map
         self.Finish = False
+        self.isGoBack = False
     def animation(self):
         #Vẽ nhân vật
         if self.count_run >= 3:
@@ -137,7 +138,11 @@ class player():
         self.animation()
         self.move()
         self.FinishLine_Pass()
-        screen.blit(self.image, self.rect)
+        if self.isGoBack: #Đi ngược lại
+            goBackImage = pygame.transform.flip(self.image, True, False)
+            screen.blit(goBackImage, self.rect)
+        else:
+            screen.blit(self.image, self.rect)
 
     def stop(self, activated):
         if not activated:
@@ -162,6 +167,11 @@ class player():
     def teleport(self, activated):
         if not activated:
             self.rect.x = screen.get_width() * 0.8
+
+    def goback(self, activated):
+        if not activated:
+            self.speed *= -1
+            self.isGoBack = True
 
 Char1 = player(speed = Speed[0], 
                  pos = (screen.get_width() * 0.01, screen.get_height() * 0.55), 
@@ -220,11 +230,10 @@ class LuckyBox():
         self.active_effect = None #Kích hoạt hiệu ứng
         self.effect_duration = random.randint(1000, 3000) #Tính theo mili giây
         self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
-        self.effects = ["stun", "stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "accelerate", "teleport"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
+        self.effects = ["stun", "stun", "stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "accelerate", "accelerate", "teleport", "goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.tempSpeed = character.speed #Dùng để lưu tốc chạy của nhân vật tạm thời
-        self.firstTime = True
 
     def check_activate(self, character):
         if character.rect.colliderect(self.rect) and (not self.activated):
@@ -244,6 +253,8 @@ class LuckyBox():
             character.accelerate(self.activated)
         elif self.active_effect == "teleport":
             character.teleport(self.activated)
+        elif self.active_effect == "goback":
+            character.goback(self.activated)
 
     def update(self, character):
         self.check_activate(character)
@@ -251,11 +262,17 @@ class LuckyBox():
         if self.active_effect is not None:
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
             elapsed_time = current_time - self.activation_time
+            if self.active_effect == "stun" or self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
+                if elapsed_time >= self.effect_duration:
+                    self.active_effect = None
+                    character.speed = self.tempSpeed
+                    character.run = True
+            elif self.active_effect == "goback":
+                if character.rect.x < 0:
+                    self.active_effect = None
+                    character.speed = self.tempSpeed
+                    character.isGoBack = False
 
-            if elapsed_time >= self.effect_duration:
-                self.active_effect = None
-                character.speed = self.tempSpeed
-                character.run = True
 
         if not self.activated:
             screen.blit(self.image, self.rect)

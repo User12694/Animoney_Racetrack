@@ -4,11 +4,14 @@ from GameInit import *
 
 #Đếm ngược
 countDownCheck = True
-NumberCountDown = ["assets/background/1.png", "assets/background/2.png", "assets/background/3.png"]
-def count_down(countDownCheck):
-    for i in range(2, -1, -1):
+NumberCountDown = ["assets/background/start.png", "assets/background/1.png", "assets/background/2.png", "assets/background/3.png"]
+def count_down():
+    for i in range(3, -1, -1):
         screen.blit(MAPS[MAP_INDEX], (0, 0))
-        screen.blit(pygame.image.load(NumberCountDown[i]).convert_alpha(), (screen.get_width() / 2, screen.get_height() / 2))
+        image = pygame.image.load(NumberCountDown[i]).convert_alpha()
+        image_rect = image.get_rect(center = (screen.get_width() / 2, screen.get_height() / 2))
+        screen.blit(image, image_rect)
+
         pygame.display.update()
         pygame.time.wait(1000)
     pygame.mixer.music.set_volume(present_volume)
@@ -34,7 +37,7 @@ def Play():
         
         #Đếm ngược trước khi vào game
         if countDownCheck:
-            count_down(countDownCheck)
+            count_down()
             countDownCheck = False
 
         #Chữ chạy
