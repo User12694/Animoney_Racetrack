@@ -6,6 +6,7 @@ from GameInit import *
 countDownCheck = True
 NumberCountDown = ["assets/background/start.png", "assets/background/1.png", "assets/background/2.png", "assets/background/3.png"]
 def count_down():
+    global gameSound
     for i in range(3, -1, -1):
         screen.blit(MAPS[MAP_INDEX], (0, 0))
         image = pygame.image.load(NumberCountDown[i]).convert_alpha()
@@ -17,12 +18,12 @@ def count_down():
     pygame.mixer.music.set_volume(present_volume)
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
+    gameSound = True
 
 
 def Play():
-    global countDownCheck
+    global countDownCheck, gameSound
     while True:
-        
         #Ảnh nền
         if MAP_INDEX == 0:
              screen.blit(MAPS[0],(0,0))
@@ -39,6 +40,12 @@ def Play():
         if countDownCheck:
             count_down()
             countDownCheck = False
+
+        if not gameSound:
+            pygame.mixer.music.set_volume(present_volume)
+            pygame.mixer.music.load('assets/sounds/set1.mp3')
+            pygame.mixer.music.play(loops = -1)
+            gameSound = True
 
         #Chữ chạy
         ChuChay.update()
@@ -154,9 +161,6 @@ class MenuClass:
     #Khởi tạo các thuộc tính
     def __init__(self):
         global VOLUME_INDEX, present_volume
-        pygame.mixer.music.set_volume(present_volume)
-        pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
-        pygame.mixer.music.play(loops = -1)
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.8), text_base_color= "black", text_active_color = "white", textIn = "PLAY") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), text_base_color= "black", text_active_color = "white", textIn = "SETTINGS") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color = "black", text_active_color = "white", textIn = "QUIT") # Nút có dòng chữ "Quit"
@@ -169,12 +173,20 @@ class MenuClass:
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
+        global MenuSound, gameSound
+        if not MenuSound:
+            pygame.mixer.music.set_volume(present_volume)
+            pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
+            pygame.mixer.music.play(loops = -1)
+            MenuSound = True
         pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if self.playButton.CheckClick(pos):
+                MenuSound = False
+                gameSound = False
                 Play()
             if self.settingsButton.CheckClick(pos):
                 return SettingClass()
@@ -307,30 +319,35 @@ class WindowModeSettingClass:
     def __init__(self):
         #Khởi tạo các thuộc tính
         self.fullScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="FULLSCREEN") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
-        self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="0.25%") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
+        self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="25%") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
         self.esc_button = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color="Black", text_active_color="white", textIn="BACK") # Nút quay về
-        self.halfScreenButton_active = True
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, mouse_pos):
         screen.blit(Background, (0, 0))
-        if not self.halfScreenButton_active:
+        if halfScreen_active:
             self.fullScreenButton.update(mouse_pos)
         else:
             self.halfScreenButton.update(mouse_pos)
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
+        global WINDOW_SIZE_INDEX, halfScreen_active, screen, Background
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
         if event.type == pygame.MOUSEBUTTONDOWN:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.fullScreenButton.CheckClick(pos):
-                #Kiểm tra xem nút đầu tiên có được nhấn hay không
-                self.halfScreenButton_active = not self.halfScreenButton_active
-                pass
-            if self.halfScreenButton.CheckClick(pos):
-                pass
-            if self.esc_button.CheckClick(pos):
+                halfScreen_active = not halfScreen_active
+                return self
+            elif self.halfScreenButton.CheckClick(pos):
+                halfScreen_active = True
+                return self
+            elif self.esc_button.CheckClick(pos):
                 return SettingClass() #Trả về màn hình cài đặt
+            elif event.type == pygame.VIDEORESIZE:
+                # Xử lý sự kiện resize màn hình
+                width, height = event.w, event.h
+                screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         return self
+        
