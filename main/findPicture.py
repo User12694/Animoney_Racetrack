@@ -1,5 +1,6 @@
 import os
 from PIL import Image
+import string
 
 # Đường dẫn đến thư mục chính
 main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/player/'
@@ -20,13 +21,7 @@ def Browse():
                 if file_name.endswith('.png') or file_name.endswith('.jpg') or file_name.endswith('.jpeg'):
                     # Tạo đường dẫn đầy đủ đến file ảnh
                     image_path = os.path.join(player_directory_path, file_name)
-
-                    # Mở file ảnh và lưu vào biến
-                    image = Image.open(image_path)
-
-                    # Thêm ảnh và đường dẫn đến danh sách tương ứng
-                    image_list.append(image)
+                    image_path = image_path.replace('\\','/')
                     image_path_list.append(image_path)
 
-    print(f'Found {len(image_list)} images')
-    return image_list, image_path_list
+    return image_path_list
