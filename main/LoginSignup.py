@@ -35,7 +35,7 @@ def filePath():
 def face_detect(image_path):
         img = cv2.imread(image_path)
         #Chuyển đổi hệ màu
-        gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Khởi tạo Haar cascade
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -59,14 +59,17 @@ def cv2_read_image(image_path):
 def compare_faces(image1_path, image2_path):
     # Đọc hai hình ảnh từ đường dẫn
     img1 = cv2_read_image(image1_path)
-    img2 = cv2_read_image
+    img2 = cv2_read_image(image2_path)
 
+    #Chuyển đổi hình ảnh sang hệ màu xám 
+    changed_img1 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
+    changed_img2 = cv2.cvtColor(img2, cv2.COLOR_RGB2GRAY)
     # Khởi tạo Haar cascade
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
     # Phát hiện khuôn mặt trong hai hình ảnh
-    faces1 = face_cascade.detectMultiScale(img1, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    faces2 = face_cascade.detectMultiScale(img2, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    faces1 = face_cascade.detectMultiScale(changed_img1, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    faces2 = face_cascade.detectMultiScale(changed_img2, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
     # Kiểm tra xem có phát hiện được khuôn mặt không
     if len(faces1) == 0 or len(faces2) == 0:
@@ -117,7 +120,8 @@ class LoginRegisterMenu:
         self.image_label = tk.Label(self.frame,bg=bg_color)
         self.confirm_button = tk.Button(self.frame,text="Confirm image",command=self.confirm_image)
         self.confirmed_notification = tk.Label(self.frame, text="Image loaded!", bg=bg_color)
-
+        self.face_detected = tk.Label(self.frame, text="Have faces!", bg=bg_color)
+        self.noface_detected = tk.Label(self.frame, text="No faces!", bg=bg_color)
         # Đóng gói các widget vào frame
         self.game_logo.pack()
         self.username_label.pack()
@@ -184,6 +188,8 @@ class LoginRegisterMenu:
         self.image_label.pack_forget()
         self.confirm_button.pack_forget()
         self.confirmed_notification.pack_forget()
+        self.face_detected.pack_forget()
+        self.noface_detected.pack_forget()
         self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
         self.open_button.pack() # Đóng gói nút mở ảnh vào frame
@@ -200,10 +206,11 @@ class LoginRegisterMenu:
         self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
         self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
         self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi frame
-        self.emptyname_error.pack_forget()
         self.image_label.pack_forget()
         self.confirm_button.pack_forget()
         self.confirmed_notification.pack_forget()
+        self.face_detected.pack_forget()
+        self.noface_detected.pack_forget()
         self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
         self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
@@ -223,8 +230,13 @@ class LoginRegisterMenu:
         self.image_label.config(image=self.photo)
         self.image_label.pack()
         self.image_label.image = self.photo
+        self.confirmed_notification.pack_forget()
+        self.noface_detected.pack_forget()
+        self.face_detected.pack_forget()
+        self.confirm_button.pack_forget()
         # Hiển thị nút "Xác nhận ảnh"
         self.confirm_button.pack()
+        self.login_button.config(command=self.result)
         image_load_path = self.file_path
         return image_load_path
         
@@ -243,13 +255,15 @@ class LoginRegisterMenu:
         result, text = face_detect(image_load_path)
         if result:
             print("Có khuôn mặt")
-            result = compare_faces(image_load_path, )
+            result_list = []
+            for path in image_load_path:
+                result_list.append(compare_faces(image_load_path, path))
+            print(result_list)
         else:
-            print("Đéo có")
-        for path in image_paths:
-            print(path)
-        
-        print(image_load_path)
+            print("Có cái loz")
+            self.noface_detected.pack_forget()
+            self.noface_detected.pack()
+            
 #Thực hiện lệnh shell để nhận đường dẫn Unicode:
 subprocess.run(['cmd', '/c', 'chcp', '65001'])
 # Tạo một cửa sổ gốc
