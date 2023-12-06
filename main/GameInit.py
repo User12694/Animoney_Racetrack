@@ -152,7 +152,10 @@ class player():
 
     def accelerate(self, activated):
         if not activated:
-            self.speed += 2
+            if self.speed >= 5:
+                self.speed += 1
+            else:
+                self.speed += 2
 
     def teleport(self, activated):
         if not activated:
