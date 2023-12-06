@@ -161,7 +161,7 @@ class player():
 
     def teleport(self, activated):
         if not activated:
-            self.x = screen.get_width() * 0.95
+            self.rect.x = screen.get_width() * 0.8
 
 Char1 = player(speed = Speed[0], 
                  pos = (screen.get_width() * 0.01, screen.get_height() * 0.55), 
@@ -266,11 +266,11 @@ luckyBox3 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), scre
 luckyBox4 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.87), character = Char4)
 luckyBox5 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.98), character = Char5)
 
-luckyBox6 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.55), character = Char1)
-luckyBox7 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.66), character = Char2)
-luckyBox8 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.76), character = Char3)
-luckyBox9 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.87), character = Char4)
-luckyBox10 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.98), character = Char5)
+luckyBox6 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.55), character = Char1)
+luckyBox7 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.66), character = Char2)
+luckyBox8 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.76), character = Char3)
+luckyBox9 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.87), character = Char4)
+luckyBox10 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.98), character = Char5)
 
 #Class nút
 BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
