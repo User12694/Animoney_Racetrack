@@ -30,6 +30,12 @@ def Play():
         luckyBox4.update(Char4)
         luckyBox5.update(Char5)
 
+        luckyBox6.update(Char1)
+        luckyBox7.update(Char2)
+        luckyBox8.update(Char3)
+        luckyBox9.update(Char4)
+        luckyBox10.update(Char5)
+
         #Nhân vật
         Char1.update()
         Char2.update()

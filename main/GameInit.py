@@ -145,7 +145,10 @@ class player():
 
     def slow(self, activated):
         if not activated:
-            self.speed -= 2
+            if self.speed <= 2:
+                self.speed = 1
+            else:
+                self.speed -= 2
 
     def accelerate(self, activated):
         if not activated:
@@ -252,11 +255,17 @@ class LuckyBox():
         if not self.activated:
             screen.blit(self.image, self.rect)
 
-luckyBox1 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.55), character = Char1)
-luckyBox2 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.66), character = Char2)
-luckyBox3 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.76), character = Char3)
-luckyBox4 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.87), character = Char4)
-luckyBox5 = LuckyBox(pos = (screen.get_width() * random.randint(200000, 800000) / 1000000, screen.get_height() * 0.98), character = Char5)
+luckyBox1 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.55), character = Char1)
+luckyBox2 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.66), character = Char2)
+luckyBox3 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.76), character = Char3)
+luckyBox4 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.87), character = Char4)
+luckyBox5 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.98), character = Char5)
+
+luckyBox6 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.55), character = Char1)
+luckyBox7 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.66), character = Char2)
+luckyBox8 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.76), character = Char3)
+luckyBox9 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.87), character = Char4)
+luckyBox10 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.98), character = Char5)
 
 #Class nút
 BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
