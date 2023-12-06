@@ -16,6 +16,8 @@ present_volume = VOLUME[VOLUME_INDEX]
 WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
+halfScreen_active = False
+
 
 #Kiểu chữ
 KieuChu1 = pygame.font.SysFont('./assets/font/SVN-Retron_2000.ttf',60)
@@ -28,6 +30,7 @@ scoreBoard_Box = scoreBoard.get_rect(center = (screen.get_width() * 0.13, screen
 
 #Ảnh các loại
 Background = pygame.image.load('assets/background/background.png').convert_alpha()
+Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 
 map1 = pygame.image.load('assets/background/map1.png').convert_alpha()
 map1 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
@@ -258,7 +261,6 @@ class LuckyBox():
 
     def update(self, character):
         self.check_activate(character)
-
         if self.active_effect is not None:
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
             elapsed_time = current_time - self.activation_time
@@ -275,7 +277,7 @@ class LuckyBox():
 
 
         if not self.activated:
-            screen.blit(self.image, self.rect)
+                screen.blit(self.image, self.rect)
 
 luckyBox1 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.55), character = Char2)
 luckyBox2 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.66), character = Char2)

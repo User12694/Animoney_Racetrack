@@ -307,30 +307,35 @@ class WindowModeSettingClass:
     def __init__(self):
         #Khởi tạo các thuộc tính
         self.fullScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="FULLSCREEN") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
-        self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="0.25%") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
+        self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="25%") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
         self.esc_button = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color="Black", text_active_color="white", textIn="BACK") # Nút quay về
-        self.halfScreenButton_active = True
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, mouse_pos):
         screen.blit(Background, (0, 0))
-        if not self.halfScreenButton_active:
+        if halfScreen_active:
             self.fullScreenButton.update(mouse_pos)
         else:
             self.halfScreenButton.update(mouse_pos)
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
+        global WINDOW_SIZE_INDEX, halfScreen_active, screen, Background
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
         if event.type == pygame.MOUSEBUTTONDOWN:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.fullScreenButton.CheckClick(pos):
-                #Kiểm tra xem nút đầu tiên có được nhấn hay không
-                self.halfScreenButton_active = not self.halfScreenButton_active
-                pass
-            if self.halfScreenButton.CheckClick(pos):
-                pass
-            if self.esc_button.CheckClick(pos):
+                halfScreen_active = not halfScreen_active
+                return self
+            elif self.halfScreenButton.CheckClick(pos):
+                halfScreen_active = True
+                return self
+            elif self.esc_button.CheckClick(pos):
                 return SettingClass() #Trả về màn hình cài đặt
+            elif event.type == pygame.VIDEORESIZE:
+                # Xử lý sự kiện resize màn hình
+                width, height = event.w, event.h
+                screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         return self
+        
