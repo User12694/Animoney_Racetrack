@@ -57,7 +57,7 @@ Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2
 
 #Nhân vật, tốc độ
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
-RandSpeed = [2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5]
+RandSpeed = [2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5]
 Speed = []
 for x in range(5):
     Speed.append(random.choice(RandSpeed))
@@ -152,10 +152,10 @@ class player():
 
     def accelerate(self, activated):
         if not activated:
-            if self.speed >= 5:
+            if self.speed >= 4:
                 self.speed += 1
             else:
-                self.speed += 2
+                self.speed += 3
 
     def teleport(self, activated):
         if not activated:
@@ -258,17 +258,17 @@ class LuckyBox():
         if not self.activated:
             screen.blit(self.image, self.rect)
 
-luckyBox1 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.55), character = Char1)
-luckyBox2 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.66), character = Char2)
-luckyBox3 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.76), character = Char3)
-luckyBox4 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.87), character = Char4)
-luckyBox5 = LuckyBox(pos = (screen.get_width() * random.uniform(0.1, 0.4), screen.get_height() * 0.98), character = Char5)
+luckyBox1 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.55), character = Char2)
+luckyBox2 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.66), character = Char2)
+luckyBox3 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.76), character = Char3)
+luckyBox4 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.87), character = Char4)
+luckyBox5 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.98), character = Char5)
 
-luckyBox6 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.55), character = Char1)
-luckyBox7 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.66), character = Char2)
-luckyBox8 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.76), character = Char3)
-luckyBox9 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.87), character = Char4)
-luckyBox10 = LuckyBox(pos = (screen.get_width() * random.uniform(0.5, 0.8), screen.get_height() * 0.98), character = Char5)
+luckyBox6 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.55), character = Char1)
+luckyBox7 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.66), character = Char2)
+luckyBox8 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.76), character = Char3)
+luckyBox9 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.87), character = Char4)
+luckyBox10 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.85), screen.get_height() * 0.98), character = Char5)
 
 #Class nút
 BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
