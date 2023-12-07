@@ -3,6 +3,7 @@ from PIL import Image
 import string
 
 # Đường dẫn đến thư mục chính
+
 main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/player/'
 
 # Duyệt qua tất cả các thư mục con trong thư mục chính

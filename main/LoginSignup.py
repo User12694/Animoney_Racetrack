@@ -7,7 +7,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import os
 import time
-import findPicture as fp
+# import findPicture as fp
 import fnmatch
 import subprocess
 
@@ -18,10 +18,9 @@ img_label = None
 # confirm_button = None Nút xác nhận được gắn hàm kiểm tra trong FindPicture.py (hiện bị disable)
 main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/player/'
 bg_color = "#2b95d1"
-image_paths = fp.Browse()
+# image_paths = fp.Browse()
 image_load_path = None 
-def disable_event():
-    pass  
+
 def filePath():
     anh = "captured_image.png"
 
@@ -32,26 +31,26 @@ def filePath():
     print("Đuôi file:", duoi_file)
     imgpath = f'{ten}.{duoi_file}'
     return imgpath
-def face_detect(image_path):
-        img = cv2.imread(image_path)
-        #Chuyển đổi hệ màu
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+'''def face_detect(image_path):
+    img = cv2_read_image(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
-        # Khởi tạo Haar cascade
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    # Khởi tạo Haar cascade
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-        # Phát hiện khuôn mặt trong hình ảnh
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    # Phát hiện khuôn mặt trong hình ảnh
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-        # Kiểm tra xem có phát hiện được khuôn mặt nào không
-        if len(faces) == 0:
-            text = "Không tìm thấy khuôn mặt nào. Vui lòng đưa lại ảnh"
-            return False, text
-        else:
-            text = "Phát hiện khuôn mặt."
-            return True, text
+    # Kiểm tra xem có phát hiện được khuôn mặt nào không
+    if len(faces) == 0:
+        text = "Không tìm thấy khuôn mặt nào. Vui lòng đưa lại ảnh"
+        return False, text
+    else:
+        text = "Phát hiện khuôn mặt."
+        return True, text
 #Đọc đường dẫn file chứa kí tự Unicode (nếu có)
 def cv2_read_image(image_path):
+    print(image_path)
     image_data = np.fromfile(image_path, dtype=np.uint8)
     # Giải mã mảng byte thành ảnh
     image = cv2.imdecode(image_data, cv2.IMREAD_UNCHANGED)
@@ -92,7 +91,7 @@ def compare_faces(image1_path, image2_path):
     compare_val = cv2.compareHist(hist1, hist2, cv2.HISTCMP_CORREL)
     print("Độ tương đồng giữa hai khuôn mặt:", compare_val)
     return compare_val
-
+'''
 # Định nghĩa lớp LoginRegisterMenu
 class LoginRegisterMenu:
     # Hàm khởi tạo
@@ -236,7 +235,7 @@ class LoginRegisterMenu:
         self.confirm_button.pack_forget()
         # Hiển thị nút "Xác nhận ảnh"
         self.confirm_button.pack()
-        self.login_button.config(command=self.result)
+        # self.login_button.config(command=self.result)
         image_load_path = self.file_path
         return image_load_path
         
@@ -245,24 +244,22 @@ class LoginRegisterMenu:
         if image_load_path:
             self.confirmed_notification.pack_forget()
             self.confirmed_notification.pack()
-            self.login_button.config(command=self.result())
+            # self.login_button.config(command=self.result())
         else:
             self.confirmed_notification.pack_forget()
             self.confirmed_notification.config(text="No image loaded! Try again.",bg=bg_color)
             self.confirmed_notification.pack()
-    def result(self):
+    '''def result(self):
         global image_paths, image_load_path
         result, text = face_detect(image_load_path)
         if result:
-            print("Có khuôn mặt")
             result_list = []
-            for path in image_load_path:
+            for path in image_paths:
                 result_list.append(compare_faces(image_load_path, path))
             print(result_list)
         else:
-            print("Có cái loz")
             self.noface_detected.pack_forget()
-            self.noface_detected.pack()
+            self.noface_detected.pack()'''
             
 #Thực hiện lệnh shell để nhận đường dẫn Unicode:
 subprocess.run(['cmd', '/c', 'chcp', '65001'])
