@@ -117,6 +117,7 @@ class LoginRegisterMenu:
         self.switch_button = tk.Button(self.frame, text="Don't have one? Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
         self.open_button = tk.Button(self.frame,text="Login by your face? Browse...",command = self.open_image)
         self.image_label = tk.Label(self.frame,bg=bg_color)
+        
         self.confirm_button = tk.Button(self.frame,text="Confirm image",command=self.confirm_image)
         self.confirmed_notification = tk.Label(self.frame, text="Image loaded!", bg=bg_color)
         self.face_detected = tk.Label(self.frame, text="Have faces!", bg=bg_color)

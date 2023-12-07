@@ -10,7 +10,6 @@ main_directory_path = 'C:/Users/nguye/OneDrive/Máy tính/Game_Project/assets/pl
 def Browse():
     image_list = []  # Danh sách chứa các ảnh
     image_path_list = []  # Danh sách chứa các đường dẫn đến các tệp ảnh
-
     for player_directory_name in os.listdir(main_directory_path):
         player_directory_path = os.path.join(main_directory_path, player_directory_name)
 
