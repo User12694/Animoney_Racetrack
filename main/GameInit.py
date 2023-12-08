@@ -7,6 +7,21 @@ pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
+#Các biến cần dùng
+user_id = ''
+user_pwd = ''
+user_money = 0
+set_choice = 1
+choice = 0
+bet_money = 0
+# store 5 characters
+CHARACTERS = []
+LUCKYBOX = []
+GROUP = []
+rank = []
+winner = 0
+
+
 #Ngôn ngữ
 LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
 LANGUAGE_INDEX = 0
@@ -16,12 +31,14 @@ VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 VOLUME_INDEX = 4
 present_volume = VOLUME[VOLUME_INDEX]
 MenuSound = False
+gameSound = False
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
 WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
+SCREEN_SIZE = ['assets/characters/']
+SCREEN_SIZE_INDEX = 0
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 halfScreen_active = False
-gameSound = False
 
 #Kiểu chữ
 KieuChu1 = pygame.font.SysFont('./assets/font/SVN-Retron_2000.ttf',60)
@@ -59,12 +76,13 @@ Char4Map1 = ['assets/characters/Char4Map1_1.png', 'assets/characters/Char4Map1_2
 Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2.png',
             'assets/characters/Char5Map1_3.png', 'assets/characters/Char5Map1_4.png']
 
-#Nhân vật, tốc độ
+#Nhân vật, tốc độ, vị trí
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
 RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
 Speed = []
 for x in range(5):
     Speed.append(random.choice(RandSpeed))
+Position = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
 
 #Ktra nhạc đã phát chưa
 Victory_sound_Play = True
@@ -72,11 +90,12 @@ Victory_sound_Play = True
 #List nhân vật thắng (Sẽ được thêm khi các nhân vật về đích)
 RankList = []
 #Các nhân vật trong game
-class player():
+class Character():
     def __init__(self, speed, pos, number, image, map):
         self.speed = speed
-        self.x = pos[0]
-        self.y = pos[1]
+        self.pos = pos
+        self.x = self.pos[0]
+        self.y = self.pos[1]
         self.number = number
         self.run = True
         self.count_run = 0
@@ -128,9 +147,9 @@ class player():
     #Check điều kiện thắng
     def FinishLine_Pass(self):
         global Victory_sound_Play
-        if self.rect.x > screen.get_width() * 0.95:
+        if self.rect.x > WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.95:
             if not self.Finish:
-                RankList.append(Char1)
+                rank.append(self)
                 self.run = False
                 if Victory_sound_Play:
                     pygame.mixer.music.load('assets/sounds/Victorious.ogg')
@@ -170,38 +189,28 @@ class player():
 
     def teleport(self, activated):
         if not activated:
-            self.rect.x = screen.get_width() * 0.8
+            self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.8
 
     def goback(self, activated):
         if not activated:
             self.speed *= -1
             self.isGoBack = True
 
-Char1 = player(speed = Speed[0], 
-                 pos = (screen.get_width() * 0.01, screen.get_height() * 0.55), 
-                 number = 0, 
-                 image = CharsMap1[0][0], 
-                 map = 0)
-Char2 = player(speed = Speed[1], 
-                 pos = (screen.get_width() * 0.01, screen.get_height() * 0.66), 
-                 number = 1, 
-                 image = CharsMap1[1][0], 
-                 map = 0)
-Char3 = player(speed = Speed[2], 
-                 pos = (screen.get_width() * 0.01, screen.get_height() * 0.76), 
-                 number = 2, 
-                 image = CharsMap1[2][0], 
-                 map = 0)
-Char4 = player(speed = Speed[3], 
-                 pos = (screen.get_width() * 0.01, screen.get_height() * 0.87), 
-                 number = 3, 
-                 image = CharsMap1[3][0], 
-                 map = 0)
-Char5 = player(speed = Speed[4], 
-                 pos = (screen.get_width() * 0.01, screen.get_height() * 0.98), 
-                 number = 4, 
-                 image = CharsMap1[4][0], 
-                 map = 0)
+def init_character_luckybox():
+    for i in range(5):
+        global set_choice
+        new_character = Character(speed = Speed[i], 
+                                  pos = Position[i], 
+                                  number = i, 
+                                  image = SCREEN_SIZE[SCREEN_SIZE_INDEX] + 'Char' + str(i + 1) + 'Map' + str(int(set_choice)) + '_1.png', 
+                                  map = int(set_choice - 1))
+        CHARACTERS.append(new_character)
+    for i in range(10):
+            if i < 5:
+                luckyBox = LuckyBox(pos = LuckyBox_Pos[i], character = CHARACTERS[i])
+            else:
+                luckyBox = LuckyBox(pos = LuckyBox_Pos[i], character = CHARACTERS[i - 5])
+            LUCKYBOX.append(luckyBox)
 
 #Các đối tượng trong game (Hiện tại chỉ đang có chữ chạy)
 class IG_Objects():
@@ -217,15 +226,26 @@ class IG_Objects():
         if self.name == "ChuChay":
             self.rect.x -= 2
             if self.rect.right <= 0:
-                self.rect.x = screen.get_width()
+                self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
     def update(self):
         if self.name == "ChuChay":
             self.move()
             screen.blit(self.image, self.rect)
 
 #Add object
-ChuChay = IG_Objects(name = 'ChuChay', pos = (screen.get_width(), 0))
+ChuChay = IG_Objects(name = 'ChuChay', pos = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
 
+#Vị trí lucky box
+LuckyBox_Pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98),
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55),
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66),
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76),
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
+                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
 class LuckyBox():
     def __init__(self, pos, character):
         self.x = pos[0]
@@ -308,18 +328,6 @@ class LuckyBox():
 
         if not self.activated:
                 screen.blit(self.image, self.rect)
-
-luckyBox1 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.55), character = Char2)
-luckyBox2 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.66), character = Char2)
-luckyBox3 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.76), character = Char3)
-luckyBox4 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.87), character = Char4)
-luckyBox5 = LuckyBox(pos = (screen.get_width() * random.uniform(0.28, 0.5), screen.get_height() * 0.98), character = Char5)
-
-luckyBox6 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.55), character = Char1)
-luckyBox7 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.66), character = Char2)
-luckyBox8 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.76), character = Char3)
-luckyBox9 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.87), character = Char4)
-luckyBox10 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.98), character = Char5)
 
 #Class nút
 class Button():
