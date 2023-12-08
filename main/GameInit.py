@@ -270,7 +270,7 @@ class LuckyBox():
             screen.blit(effectImage2, effectImage_rect2)
         elif self.active_effect == "slow":
             effectImage = pygame.image.load("assets/effects/hieuung_cham.png").convert_alpha()
-            effectImage_rect = effectImage.get_rect(midright = character.rect.midleft)
+            effectImage_rect = effectImage.get_rect(midbottom = character.rect.midleft)
             effectImage2 = pygame.image.load("assets/effects/hoNuoc.png").convert_alpha()
             effectImage_rect2 = effectImage.get_rect(midleft = self.rect.bottomleft)
             screen.blit(effectImage, effectImage_rect)
