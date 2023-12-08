@@ -8,13 +8,19 @@ username = 'nhat' #Khai báo trước, sau này có gì thế vô đây
 user_id = username # Cái này tí nhập qua sau
 money = 4800 #Cần thay đổi biến này thành biến cục bộ
 reward = 100 #Ví dụ cho số tiền được thay đổi khi chơi minigame
-#Thêm tí code ngăn người chơi ăn chặn tiền
-if money > 0:
-    money 
+
 # Viết mảng chỉ kết quả
 result = [('Lose'), ('Win')]
 #Kết quả: Thắng hoặc thua, k có nhưng
 result_index = 0
+
+#Thêm tí code ngăn người chơi ăn chặn tiền
+if money > 0:
+    if result[result_index] == 'Win':
+        money = money + reward
+    else:
+        money = money - reward
+
 def update_money(username):
     #Đọc toàn bộ file: Dòng chỉ số 0 là mật khẩu, 1 là số tiền, 2 trở đi sẽ là dòng lịch sử đấu
     with open(f'./assets/player/{username}/{username}.txt','r') as f:
