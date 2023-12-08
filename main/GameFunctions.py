@@ -96,9 +96,9 @@ def Pause_Game():
         screen.blit(Background,(0,0))
         #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
-        RETURN_TO_MENU = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 - 50), text_base_color="Black", text_active_color="white", textIn="RETURN TO MENU")
-        RETURN_TO_GAME = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="CONTINUE")
-        QUIT = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 + 50), text_base_color="Black", text_active_color="white", textIn="QUIT")
+        RETURN_TO_MENU = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.8), imageNormal = "return.png", imageChanged = "return2.png")
+        RETURN_TO_GAME = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "continue.png", imageChanged = "continue2.png")
+        QUIT = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "quit.png", imageChanged = "quit2.png")
 
         BUTTONS = [RETURN_TO_MENU, RETURN_TO_GAME, QUIT]
 
@@ -131,8 +131,8 @@ def QuitConfirm():
         mouse_pos = pygame.mouse.get_pos()
         #Các nút trong quit confirm
         Promptlabel = Label(screen.get_width() / 2 * 0.85, screen.get_height() / 2 * 0.7, 125, 50, 'Want to back the Menu Screen?')
-        yesButton = Button(pos=(screen.get_width() / 2 * 1.2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="YES")
-        noButton = Button(pos=(screen.get_width() / 2 * 0.8, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="NO")
+        yesButton = Button(pos=(screen.get_width() / 2 * 1.5, screen.get_height() / 2), imageNormal = "yes.png", imageChanged = "yes2.png")
+        noButton = Button(pos=(screen.get_width() / 2 * 0.5, screen.get_height() / 2), imageNormal = "no.png", imageChanged = "no2.png")
 
         Promptlabel.draw(screen)
         yesButton.update(mouse_pos)
@@ -160,9 +160,9 @@ class MenuClass:
     #Khởi tạo các thuộc tính
     def __init__(self):
         global VOLUME_INDEX, present_volume
-        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.8), text_base_color= "black", text_active_color = "white", textIn = "PLAY") # Nút có dòng chữ "Play game"
-        self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), text_base_color= "black", text_active_color = "white", textIn = "SETTINGS") # Nút có dòng chữ "Settings"
-        self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color = "black", text_active_color = "white", textIn = "QUIT") # Nút có dòng chữ "Quit"
+        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
+        self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
+        self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.75), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
         screen.blit(Background, (0, 0))
@@ -197,9 +197,9 @@ class MenuClass:
 
 class SettingClass: #Khởi tạo các nút, label và Button. 
     def __init__(self):
-        self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.8), text_base_color="Black", text_active_color="white", textIn="SOUND")
-        self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="SCREEN")
-        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color="Black", text_active_color="white", textIn="BACK")
+        self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.8), imageNormal = "sound.png", imageChanged = "sound2.png")
+        self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "screen.png", imageChanged = "screen2.png")
+        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "back.png", imageChanged = "back2.png")
     #Vẽ các lớp phủ, các nút và chữ
     def draw(self, mouse_pos):
         screen.blit(Background,(0,0)) #Tạo một lớp phủ hình chữ nhật kích thước tối đa
@@ -232,11 +232,11 @@ class VolumeSettingClass:
         # Chú ý các thành phần như âm lượng hiện tại và chỉ số âm lượng được đánh dấu toàn cục. Sau này sẽ thêm các thuộc tính WINDOW
         global present_volume, VOLUME_INDEX
         self.label1 = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2 * 0.4,125,50,'Mute Volume') # Dòng chữ 'Mute Volume'  
-        self.esc_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.5),"black", "white",'Back')    # Nút có chữ 'Back'
-        self.mute_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 0.75),"black", "white", "Mute") # Nút có chữ 'Mute'
+        self.esc_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.5),imageNormal = "back.png", imageChanged = "back2.png")    # Nút có chữ 'Back'
+        self.mute_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 0.75),imageNormal = "mute.png", imageChanged = "mute2.png") # Nút có chữ 'Mute'
         self.label2 = Label(screen.get_width() / 2 * 0.92, screen.get_height() / 2 * 0.8,125,50,'Volume')     # dòng chữ "Volume"
-        self.minusVol_button = Button((screen.get_width() / 2 * 0.8, screen.get_height() / 2 * 0.85),"black", "white",'-') #Các nút +, - để tăng giảm âm lượng
-        self.plusVol_button = Button((screen.get_width() / 2 * 1.2, screen.get_height() / 2 * 0.85),"black", "white",'+')
+        self.minusVol_button = Button((screen.get_width() / 2 * 0.8, screen.get_height() / 2 * 0.85),imageNormal = "low.png", imageChanged = "low2.png") #Các nút +, - để tăng giảm âm lượng
+        self.plusVol_button = Button((screen.get_width() / 2 * 1.2, screen.get_height() / 2 * 0.85),imageNormal = "high.png", imageChanged = "high2.png")
         self.display_volume_label = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2,50,50, f"{present_volume * 100}") # Trường hiển thị âm lượng hiện tại
         
         self.isMute = False #Các biến khai báo. Ở đây là biến xác định xem có đang tắt âm hay không
@@ -298,7 +298,8 @@ class VolumeSettingClass:
                 if self.isMute == False:
                     self.isMute = True #Trả về True cho isMute rồi thực hiện lệnh setvolume về 0
                     if self.isMute:
-                        self.mute_button.textIn = 'Muted' 
+                        self.mute_button.imageNormal = 'unmute.png'
+                        self.mute_button.imageChanged = 'unmute2.png'
                         self.volume = present_volume #Lưu trữ giá trị âm lượng
                         present_volume = 0
                         self.display_volume_label.text = "0" #Đưa giá trị âm lượng về 0
@@ -307,7 +308,8 @@ class VolumeSettingClass:
                 elif self.isMute == True:
                     self.isMute = False
                     if not self.isMute:
-                        self.mute_button.textIn = 'Mute'
+                        self.mute_button.imageNormal = 'mute.png'
+                        self.mute_button.imageChanged = 'mute2.png'
                         present_volume=self.volume  # Khôi phục giá trị âm lượng
                         self.display_volume_label.text = f'{present_volume * 100}' #Khôi phục giá trị hiển thị âm lượng hiện tại
                         pygame.mixer.music.set_volume(present_volume)
@@ -317,16 +319,16 @@ class VolumeSettingClass:
 class WindowModeSettingClass:
     def __init__(self):
         #Khởi tạo các thuộc tính
-        self.fullScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="FULLSCREEN") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
-        self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="25%") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
-        self.esc_button = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), text_base_color="Black", text_active_color="white", textIn="BACK") # Nút quay về
+        # self.fullScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="FULLSCREEN") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
+        # self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="25%") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
+        self.esc_button = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "back.png", imageChanged = "back2.png") # Nút quay về
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, mouse_pos):
         screen.blit(Background, (0, 0))
-        if halfScreen_active:
-            self.fullScreenButton.update(mouse_pos)
-        else:
-            self.halfScreenButton.update(mouse_pos)
+        # if halfScreen_active:
+        #     self.fullScreenButton.update(mouse_pos)
+        # else:
+        #     self.halfScreenButton.update(mouse_pos)
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
@@ -336,13 +338,13 @@ class WindowModeSettingClass:
         #Kiểm tra xem có nhấn chuột không
         if event.type == pygame.MOUSEBUTTONDOWN:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
-            if self.fullScreenButton.CheckClick(pos):
-                halfScreen_active = not halfScreen_active
-                return self
-            elif self.halfScreenButton.CheckClick(pos):
-                halfScreen_active = True
-                return self
-            elif self.esc_button.CheckClick(pos):
+            # if self.fullScreenButton.CheckClick(pos):
+            #     halfScreen_active = not halfScreen_active
+            #     return self
+            # elif self.halfScreenButton.CheckClick(pos):
+            #     halfScreen_active = True
+            #     return self
+            if self.esc_button.CheckClick(pos):
                 return SettingClass() #Trả về màn hình cài đặt
             elif event.type == pygame.VIDEORESIZE:
                 # Xử lý sự kiện resize màn hình
