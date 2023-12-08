@@ -1,9 +1,9 @@
 import pygame, sys, os
 from datetime import datetime
-from collection import deque
+
 
 # Tạo các biến toàn cục cho tài khoản và số tiền:
-username = 'phuoc' #Khai báo trước, sau này có gì thế vô đây
+username = 'thuan' #Khai báo trước, sau này có gì thế vô đây
 user_id = username # Cái này tí nhập qua sau
 #Lấy thời gian hiện tại
 now = datetime.now()
@@ -14,8 +14,10 @@ date_string = rounded_now.strftime('%d/%m')
 time_string = rounded_now.strftime('%H:%M')
 # Viết mảng chỉ kết quả
 result = ['Lose', 'Win']
+result_index = 0
 doesWin = 0
 timestamp = date_string + ' ' + time_string + "," + result[doesWin]
+
 def update_money():
     #Đọc toàn bộ file: Dòng chỉ số 0 là mật khẩu, 1 là số tiền, 2 trở đi sẽ là dòng lịch sử đấu
     with open(f'./assets/player/{username}/{username}.txt','r') as f:
@@ -24,14 +26,14 @@ def update_money():
     with open(f'./assets/player/{username}/{username}.txt','w') as f:
         f.writelines(lines) # Ghi lại toàn bộ nội dung vào file
 update_money()
+
 def update_timestamp(): #Ta chỉ cần thay đổi kết quả các dòng timestamp thôi
     with open(f'./assets/player/{username}/{username}.txt', 'r') as f:
         lines = f.readlines()
-
-    # Giữ lại dòng 0 và 1, và tạo một deque với các dòng từ 2 đến 7
-    lines = lines[:2] + list(deque(lines[2:8], maxlen=6))
-
+    input_result = ['','','','','']
+    for i in range (1,5):
+        input_result[i] = timestamp  + '\n'
     # Ghi lại nội dung vào file
-    with open(f'./assets/player/{username}/{username}.txt', 'w') as f:
-        f.writelines(lines)
+    with open(f'./assets/player/{username}/{username}.txt', 'a') as f:
+        f.writelines(input_result)
 update_timestamp()    
