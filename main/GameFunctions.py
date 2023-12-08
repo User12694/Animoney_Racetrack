@@ -93,12 +93,15 @@ def Play():
 #Tạm dừng trò chơi
 def Pause_Game():
      while True:
+        #Ảnh nền
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
-        RETURN_TO_MENU = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.8), imageNormal = "return.png", imageChanged = "return2.png")
-        RETURN_TO_GAME = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "continue.png", imageChanged = "continue2.png")
-        QUIT = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "quit.png", imageChanged = "quit2.png")
+        RETURN_TO_MENU = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "return.png", imageChanged = "return2.png")
+        RETURN_TO_GAME = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "continue.png", imageChanged = "continue2.png")
+        QUIT = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png")
 
         BUTTONS = [RETURN_TO_MENU, RETURN_TO_GAME, QUIT]
 
@@ -127,14 +130,14 @@ def Pause_Game():
 
 def QuitConfirm():
     while True:
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'quitprompt.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         mouse_pos = pygame.mouse.get_pos()
         #Các nút trong quit confirm
-        Promptlabel = Label(screen.get_width() / 2 * 0.85, screen.get_height() / 2 * 0.7, 125, 50, 'Want to back the Menu Screen?')
-        yesButton = Button(pos=(screen.get_width() / 2 * 1.5, screen.get_height() / 2), imageNormal = "yes.png", imageChanged = "yes2.png")
-        noButton = Button(pos=(screen.get_width() / 2 * 0.5, screen.get_height() / 2), imageNormal = "no.png", imageChanged = "no2.png")
+        yesButton = Button(pos=(screen.get_width() / 2 * 1.5, screen.get_height() / 2 * 1.2), imageNormal = "yes.png", imageChanged = "yes2.png")
+        noButton = Button(pos=(screen.get_width() / 2 * 0.5, screen.get_height() / 2 * 1.2), imageNormal = "no.png", imageChanged = "no2.png")
 
-        Promptlabel.draw(screen)
         yesButton.update(mouse_pos)
         noButton.update(mouse_pos)
 
@@ -162,9 +165,11 @@ class MenuClass:
         global VOLUME_INDEX, present_volume
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
-        self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.75), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
+        self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         self.playButton.update(mouse_pos)
         self.settingsButton.update(mouse_pos)
@@ -197,11 +202,13 @@ class MenuClass:
 
 class SettingClass: #Khởi tạo các nút, label và Button. 
     def __init__(self):
-        self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.8), imageNormal = "sound.png", imageChanged = "sound2.png")
-        self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "screen.png", imageChanged = "screen2.png")
-        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "back.png", imageChanged = "back2.png")
+        self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "sound.png", imageChanged = "sound2.png")
+        self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "screen.png", imageChanged = "screen2.png")
+        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "back.png", imageChanged = "back2.png")
     #Vẽ các lớp phủ, các nút và chữ
     def draw(self, mouse_pos):
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'settingsMenu.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0)) #Tạo một lớp phủ hình chữ nhật kích thước tối đa
         #Vẽ nút
         self.soundButton.update(mouse_pos)
@@ -231,12 +238,12 @@ class VolumeSettingClass:
         # Khởi tạo các thuộc tính. 
         # Chú ý các thành phần như âm lượng hiện tại và chỉ số âm lượng được đánh dấu toàn cục. Sau này sẽ thêm các thuộc tính WINDOW
         global present_volume, VOLUME_INDEX
-        self.label1 = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2 * 0.4,125,50,'Mute Volume') # Dòng chữ 'Mute Volume'  
+        # self.label1 = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2 * 0.4,125,50,'Mute Volume') # Dòng chữ 'Mute Volume'  
         self.esc_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.5),imageNormal = "back.png", imageChanged = "back2.png")    # Nút có chữ 'Back'
         self.mute_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 0.75),imageNormal = "mute.png", imageChanged = "mute2.png") # Nút có chữ 'Mute'
-        self.label2 = Label(screen.get_width() / 2 * 0.92, screen.get_height() / 2 * 0.8,125,50,'Volume')     # dòng chữ "Volume"
-        self.minusVol_button = Button((screen.get_width() / 2 * 0.8, screen.get_height() / 2 * 0.85),imageNormal = "low.png", imageChanged = "low2.png") #Các nút +, - để tăng giảm âm lượng
-        self.plusVol_button = Button((screen.get_width() / 2 * 1.2, screen.get_height() / 2 * 0.85),imageNormal = "high.png", imageChanged = "high2.png")
+        # self.label2 = Label(screen.get_width() / 2 * 0.92, screen.get_height() / 2 * 0.8,125,50,'Volume')     # dòng chữ "Volume"
+        self.minusVol_button = Button((screen.get_width() / 2 * 0.6, screen.get_height() / 2 * 0.95),imageNormal = "low.png", imageChanged = "low2.png") #Các nút +, - để tăng giảm âm lượng
+        self.plusVol_button = Button((screen.get_width() / 2 * 1.4, screen.get_height() / 2 * 0.95),imageNormal = "high.png", imageChanged = "high2.png")
         self.display_volume_label = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2,50,50, f"{present_volume * 100}") # Trường hiển thị âm lượng hiện tại
         
         self.isMute = False #Các biến khai báo. Ở đây là biến xác định xem có đang tắt âm hay không
@@ -248,10 +255,12 @@ class VolumeSettingClass:
     #Hàm vẽ các đối tượng trên màn hình
     def draw(self, mouse_pos):
         #Vẽ lớp phủ hình chữ nhật kích thước bằng kích thước cửa sổ hiện hành
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'soundMenu.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Vẽ các thuộc tính khác đã nêu
-        self.label1.draw(screen)
-        self.label2.draw(screen)
+        # self.label1.draw(screen)
+        # self.label2.draw(screen)
         self.esc_button.update(mouse_pos)
         self.mute_button.update(mouse_pos)
         self.plusVol_button.update(mouse_pos)
@@ -324,6 +333,8 @@ class WindowModeSettingClass:
         self.esc_button = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "back.png", imageChanged = "back2.png") # Nút quay về
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, mouse_pos):
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         # if halfScreen_active:
         #     self.fullScreenButton.update(mouse_pos)
