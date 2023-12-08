@@ -113,13 +113,13 @@ class LoginRegisterMenu:
         self.password_entry = tk.Entry(self.frame, show="*")  # Trường nhập mật khẩu
         self.login_button = tk.Button(self.frame, text="Login", command=self.login)  # Nút đăng nhập
         self.switch_button = tk.Button(self.frame, text="Don't have one? Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
-        self.open_button = tk.Button(self.frame,text="Login by your face? Browse...",command = self.open_image)
-        self.image_label = tk.Label(self.frame,bg=bg_color)
+        # self.open_button = tk.Button(self.frame,text="Login by your face? Browse...",command = self.open_image)
+        # self.image_label = tk.Label(self.frame,bg=bg_color)
         
-        self.confirm_button = tk.Button(self.frame,text="Confirm image",command=self.confirm_image)
+        '''self.confirm_button = tk.Button(self.frame,text="Confirm image",command=self.confirm_image)
         self.confirmed_notification = tk.Label(self.frame, text="Image loaded!", bg=bg_color)
         self.face_detected = tk.Label(self.frame, text="Have faces!", bg=bg_color)
-        self.noface_detected = tk.Label(self.frame, text="No faces!", bg=bg_color)
+        self.noface_detected = tk.Label(self.frame, text="No faces!", bg=bg_color)'''
         # Đóng gói các widget vào frame
         self.game_logo.pack()
         self.username_label.pack()
@@ -129,8 +129,8 @@ class LoginRegisterMenu:
         self.password_entry.pack()
         self.login_button.pack(pady=10)
         self.switch_button.pack()
-        self.open_button.pack()
-        self.image_label.pack()
+        # self.open_button.pack()
+        # self.image_label.pack()
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
@@ -175,22 +175,22 @@ class LoginRegisterMenu:
         self.login_button.config(text="Register", command=self.register)  # Thay đổi nút đăng nhập thành nút đăng ký
         self.switch_button.config(text="Already have an account? Login", command=self.switch_to_login)  # Thay đổi nút chuyển đổi thành nút đăng nhập
         self.note_label.config(text="(If you register by face, username must be filled.)")
-        self.open_button.config(text="Register by your face? Browse...",command=self.open_image)
+        # self.open_button.config(text="Register by your face? Browse...",command=self.open_image)
         self.repeat_password_label = tk.Label(self.frame, text="Repeat Password",bg=bg_color)  # Tạo nhãn cho trường nhập lại mật khẩu
         self.repeat_password_entry = tk.Entry(self.frame, show="*")  # Tạo trường nhập lại mật khẩu
         self.repeat_password_label.pack()  # Đóng gói nhãn vào frame
         self.repeat_password_entry.pack()  # Đóng gói trường nhập liệu vào frame
         self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
         self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
-        self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi fame
-        self.image_label.pack_forget()
-        self.confirm_button.pack_forget()
-        self.confirmed_notification.pack_forget()
-        self.face_detected.pack_forget()
-        self.noface_detected.pack_forget()
+        # self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi fame
+        # self.image_label.pack_forget()
+        # self.confirm_button.pack_forget()
+        # self.confirmed_notification.pack_forget()
+        # self.face_detected.pack_forget()
+        # self.noface_detected.pack_forget()
         self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
-        self.open_button.pack() # Đóng gói nút mở ảnh vào frame
+        # self.open_button.pack() # Đóng gói nút mở ảnh vào frame
         self.login_button.pack()
 
     # Hàm chuyển đổi sang chế độ đăng nhập
@@ -198,20 +198,20 @@ class LoginRegisterMenu:
         self.login_button.config(text="Login", command=self.login)  # Thay đổi nút đăng ký thành nút đăng nhập
         self.switch_button.config(text="Don't have one? Register", command=self.switch_to_register)  # Thay đổi nút chuyển đổi thành nút đăng ký
         self.note_label.config(text="(If you login by face, username must be filled.)")
-        self.open_button.config(text="Login by your face? Browse...",command=self.open_image)
+        # self.open_button.config(text="Login by your face? Browse...",command=self.open_image)
         self.repeat_password_label.pack_forget()  # Loại bỏ nhãn khỏi frame
         self.repeat_password_entry.pack_forget()  # Loại bỏ trường nhập liệu khỏi frame
         self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
         self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
-        self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi frame
-        self.image_label.pack_forget()
-        self.confirm_button.pack_forget()
-        self.confirmed_notification.pack_forget()
-        self.face_detected.pack_forget()
-        self.noface_detected.pack_forget()
+        # self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi frame
+        # self.image_label.pack_forget()
+        # self.confirm_button.pack_forget()
+        # self.confirmed_notification.pack_forget()
+        # self.face_detected.pack_forget()
+        # self.noface_detected.pack_forget()
         self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
         self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
-        self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
+        # self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
         
     # Hàm dùng để mở ảnh 
 '''    def open_image(self):

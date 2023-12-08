@@ -1,8 +1,6 @@
 import pygame, sys
 
 
-black = (0, 0, 0)
-white = (255, 255, 255)
 user_id = ''
 user_money = 0
 set_choice = 0
@@ -10,11 +8,12 @@ choice = 0
 bet_money = 0
 pygame.init()
 
-volume = 0.2
 
 clock = pygame.time.Clock()
-screen_Width = 1500
-screen_Height = 800
+WINDOW_SIZE = [(1536,864),(768,432)]
+WINDOW_INDEX = 0
+screen_Width = WINDOW_SIZE[WINDOW_INDEX][0]
+screen_Height = WINDOW_SIZE[WINDOW_INDEX][1]
 screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
 pygame.display.set_caption('RACE')
 running = True
@@ -24,7 +23,9 @@ white = pygame.Color(255, 255, 255)
 bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
+orange = "#EE7214"
 
+volume = 0.4
 # Phông chữ :
 font = pygame.font.SysFont("comicsansms", int(screen_Width / 1500 * 32))
 text_Font = pygame.font.Font(None, int(screen_Width / 1500 * 38))
@@ -90,6 +91,7 @@ def money_bet():
         user_info = text_Font.render('ID: ' + user_id, True, black)
         money_info = text_Font.render('Money: ' + str(user_money), True, black)
         store = menu_Font.render('BUY RANDOM SPELL (100$)', True, white)
+        mustHaveMoney = menu_Font.render('You must enter the money you bet!', True, white)
         done = menu_Font.render('DONE!', True, white)
         ok_button = font.render('OK', True, white)
         back_button = font.render('Back', True, white)
@@ -110,8 +112,8 @@ def money_bet():
         else:
             pygame.draw.rect(screen, old_red, (x_back_button, y_back_button, screen_Width / 15, screen_Height / 16))
         screen.blit(back_button, (x_back_button + 10, y_back_button))
-        title = menu_Font.render('Enter the money you bet', True, white)
-        screen.blit(title, (screen_Width / 2 - title.get_width() / 2, screen_Height / 4))
+        title = menu_Font.render('Enter the money you bet', True, orange)
+        screen.blit(title, (screen_Width / 2 - title.get_width() / 2, screen_Height / 2 - screen_Height /24))
 
         if hihi == 1:
             title2 = text_Font.render('Dont have enough money? play mini game to get more !', True, white)
@@ -150,10 +152,13 @@ def money_bet():
                 if (screen_Width / (1500 / 706) <= mouse_x <= screen_Width / (1500 / 706) + ok_button.get_width()) and (
                         screen_Height / (8 / 5) <= mouse_y <= screen_Height / (8 / 5) + ok_button.get_height()):
                     money_bet = user_text
-                    if int(user_money) >= int(money_bet):
-                        return money_bet
+                    if money_bet == '':
+                        screen.blit(mustHaveMoney, (x_done - 50, y_done - 50))
                     else:
-                        hihi = 1
+                        if int(user_money) >= int(money_bet):
+                            return money_bet
+                        else:
+                            hihi = 1
                 if (x_store_button + store.get_width() * 1.5 > mouse[
                     0] > x_store_button and y_store_button + store.get_height() * 1.5 > mouse[
                         1] > y_store_button) and bought != 1:
@@ -191,14 +196,16 @@ def money_bet():
         screen.blit(text_surface, (rect_text.x + 5, rect_text.y + 5))  # căn đều lề khi input // doi bien sau 
         pygame.display.update()
 def update_account(usr_id, money):
+    global user_id
+    username = user_id
     data = []
-    with open('account.txt', 'r') as old_file:
+    with open(f'./assets/player/{username}/{username}.txt', 'r') as old_file:
         for line in old_file:
             if line.split(',')[0] == usr_id:
                 pos = line.rfind(',')
                 line = line[:pos + 1] + str(money) + '\n'
             data.append(line)
-    with open('account.txt', 'w') as new_file:
+    with open(f'./assets/player/{username}/{username}.txt', 'w') as new_file:
         for line in data:
             new_file.write(line)
 
