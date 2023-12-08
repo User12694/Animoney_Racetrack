@@ -8,7 +8,8 @@ clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
 #Ngôn ngữ
-LANGUAGE = ["assets/icon/VIET", "assets/icon/ENG"]
+LANGUAGE = ["assets/icon/button/ENG/", "assets/icon/button/VIET/"]
+LANGUAGE_INDEX = 0
 
 #Màn hình cài đặt âm lượng
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
@@ -295,43 +296,42 @@ luckyBox9 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), scr
 luckyBox10 = LuckyBox(pos = (screen.get_width() * random.uniform(0.65, 0.75), screen.get_height() * 0.98), character = Char5)
 
 #Class nút
-BUTTON_STATE = ['assets/icon/button/Normal.png', 'assets/icon/button/Clicked.png', 'assets/icon/button/Hover.png'] #Trạng thái nút
 class Button():
-    def __init__(self, pos, text_base_color, text_active_color, textIn = None, font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 30)):
-        self.image = pygame.image.load(BUTTON_STATE[0]).convert_alpha()
+    def __init__(self, pos, imageNormal, imageChanged, text_base_color = None, text_active_color = None, textIn = None, font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 30)):
+        self.imageNormal = imageNormal
+        self.imageChanged = imageChanged
+        self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + imageNormal).convert_alpha()
         self.x = pos[0]
         self.y = pos[1]
-        self.font = font
-        self.base_color, self.active_color = text_base_color, text_active_color
-        self.textIn = textIn
-        self.text = self.font.render(self.textIn, True, self.base_color)
-        self.text_rect = self.text.get_rect(center=(self.x, self.y))
-        self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
         self.rect = self.image.get_rect(center=(self.x, self.y * 1.01))
+        # self.textIn = textIn
+        # if self.textIN is not None:
+        #     self.text = self.font.render(self.textIn, True, self.base_color)
+        #     self.text_rect = self.text.get_rect(center=(self.x, self.y))
+        #     self.base_color, self.active_color = text_base_color, text_active_color
+        #     self.font = font
+        #     self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
 
     def CheckClick(self, position):
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
-            self.image = pygame.image.load(BUTTON_STATE[1]).convert_alpha()
-            self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
-            pygame.time.wait(200)
             return True
         return False
     
     def update(self, position):
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
-            self.image = pygame.image.load(BUTTON_STATE[2]).convert_alpha()
-            self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
-            self.text = self.font.render(self.textIn, True, self.active_color)
+            self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageChanged).convert_alpha()
+            # self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
+            # self.text = self.font.render(self.textIn, True, self.active_color)
         else:
-            self.image = pygame.image.load(BUTTON_STATE[0]).convert_alpha()
-            self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height()))
-            self.text = self.font.render(self.textIn, True, self.base_color)
+            self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageNormal).convert_alpha()
+            # self.image = pygame.transform.smoothscale(self.image, (self.text.get_width(), self.text.get_height())
+            # self.text = self.font.render(self.textIn, True, self.base_color)
         screen.blit(self.image, self.rect)
-        screen.blit(self.text, self.text_rect)
+        # screen.blit(self.text, self.text_rect)
 
 #Cách xài class button
 # 1. Khởi tạo nút
-# button = Button((400, 300), "black", "white", "Chữ", Ảnh)
+# button = Button( pos = (400, 300), imageNỏmal = "Button.png", imageChanged = "Button2.png", ["black", "white", "Chữ"] ) Chú ý: Trong [] là không có cũng được, Button.png là ảnh khi chưa rê chuột vào, Button2.png là ảnh khi rê chuột vào
 # 2. Check click
 #     if event.type == pygame.MOUSEBUTTONDOWN:
 #         button.CheckClick(pygame.mouse.get_pos())
