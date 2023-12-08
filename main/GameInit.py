@@ -8,7 +8,7 @@ clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
 #Ngôn ngữ
-LANGUAGE = ["assets/icon/button/ENG/", "assets/icon/button/VIET/"]
+LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
 LANGUAGE_INDEX = 0
 
 #Màn hình cài đặt âm lượng
@@ -33,9 +33,6 @@ scoreBoard = KieuChu2.render(f"Money: {Player_money}", False, (0, 255, 255))
 scoreBoard_Box = scoreBoard.get_rect(center = (screen.get_width() * 0.13, screen.get_height() * 0.92))
 
 #Ảnh các loại
-Background = pygame.image.load('assets/background/background.png').convert_alpha()
-Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
-
 map1 = pygame.image.load('assets/background/map1.png').convert_alpha()
 map1 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map2 = pygame.image.load('assets/background/map2.png').convert_alpha()
