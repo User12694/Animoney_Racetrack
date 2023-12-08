@@ -202,9 +202,9 @@ class MenuClass:
 
 class SettingClass: #Khởi tạo các nút, label và Button. 
     def __init__(self):
-        self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "sound.png", imageChanged = "sound2.png")
-        self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "screen.png", imageChanged = "screen2.png")
-        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "back.png", imageChanged = "back2.png")
+        self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.65), imageNormal = "sound.png", imageChanged = "sound2.png")
+        self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = "screen.png", imageChanged = "screen2.png")
+        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.15), imageNormal = "back.png", imageChanged = "back2.png")
     #Vẽ các lớp phủ, các nút và chữ
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'settingsMenu.png').convert_alpha()
