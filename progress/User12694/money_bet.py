@@ -25,6 +25,9 @@ old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 orange = "#EE7214"
 
+LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
+LANGUAGE_INDEX = 0
+
 volume = 0.4
 # Phông chữ :
 font = pygame.font.SysFont("comicsansms", int(screen_Width / 1500 * 32))
@@ -51,9 +54,9 @@ x_back_button = screen_Width / (15 / 13)
 y_back_button = screen_Height / (8 / 6)
 
 # backgroundgame :
-background = pygame.image.load('./assets/background/background.png')
-backgroundmenu = pygame.image.load('./assets/background/background.png')
-backgroundmenu1 = pygame.image.load('./assets/background/background.png')
+background = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/background.png')
+backgroundmenu = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/background.png')
+backgroundmenu1 = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/background.png')
 # hinh anh text box
 # box1 = pygame.image.load('box.png')
 
@@ -210,7 +213,7 @@ def update_account(usr_id, money):
             new_file.write(line)
 
 def reset_game():
-    file = 'Sounds/nhac2.wav'
+    file = './assets/sounds/mainmenu.mp3'
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load(file)
