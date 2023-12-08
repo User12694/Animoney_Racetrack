@@ -3,6 +3,7 @@ from GameFunctions import *
 #Đây là main loop
 def main():
     global login_lock
+    
     if not login_lock:
         pygame.quit()
         sys.exit()
