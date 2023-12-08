@@ -350,6 +350,9 @@ class Button():
         else:
             self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageNormal).convert_alpha()
         screen.blit(self.image, self.rect)
+    '''def update_images(self, imageNormal, imageChanged):
+        self.imageNormal = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageNormal).convert_alpha()
+        self.imageChanged = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageChanged).convert_alpha()'''
 
 #Cách xài class button
 # 1. Khởi tạo nút

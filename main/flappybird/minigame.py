@@ -13,7 +13,7 @@ user_id = ''
 user_money = 0
 
 #Mod lại subpath để có thể đưa menugame vào:
-subpath = './flappybird/'
+subpath = './main/flappybird'
 
 pygame.init()
 
@@ -67,6 +67,7 @@ def flappy_bird():
     global screen_Width, screen_Height, screen, text_Font, menu_Font, font, tube1_height, tube2_height, tube3_height, tube4_height
     global user_id, user_money
     running = True
+    # Màu đen 
     BLACK = (0, 0, 0)
     screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
     clock = pygame.time.Clock()
@@ -74,26 +75,29 @@ def flappy_bird():
     TUBE_WIDTH = int(screen_Width / 30)
     TUBE_VELOCITY = int(screen_Width / 250)
     TUBE_GAP = int(screen_Height * 23 / 80)
+    #Quy định các vị trí ống xuất hiện
     tube1_x = int(screen_Width * 6 / 15)
     tube2_x = int(screen_Width * 8 / 15)
     tube3_x = int(screen_Width * 10 / 15)
-
+    # Quy định chiều cao spawn ống ngẫu nhiên
     tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
     tube2_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
     tube3_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-
+    #Các quy định về tốc độ chim bay, vị trí của chim, trong lực
     BIRD_X = screen_Width * 2 / 15
     bird_y = screen_Height / (2)
     BIRD_WIDTH = int(screen_Width * 7 / 300)
     BIRD_HEIGHT = int(screen_Height * 7 / 300)
     bird_drop_velocity = 0
     GRAVITY = 0.7
+    #Điểm. Sẽ reset khi nhấn nút chơi lại
     score = 0
+    #Load font. Sau này chỉnh sửa chỗ này lại cho dùng font mình
     fontend = pygame.font.SysFont('sans', 50)
+    # Các biến thông báo chim vượt qua ống hay chưa
     tube1_pass = False
     tube2_pass = False
     tube3_pass = False
-    tube4_pass = False
 
     pausing = False
     run = False
@@ -114,7 +118,7 @@ def flappy_bird():
         user_info = text_Font.render('ID: ' + user_id, True, black)
         money_info = text_Font.render('Money: ' + str(user_money), True, black)
         #Tạo nút back có text màu trăng
-        back_button = font.render('Back', True, white)
+        back_button = font.render('Back', True, black)
         #Viết thông tin ID và số tiền. Hiện tại k lấy đc
         screen.blit(user_info, (screen_Width - user_info.get_width() - money_info.get_width() - 40, 10))
         screen.blit(money_info,
@@ -227,6 +231,7 @@ def flappy_bird():
                     pygame.draw.rect(screen, old_red,
                                      (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
                 screen.blit(back_button, (x_back_button + 10, y_back_button))
+        # Nền hoạt động chính của game. Chú ý cái video resize
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -244,7 +249,7 @@ def flappy_bird():
                     # reset 
                     if pausing:
                         bird_y = screen_Height / (2)
-                        TUBE_VELOCITY = 6
+                        TUBE_VELOCITY = 8
                         tube1_x = screen_Width / (1500 / 600)
                         tube2_x = screen_Width / (1500 / 800)
                         tube3_x = screen_Width / (1500 / 1000)
@@ -253,7 +258,6 @@ def flappy_bird():
                         tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
                         tube2_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
                         tube3_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-
 
                         score = 0
                         dem = 0

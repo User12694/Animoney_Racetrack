@@ -160,10 +160,10 @@ class MenuClass:
     #Khởi tạo các thuộc tính
     def __init__(self):
         global VOLUME_INDEX, present_volume
-        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
+        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
-        self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
+        #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
@@ -172,7 +172,7 @@ class MenuClass:
         self.playButton.update(mouse_pos)
         self.settingsButton.update(mouse_pos)
         self.quitButton.update(mouse_pos)
-        self.changeLanguageButton.update(mouse_pos)
+        # self.changeLanguageButton.update(mouse_pos)
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
@@ -196,11 +196,22 @@ class MenuClass:
             if self.quitButton.CheckClick(pos):
                 pygame.quit()
                 sys.exit()
-            if self.changeLanguageButton.CheckClick(pos):
+            '''if self.changeLanguageButton.CheckClick(pos):
                 if LANGUAGE_INDEX == 0:
                     LANGUAGE_INDEX = 1
+                    print("Language changed to Vietnamese!",LANGUAGE_INDEX)
+                    self.playButton.update_images("play.png", "play2.png")
+                    self.settingsButton.update_images("settings.png", "settings2.png")
+                    self.quitButton.update_images("quit.png", "quit2.png")
+                    self.changeLanguageButton.update_images("lang40.png", "lang240.png")
                 elif LANGUAGE_INDEX == 1:
                     LANGUAGE_INDEX = 0
+                    print("Language changed to English!",LANGUAGE_INDEX)
+                    self.playButton.update_images("play.png", "play2.png")
+                    self.settingsButton.update_images("settings.png", "settings2.png")
+                    self.quitButton.update_images("quit.png", "quit2.png")
+                    self.changeLanguageButton.update_images("lang40.png", "lang240.png")'''
+                    
         return self
 
 class SettingClass: #Khởi tạo các nút, label và Button. 

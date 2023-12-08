@@ -1,6 +1,5 @@
 import os
 
-
 def find_images(directory):
     file_paths = []
     image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.ico']
