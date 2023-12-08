@@ -1,5 +1,5 @@
 # Import các thư viện cần thiết
-import cv2
+# import cv2
 import numpy as np
 import tkinter as tk
 import tkinter.messagebox
@@ -7,13 +7,13 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import os
 import time
-import findPicture as fp
+# import findPicture as fp
 import fnmatch
 import subprocess
 
 # Các khai báo cho biến toàn cục
 login_lock = False
-img = fp.find_images('assets/player') # Kiểm tra file được tìm thấy không
+# img = fp.find_images('assets/player') # Kiểm tra file được tìm thấy không
 img_label = None
 # confirm_button = None Nút xác nhận được gắn hàm kiểm tra trong FindPicture.py (hiện bị disable)
 bg_color = "#2b95d1"
@@ -29,7 +29,7 @@ def filePath():
     print("Đuôi file:", duoi_file)
     imgpath = f'{ten}.{duoi_file}'
     return imgpath
-def face_detect(image_path):
+'''def face_detect(image_path):
     img = cv2_read_image(image_path)
     gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
@@ -88,7 +88,7 @@ def compare_faces(image1_path, image2_path):
     # So sánh hai histogram
     compare_val = cv2.compareHist(hist1, hist2, cv2.HISTCMP_CORREL)
     print("Độ tương đồng giữa hai khuôn mặt:", compare_val)
-    return compare_val
+    return compare_val'''
 
 # Định nghĩa lớp LoginRegisterMenu
 class LoginRegisterMenu:
@@ -214,7 +214,7 @@ class LoginRegisterMenu:
         self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
         
     # Hàm dùng để mở ảnh 
-    def open_image(self):
+'''    def open_image(self):
         global image_load, image_load_path
         # Mở cửa sổ chọn file để chọn ảnh
         self.file_path = filedialog.askopenfilename(filetypes=[('Image Files', '*.jpg')])
@@ -258,7 +258,7 @@ class LoginRegisterMenu:
             print(result_list)
         else:
             self.noface_detected.pack_forget()
-            self.noface_detected.pack()
+            self.noface_detected.pack()'''
             
 #Thực hiện lệnh shell để nhận đường dẫn Unicode:
 subprocess.run(['cmd', '/c', 'chcp', '65001'])
