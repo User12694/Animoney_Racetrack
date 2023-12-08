@@ -1,6 +1,14 @@
 import pygame_menu, pygame, random, sys, time
 from GameInit import *
 
+#Reset game
+def reset_game():
+    file = 'Sounds/nhac2.wav'
+    pygame.init()
+    pygame.mixer.init()
+    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last
+    rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX = [], 0, [], 0, 0, [], 0, 0, []
+
 
 #Đếm ngược
 countDownCheck = True
@@ -20,9 +28,15 @@ def count_down():
     pygame.mixer.music.play(loops = -1)
     gameSound = True
 
-def Play():
-    global countDownCheck, gameSound
-    while True:
+class Play:
+    def __init__(self):
+        init_character_luckybox()
+        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
+        self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
+        self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
+    #Vẽ các thuộc tính lên màn hình
+    def draw(self, mouse_pos):
+        global VOLUME_INDEX, present_volume, countDownCheck, gameSound
         #Ảnh nền
         if MAP_INDEX == 0:
              screen.blit(MAPS[0],(0,0))
@@ -50,45 +64,29 @@ def Play():
         ChuChay.update()
                 
         #Update lucky box
-        luckyBox1.update(Char1)
-        luckyBox2.update(Char2)
-        luckyBox3.update(Char3)
-        luckyBox4.update(Char4)
-        luckyBox5.update(Char5)
-
-        luckyBox6.update(Char1)
-        luckyBox7.update(Char2)
-        luckyBox8.update(Char3)
-        luckyBox9.update(Char4)
-        luckyBox10.update(Char5)
+        for i in range(10):
+            if i < 5:
+                LUCKYBOX[i].update(CHARACTERS[i])
+            else:
+                LUCKYBOX[i].update(CHARACTERS[i - 5])
 
         #Nhân vật
-        Char1.update()
-        Char2.update()
-        Char3.update()
-        Char4.update()
-        Char5.update()
-        
+        for i in range(5):
+            CHARACTERS[i].update()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+    # Cập nhật các trạng thái của thuộc tính
+    def update(self, event):
+        global MenuSound, gameSound
+        if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    Back_To_Menu = Pause_Game()
-                    if Back_To_Menu:
-                        pygame.mixer.music.set_volume(present_volume)
-                        pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
-                        pygame.mixer.music.play(loops = -1)
-                        return
-
-        #Bảng tiền
-        # pygame.draw.rect(screen, "red", scoreBoard_Box, 6, 10)
-        # screen.blit(scoreBoard, scoreBoard_Box)
-
-        pygame.display.update()
-        clock.tick(60)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                Back_To_Menu = Pause_Game()
+                if Back_To_Menu:
+                    return MenuClass()
+            
+        return self
 
 #Tạm dừng trò chơi
 def Pause_Game():
@@ -192,7 +190,7 @@ class MenuClass:
             if self.playButton.CheckClick(pos):
                 MenuSound = False
                 gameSound = False
-                Play()
+                return Play()
             if self.settingsButton.CheckClick(pos):
                 return SettingClass()
             if self.quitButton.CheckClick(pos):
