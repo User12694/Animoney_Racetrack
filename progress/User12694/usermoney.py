@@ -8,6 +8,9 @@ username = 'nhat' #Khai báo trước, sau này có gì thế vô đây
 user_id = username # Cái này tí nhập qua sau
 money = 4800 #Cần thay đổi biến này thành biến cục bộ
 reward = 100 #Ví dụ cho số tiền được thay đổi khi chơi minigame
+#Thêm tí code ngăn người chơi ăn chặn tiền
+if money > 0:
+    money 
 # Viết mảng chỉ kết quả
 result = [('Lose'), ('Win')]
 #Kết quả: Thắng hoặc thua, k có nhưng
