@@ -7,6 +7,9 @@ pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
+#Ngôn ngữ
+LANGUAGE = ["assets/icon/VIET", "assets/icon/ENG"]
+
 #Màn hình cài đặt âm lượng
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 VOLUME_INDEX = 4
