@@ -20,7 +20,6 @@ def count_down():
     pygame.mixer.music.play(loops = -1)
     gameSound = True
 
-
 def Play():
     global countDownCheck, gameSound
     while True:

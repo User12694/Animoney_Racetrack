@@ -875,6 +875,7 @@ def memorytest():
                 return False  # return False if any boxes are covered.
         return True
     def money():
+        global revealedBoxes
         if hasWon(revealedBoxes) == True:
             return 1000
     if __name__ == '__main__':
