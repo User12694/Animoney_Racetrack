@@ -102,7 +102,6 @@ def Pause_Game():
         RETURN_TO_MENU = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), imageNormal = "return.png", imageChanged = "return2.png")
         RETURN_TO_GAME = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "continue.png", imageChanged = "continue2.png")
         QUIT = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png")
-
         BUTTONS = [RETURN_TO_MENU, RETURN_TO_GAME, QUIT]
 
         for button in BUTTONS:
@@ -166,6 +165,7 @@ class MenuClass:
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
+        self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
@@ -174,10 +174,11 @@ class MenuClass:
         self.playButton.update(mouse_pos)
         self.settingsButton.update(mouse_pos)
         self.quitButton.update(mouse_pos)
+        self.changeLanguageButton.update(mouse_pos)
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
-        global MenuSound, gameSound
+        global MenuSound, gameSound, LANGUAGE, LANGUAGE_INDEX
         if not MenuSound:
             pygame.mixer.music.set_volume(present_volume)
             pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
@@ -197,7 +198,11 @@ class MenuClass:
             if self.quitButton.CheckClick(pos):
                 pygame.quit()
                 sys.exit()
-            
+            if self.changeLanguageButton.CheckClick(pos):
+                if LANGUAGE_INDEX == 0:
+                    LANGUAGE_INDEX = 1
+                elif LANGUAGE_INDEX == 1:
+                    LANGUAGE_INDEX = 0
         return self
 
 class SettingClass: #Khởi tạo các nút, label và Button. 

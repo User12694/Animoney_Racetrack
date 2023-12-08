@@ -6,8 +6,6 @@ user_money = 0
 set_choice = 0
 choice = 0
 bet_money = 0
-pygame.init()
-
 
 clock = pygame.time.Clock()
 WINDOW_SIZE = [(1536,864),(768,432)]
@@ -39,13 +37,6 @@ rect_text = pygame.Rect(screen_Width / (1500 / 568), screen_Height / (800 / 440)
                         screen_Height / (800 / 40))
 
 # Nút bấm
-ok_button = font.render('OK', True, white)
-play_game_button = font.render('Main Game', True, white)
-play_minigame_button = font.render('Mini Game', True, white)
-option_button = font.render('Option', True, white)
-exit_button = font.render('Exit', True, white)
-flappybird_game_button = font.render('Flappy Bird', True, white)
-back_button = font.render('Back', True, white)
 
 width = screen_Width / (15 / 2)
 height = screen_Height / 16

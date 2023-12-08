@@ -5,6 +5,10 @@ white = (255,255,255)
 
 WINDOWS_SIZE = [(1536,864),(768,432)]
 WINDOWS_INDEX = 0
+screen_Width = WINDOWS_SIZE[WINDOWS_INDEX][0]
+screen_Height = WINDOWS_SIZE[WINDOWS_INDEX][1]
+screen = pygame.set_mode
+backgroundmenu1 = pygame.image.load('./assets/background/background-80.png')
 class Character:
     def __init__(self, name=None, average_speed=10, image=None, affect=None, x_pos=None, y_pos=None):
         self.char_name = name
@@ -29,7 +33,7 @@ def init_character():
         CHARACTERS.append(new_character)
 
 def set_choosing():
-    global screen_Width, screen_Height, screen, text_Font, menu_Font, font
+    global screen, screen_Width, screen_Height, screen, text_Font, menu_Font, font
     choosing = True
     while choosing:
         global backgroundmenu1
@@ -128,7 +132,7 @@ def character_choosing():
 def main():
 
     pygame.init()
-    window = pygame.display.set_mode(WINDOWS_SIZE[WINDOWS_INDEX])
+    screen = pygame.display.set_mode(WINDOWS_SIZE[WINDOWS_INDEX])
     running = True
     while running:
         set_choosing()
