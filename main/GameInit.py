@@ -260,9 +260,38 @@ class LuckyBox():
         elif self.active_effect == "goback":
             character.goback(self.activated)
 
+    def effect_Image(self, character):
+        if self.active_effect == "stun":
+            effectImage = pygame.image.load("assets/effects/hieuung_choang.png").convert_alpha()
+            effectImage_rect = effectImage.get_rect(center = character.rect.midtop)
+            effectImage2 = pygame.image.load("assets/effects/tangDa.png").convert_alpha()
+            effectImage_rect2 = effectImage.get_rect(bottomleft = self.rect.midleft)
+            screen.blit(effectImage, effectImage_rect)
+            screen.blit(effectImage2, effectImage_rect2)
+        elif self.active_effect == "slow":
+            effectImage = pygame.image.load("assets/effects/hieuung_cham.png").convert_alpha()
+            effectImage_rect = effectImage.get_rect(midbottom = character.rect.midleft)
+            effectImage2 = pygame.image.load("assets/effects/hoNuoc.png").convert_alpha()
+            effectImage_rect2 = effectImage.get_rect(midleft = self.rect.bottomleft)
+            screen.blit(effectImage, effectImage_rect)
+            screen.blit(effectImage2, effectImage_rect2)
+        elif self.active_effect == "accelerate":
+            effectImage = pygame.image.load("assets/effects/hieuung_tangtoc.png").convert_alpha()
+            effectImage_rect = effectImage.get_rect(bottomright = character.rect.bottomleft)
+            screen.blit(effectImage, effectImage_rect)
+        elif self.active_effect == "teleport":
+            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
+            effectImage_rect = effectImage.get_rect(bottomleft = self.rect.midbottom)
+            screen.blit(effectImage, effectImage_rect)
+        elif self.active_effect == "goback":
+            effectImage = pygame.image.load("assets/effects/hieuung_quayve.png").convert_alpha()
+            effectImage_rect = effectImage.get_rect(bottomleft = self.rect.midbottom)
+            screen.blit(effectImage, effectImage_rect)
+
     def update(self, character):
         self.check_activate(character)
         if self.active_effect is not None:
+            self.effect_Image(character)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
             elapsed_time = current_time - self.activation_time
             if self.active_effect == "stun" or self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
