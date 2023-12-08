@@ -164,7 +164,7 @@ class LoginRegisterMenu:
                 os.makedirs(f"assets/player/{username}",exist_ok=True)
                 with open(f"assets/player/{username}/{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
                     file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
-                    file.write("5000")  # Ghi "5000" vào dòng thứ hai của file
+                    file.write("500" + "\n")  # Ghi "500" vào dòng thứ hai của file
                 tk.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
                 self.switch_to_login()  # Chuyển về chế độ đăng nhập
             else:
