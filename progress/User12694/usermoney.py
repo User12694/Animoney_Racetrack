@@ -2,6 +2,9 @@
 import pygame, sys, os
 from datetime import datetime
 import pyautogui
+from PIL import Image
+import platform
+import pygetwindow
 # Tạo các biến toàn cục cho tài khoản và số tiền:
 
 user_id = 'nhat' # Cái này tí nhập qua sau
@@ -14,20 +17,22 @@ result = [('Lose'), ('Win')]
 result_index = 0
 
 #Thêm tí code ngăn người chơi ăn chặn tiền
-if money > 0:
-    if result[result_index] == 'Win':
-        money = money + reward
-    else:
-        money = money - reward
+def money_reward(money):
+    if money > 0:
+        if result[result_index] == 'Win':
+            money = money + reward
+        else:
+            money = money - reward
+    return money # Trả về số tiền hiện tại
 
-def update_money(username):
+def update_money(username, money):
     #Đọc toàn bộ file: Dòng chỉ số 0 là mật khẩu, 1 là số tiền, 2 trở đi sẽ là dòng lịch sử đấu
     with open(f'./assets/player/{username}/{username}.txt','r') as f:
         lines = f.readlines()
     lines[1] = f"{money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
     with open(f'./assets/player/{username}/{username}.txt','w') as f:
         f.writelines(lines) # Ghi lại toàn bộ nội dung vào file
-update_money(username=user_id)
+update_money(username=user_id, money=money_reward(money))
 
 #Hàm này nên được cập nhật khi kết thúc trận đấu. Lấy đối tượng thời gian khi nhấn Bắt đầu chơi
 #Chỉ lấy ở phần chơi chính
@@ -72,13 +77,26 @@ update_timestamp(username=user_id, result=result[result_index])
 screenshot_taken = False # Đặt cái này làm biến toàn cục ở GameInit
 # Đặt trong đối tượng ResultClass() ha class Result j j đó:
 def take_screenshot():
-    subpath = '././screenshots/' # Thay đổi đường dẫn này thành ./screenshots khi merge vào GameFunctions, đưa vào đối tượng EndGameClass() ha j j đó
-    now = datetime.now()
-    now = now.replace(microsecond=0)
-    screenshot_time = now.strftime('%d-%m-%Y %H%M%S')
-    global screenshot_taken # Truy cập biến toàn cục
-    if not screenshot_taken:#Nếu chưa chụp thì chụp tiếp
-        screenshot = pyautogui.screenshot()
-    screenshot.save(subpath +'Screenshot '+ screenshot_time +'.png')
-    screenshot_taken = True
+    datetime = datetime.now()
+    datetime = datetime.rounded_now('%d-%m-%Y %H%M%S')
+    path = f'././screenshots/screenshot {datetime}'
+    titles = pygetwindow.getAllTitles()
+    
+    if platform == 'Windows':
+        window = pygetwindow.getWindowsWithTitle('pygame window')[0]
+        left, top = window.topleft
+        right, bottom = window.bottomright
+        pyautogui.screenshot(path)
+        im = Image.open(path)
+        im = im.crop(left+10,top+20,right+10,bottom-10)
+        im.save(path)
+        im.show(path)
+    elif platform.system == 'Darwin':
+        x1, y1, width, height = pygetwindow.getWindowGeometry('Terminal ')
+        x2 = x1 + width
+        y2 = y1 + height
+        pyautogui.screenshot(path)
+        im.imcrop(x1, y1, x2, y2)
+        im.save(path)
+        im.show(path)
 take_screenshot()
