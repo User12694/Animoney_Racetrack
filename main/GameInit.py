@@ -18,8 +18,9 @@ bet_money = 0
 CHARACTERS = []
 LUCKYBOX = []
 GROUP = []
-rank = []
+rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
+last = 0
 
 
 #Ngôn ngữ
@@ -82,13 +83,15 @@ RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
 Speed = []
 for x in range(5):
     Speed.append(random.choice(RandSpeed))
-Position = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
+Position = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
 
 #Ktra nhạc đã phát chưa
 Victory_sound_Play = True
 
-#List nhân vật thắng (Sẽ được thêm khi các nhân vật về đích)
-RankList = []
 #Các nhân vật trong game
 class Character():
     def __init__(self, speed, pos, number, image, map):
@@ -145,22 +148,18 @@ class Character():
         if self.run:
             self.rect.x += self.speed
     #Check điều kiện thắng
-    def FinishLine_Pass(self):
-        global Victory_sound_Play
+    def checkFinishLine(self):
         if self.rect.x > WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.95:
             if not self.Finish:
                 rank.append(self)
                 self.run = False
-                if Victory_sound_Play:
-                    pygame.mixer.music.load('assets/sounds/Victorious.ogg')
-                    pygame.mixer.music.play(loops = 0)
-                    Victory_sound_Play = False
+                self.Finish = True
         
 
     def update(self):
         self.animation()
         self.move()
-        self.FinishLine_Pass()
+        self.checkFinishLine()
         if self.isGoBack: #Đi ngược lại
             goBackImage = pygame.transform.flip(self.image, True, False)
             screen.blit(goBackImage, self.rect)
@@ -314,11 +313,16 @@ class LuckyBox():
             self.effect_Image(character)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
             elapsed_time = current_time - self.activation_time
-            if self.active_effect == "stun" or self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
+            if self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
                 if elapsed_time >= self.effect_duration:
                     self.active_effect = None
                     character.speed = self.tempSpeed
+                    
+            elif self.active_effect == "stun":
+                if elapsed_time >= self.effect_duration:
+                    self.active_effect = None
                     character.run = True
+
             elif self.active_effect == "goback":
                 if character.rect.x < 0:
                     self.active_effect = None
