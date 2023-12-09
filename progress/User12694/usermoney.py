@@ -1,11 +1,10 @@
 #Import file này vào GameFunctions
 import pygame, sys, os
 from datetime import datetime
-
+import pyautogui
 # Tạo các biến toàn cục cho tài khoản và số tiền:
 
-username = 'nhat' #Khai báo trước, sau này có gì thế vô đây
-user_id = username # Cái này tí nhập qua sau
+user_id = 'nhat' # Cái này tí nhập qua sau
 money = 4800 #Cần thay đổi biến này thành biến cục bộ
 reward = 100 #Ví dụ cho số tiền được thay đổi khi chơi minigame
 
@@ -28,7 +27,7 @@ def update_money(username):
     lines[1] = f"{money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
     with open(f'./assets/player/{username}/{username}.txt','w') as f:
         f.writelines(lines) # Ghi lại toàn bộ nội dung vào file
-update_money(username=username)
+update_money(username=user_id)
 
 #Hàm này nên được cập nhật khi kết thúc trận đấu. Lấy đối tượng thời gian khi nhấn Bắt đầu chơi
 #Chỉ lấy ở phần chơi chính
@@ -70,3 +69,16 @@ def update_timestamp(username, result): #Ta chỉ cần thay đổi kết quả 
 #Thực thi lệnh để test. Có thể bỏ nó đi
 update_timestamp(username=user_id, result=result[result_index])
 # Đặt giá trị kết quả mặc định là 0. Có thể thay đổi bằng cách thay chỉ số result_index
+screenshot_taken = False # Đặt cái này làm biến toàn cục ở GameInit
+# Đặt trong đối tượng ResultClass() ha class Result j j đó:
+def take_screenshot():
+    subpath = '././screenshots/' # Thay đổi đường dẫn này thành ./screenshots khi merge vào GameFunctions, đưa vào đối tượng EndGameClass() ha j j đó
+    now = datetime.now()
+    now = now.replace(microsecond=0)
+    screenshot_time = now.strftime('%d-%m-%Y %H%M%S')
+    global screenshot_taken # Truy cập biến toàn cục
+    if not screenshot_taken:#Nếu chưa chụp thì chụp tiếp
+        screenshot = pyautogui.screenshot()
+    screenshot.save(subpath +'Screenshot '+ screenshot_time +'.png')
+    screenshot_taken = True
+take_screenshot()
