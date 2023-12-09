@@ -3,12 +3,17 @@ from GameInit import *
 
 #Reset game
 def reset_game():
-    file = 'Sounds/nhac2.wav'
-    pygame.init()
-    pygame.mixer.init()
-    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last
+    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX
     rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX = [], 0, [], 0, 0, [], 0, 0, []
 
+#Check điều kiện thắng
+def FinishLine_Pass():
+    global Victory_sound_Play, rank
+    if len(rank) == 5:
+        if Victory_sound_Play:
+            pygame.mixer.music.load('assets/sounds/Victorious.ogg')
+            pygame.mixer.music.play(loops = 0)
+            Victory_sound_Play = False
 
 #Đếm ngược
 countDownCheck = True
@@ -28,14 +33,21 @@ def count_down():
     pygame.mixer.music.play(loops = -1)
     gameSound = True
 
+#Biến được sử dụng
+InitGame = False
+
 class Play:
     def __init__(self):
-        init_character_luckybox()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
+        global InitGame
+        if not InitGame:
+            # reset_game()
+            init_character_luckybox()
+            InitGame = True
         global VOLUME_INDEX, present_volume, countDownCheck, gameSound
         #Ảnh nền
         if MAP_INDEX == 0:
@@ -73,10 +85,12 @@ class Play:
         #Nhân vật
         for i in range(5):
             CHARACTERS[i].update()
+        #Check xong game
+        FinishLine_Pass()
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
-        global MenuSound, gameSound
+        global MenuSound, gameSound, InitGame
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -84,6 +98,7 @@ class Play:
             if event.key == pygame.K_ESCAPE:
                 Back_To_Menu = Pause_Game()
                 if Back_To_Menu:
+                    InitGame = False
                     return MenuClass()
             
         return self
