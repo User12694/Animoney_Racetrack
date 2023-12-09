@@ -7,7 +7,7 @@ import platform
 import pygetwindow
 # Tạo các biến toàn cục cho tài khoản và số tiền:
 
-user_id = 'nhat' # Cái này tí nhập qua sau
+user_id = 'phuoc' # Cái này tí nhập qua sau
 money = 4800 #Cần thay đổi biến này thành biến cục bộ
 reward = 100 #Ví dụ cho số tiền được thay đổi khi chơi minigame
 
@@ -77,9 +77,7 @@ update_timestamp(username=user_id, result=result[result_index])
 screenshot_taken = False # Đặt cái này làm biến toàn cục ở GameInit
 # Đặt trong đối tượng ResultClass() ha class Result j j đó:
 def take_screenshot():
-    datetime = datetime.now()
-    datetime = datetime.rounded_now('%d-%m-%Y %H%M%S')
-    path = f'././screenshots/screenshot {datetime}'
+    path = f'././screenshots/screenshot.png '
     titles = pygetwindow.getAllTitles()
     
     if platform == 'Windows':
@@ -88,7 +86,7 @@ def take_screenshot():
         right, bottom = window.bottomright
         pyautogui.screenshot(path)
         im = Image.open(path)
-        im = im.crop(left+10,top+20,right+10,bottom-10)
+        im = im.crop(left+20,top+50,right+10,bottom-10)
         im.save(path)
         im.show(path)
     elif platform.system == 'Darwin':

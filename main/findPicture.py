@@ -9,3 +9,5 @@ def find_images(directory):
                 path = directory + '/' + f'{file}'
                 file_paths.append(path)
                 
+                
+find_images('./assets/player')
