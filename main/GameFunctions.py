@@ -14,6 +14,10 @@ def FinishLine_Pass():
             pygame.mixer.music.load('assets/sounds/Victorious.ogg')
             pygame.mixer.music.play(loops = 0)
             Victory_sound_Play = False
+            time.sleep(5)
+            return True
+    return False
+
 
 #Đếm ngược
 countDownCheck = True
@@ -33,14 +37,60 @@ def count_down():
     pygame.mixer.music.play(loops = -1)
     gameSound = True
 
+class Congratulations:
+    def __init__(self):
+        self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
+    #Vẽ các thuộc tính lên màn hình
+    def draw(self, mouse_pos):
+        global rank, rankSound,  WINDOW_SIZES, WINDOW_SIZE_INDEX
+        BG = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
+        BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        screen.blit(BG, (0, 0))
+        self.CONTINUE_BUTTON.update(mouse_pos)
+
+        if not rankSound:
+            pygame.mixer.music.set_volume(present_volume)
+            pygame.mixer.music.load('assets/sounds/rank.mp3')
+            pygame.mixer.music.play(loops = -1)
+            rankSound = True
+        
+        Congratulations_pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.78), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.6, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.5, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.42, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
+
+        for i in range(5):
+            rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
+            screen.blit(rank[i].image, rank[i].rect)
+
+        
+
+    # Cập nhật các trạng thái của thuộc tính
+    def update(self, event):
+        global MenuSound, gameSound, InitGame
+        if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                Back_To_Menu = Pause_Game()
+                if Back_To_Menu:
+                    InitGame = False
+                    return MenuClass()
+            
+        return self
+
 #Biến được sử dụng
 InitGame = False
+rankSound = False
 
 class Play:
     def __init__(self):
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
+        self.CheckPass = False #Check xem 5 nv có về đích chưa
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
         global InitGame
@@ -85,8 +135,10 @@ class Play:
         #Nhân vật
         for i in range(5):
             CHARACTERS[i].update()
+
         #Check xong game
-        FinishLine_Pass()
+        if FinishLine_Pass():
+            self.CheckPass = True
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
@@ -100,6 +152,9 @@ class Play:
                 if Back_To_Menu:
                     InitGame = False
                     return MenuClass()
+        if self.CheckPass:
+            print("Yes")
+            return Congratulations()
             
         return self
 
