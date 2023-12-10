@@ -352,6 +352,7 @@ class Button():
         return False
     
     def update(self, position):
+        global LANGUAGE_INDEX
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
             self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageChanged).convert_alpha()
         else:

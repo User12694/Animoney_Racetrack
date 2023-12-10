@@ -277,21 +277,6 @@ class MenuClass:
                 sys.exit()
             if self.minigame.CheckClick(pos):
                 minigame.flappy_bird()
-            '''if self.changeLanguageButton.CheckClick(pos):
-                if LANGUAGE_INDEX == 0:
-                    LANGUAGE_INDEX = 1
-                    print("Language changed to Vietnamese!",LANGUAGE_INDEX)
-                    self.playButton.update_images("play.png", "play2.png")
-                    self.settingsButton.update_images("settings.png", "settings2.png")
-                    self.quitButton.update_images("quit.png", "quit2.png")
-                    self.changeLanguageButton.update_images("lang40.png", "lang240.png")
-                elif LANGUAGE_INDEX == 1:
-                    LANGUAGE_INDEX = 0
-                    print("Language changed to English!",LANGUAGE_INDEX)
-                    self.playButton.update_images("play.png", "play2.png")
-                    self.settingsButton.update_images("settings.png", "settings2.png")
-                    self.quitButton.update_images("quit.png", "quit2.png")
-                    self.changeLanguageButton.update_images("lang40.png", "lang240.png")'''
                     
         return self
 
@@ -299,16 +284,18 @@ class SettingClass: #Khởi tạo các nút, label và Button.
     def __init__(self):
         self.soundButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.65), imageNormal = "sound.png", imageChanged = "sound2.png")
         self.screenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = "screen.png", imageChanged = "screen2.png")
-        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.15), imageNormal = "back.png", imageChanged = "back2.png")
+        self.escButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.4), imageNormal = "back.png", imageChanged = "back2.png")
+        self.changeLanguageButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.15), imageNormal = "lang.png", imageChanged = "lang2.png")
     #Vẽ các lớp phủ, các nút và chữ
     def draw(self, mouse_pos):
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'settingsMenu.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + 'settingsMenu.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0)) #Tạo một lớp phủ hình chữ nhật kích thước tối đa
         #Vẽ nút
         self.soundButton.update(mouse_pos)
         self.screenButton.update(mouse_pos)
         self.escButton.update(mouse_pos)
+        self.changeLanguageButton.update(mouse_pos)
     #Cập nhật trạng thái của class
     def update(self, event):
         mouse_pos = pygame.mouse.get_pos()
@@ -324,6 +311,12 @@ class SettingClass: #Khởi tạo các nút, label và Button.
                 return WindowModeSettingClass()
             if self.escButton.CheckClick(mouse_pos):
                 return MenuClass()
+            if self.changeLanguageButton.CheckClick(mouse_pos):
+                global LANGUAGE_INDEX
+                if LANGUAGE_INDEX == 0:
+                    LANGUAGE_INDEX = 1
+                elif LANGUAGE_INDEX == 1:
+                    LANGUAGE_INDEX = 0
         return self
 
 
