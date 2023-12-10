@@ -1,14 +1,17 @@
 import pygame_menu, pygame, random, sys, time
 from datetime import datetime
 from LoginSignup import *
+from flappybird import minigame
 #Khởi tạo các thứ
 pygame.init()
+from money_bet import *
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
 
 money_bet_list = [200,500,1000]
+checkBet = False
 #Các biến cần dùng
 user_id = ''
 user_pwd = ''
@@ -26,9 +29,7 @@ winner = 0
 last = 0
 
 
-#Ngôn ngữ
-LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
-LANGUAGE_INDEX = 0
+
 
 #Màn hình cài đặt âm lượng
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
