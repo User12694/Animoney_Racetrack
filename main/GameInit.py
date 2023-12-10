@@ -11,7 +11,6 @@ random.seed(datetime.now().timestamp())
 
 
 money_bet_list = [200,500,1000]
-checkBet = False
 #Các biến cần dùng
 user_id = ''
 user_pwd = ''
@@ -27,11 +26,6 @@ GROUP = []
 rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
-
-#Reset game
-def reset_game():
-    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX
-    rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX = [], 0, [], 0, 0, [], 0, 0, []
 
 
 #Màn hình cài đặt âm lượng
