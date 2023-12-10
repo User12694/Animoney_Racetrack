@@ -16,6 +16,7 @@ old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 orange = "#EE7214"
 
+#Ngôn ngữ
 LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
 LANGUAGE_INDEX = 0
 
