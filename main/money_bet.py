@@ -1,4 +1,6 @@
 import pygame, sys
+from GameInit import *
+import GameInit
 
 clock = pygame.time.Clock()
 WINDOW_SIZE = [(1536,864),(768,432)]
@@ -204,5 +206,4 @@ def reset_game():
     pygame.mixer.music.load(file)
     pygame.mixer.music.set_volume(volume)
     pygame.mixer.music.play()
-    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last
-    rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last = [], 0, [], 0, 0, [], 0, 0
+    GameInit.rank, GameInit.winner, GameInit.CHARACTERS, GameInit.choice, GameInit.bet_money, GameInit.GROUP, GameInit.set_choice, GameInit.last, GameInit.LUCKYBOX = [], 0, [], 0, 0, [], 0, 0, []

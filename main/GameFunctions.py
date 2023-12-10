@@ -1,7 +1,7 @@
 import pygame_menu, pygame, random, sys, time
 import GameInit
 from GameInit import *
-
+from money_bet import *
 
 
 #Check điều kiện thắng
@@ -83,18 +83,15 @@ InitGame = False
 rankSound = False
 
 class Play:
-    from GameInit import set_choice
     def __init__(self):
+        money_bet()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
         self.CheckPass = False #Check xem 5 nv có về đích chưa
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global VOLUME_INDEX, present_volume, countDownCheck, gameSound, InitGame, checkBet
-        if not checkBet:
-            money_bet()
-            checkBet = True
+        global VOLUME_INDEX, present_volume, countDownCheck, gameSound, InitGame
         if not InitGame:
             # reset_game()
             init_character_luckybox()
@@ -151,6 +148,7 @@ class Play:
                 Back_To_Menu = Pause_Game()
                 if Back_To_Menu:
                     InitGame = False
+                    reset_game()
                     return MenuClass()
         if self.CheckPass:
             print("Yes")
@@ -237,9 +235,8 @@ class MenuClass:
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global LANGUAGE_INDEX
         read_data()
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         self.playButton.update(mouse_pos)
@@ -250,7 +247,7 @@ class MenuClass:
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
-        global MenuSound, gameSound, LANGUAGE, LANGUAGE_INDEX
+        global MenuSound, gameSound, LANGUAGE
         if not MenuSound:
             pygame.mixer.music.set_volume(present_volume)
             pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
@@ -325,7 +322,7 @@ class VolumeSettingClass:
         global present_volume, VOLUME_INDEX
         # self.label1 = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2 * 0.4,125,50,'Mute Volume') # Dòng chữ 'Mute Volume'  
         self.esc_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.5),imageNormal = "back.png", imageChanged = "back2.png")    # Nút có chữ 'Back'
-        self.mute_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 0.75),imageNormal = "mute.png", imageChanged = "mute2.png") # Nút có chữ 'Mute'
+        self.mute_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 0.55),imageNormal = "mute.png", imageChanged = "mute2.png") # Nút có chữ 'Mute'
         # self.label2 = Label(screen.get_width() / 2 * 0.92, screen.get_height() / 2 * 0.8,125,50,'Volume')     # dòng chữ "Volume"
         self.minusVol_button = Button((screen.get_width() / 2 * 0.6, screen.get_height() / 2 * 0.95),imageNormal = "low.png", imageChanged = "low2.png") #Các nút +, - để tăng giảm âm lượng
         self.plusVol_button = Button((screen.get_width() / 2 * 1.4, screen.get_height() / 2 * 0.95),imageNormal = "high.png", imageChanged = "high2.png")
