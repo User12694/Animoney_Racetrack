@@ -24,7 +24,7 @@ class ChooseCharacter:
         # Load hình ảnh của các map và điều chỉnh kích thước lên 30%
         self.chars = [pygame.transform.scale(pygame.image.load(f'./assets/characters/Char{i}Map1_1.png'), (int(self.scale * pygame.image.load(f'./assets/characters/Char{i}Map1_1.png').get_width()), int(self.scale * pygame.image.load(f'./assets/characters/Char{i}Map1_1.png').get_height()))) for i in range(1, 6)]
         # Load hình ảnh cho nút "back" scale 30%
-        self.back_button_img = pygame.transform.scale(pygame.image.load('assets/background/ENG/back.png'), (3 * int(self.scale * pygame.image.load('assets/background/ENG/back.png').get_width()), 3 * int(self.scale * pygame.image.load('./assets/background/ENG/back.png').get_height())))
+        self.back_button_img = pygame.transform.scale(pygame.image.load('assets/background/ENG/back.png'), (0.3 * int(self.scale * pygame.image.load('assets/background/ENG/back.png').get_width()), 0.3 * int(self.scale * pygame.image.load('./assets/background/ENG/back.png').get_height())))
         # Đặt nút "Back" ở giữa màn hình
         self.back_button = pygame.draw.rect(self.screen, (255, 165, 0), (self.window_width / 2 - self.back_button_img.get_width() / 2, self.window_height - self.window_height / 9, self.back_button_img.get_width(), self.back_button_img.get_height()))
     def draw(self):
