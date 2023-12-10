@@ -1,5 +1,6 @@
 import pygame_menu, pygame, random, sys, time
 from GameInit import *
+from money_bet import *
 from flappybird import minigame
 
 #Reset game
@@ -238,6 +239,7 @@ class MenuClass:
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
+        read_data()
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
@@ -261,6 +263,10 @@ class MenuClass:
                 pygame.quit()
                 sys.exit()
             if self.playButton.CheckClick(pos):
+                # if user_money < min(money_bet_list):
+                #     minigame.flappy_bird()
+                # else:
+                money_bet()
                 MenuSound = False
                 gameSound = False
                 return Play()

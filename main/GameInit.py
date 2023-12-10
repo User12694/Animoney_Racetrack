@@ -7,6 +7,8 @@ pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
+
+money_bet_list = [200,500,1000]
 #Các biến cần dùng
 user_id = ''
 user_pwd = ''
@@ -14,6 +16,7 @@ user_money = 0
 set_choice = 1
 choice = 0
 bet_money = 0
+
 # store 5 characters
 CHARACTERS = []
 LUCKYBOX = []
