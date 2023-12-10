@@ -78,8 +78,57 @@ Char4Map1 = ['assets/characters/Char4Map1_1.png', 'assets/characters/Char4Map1_2
 Char5Map1 = ['assets/characters/Char5Map1_1.png', 'assets/characters/Char5Map1_2.png',
             'assets/characters/Char5Map1_3.png', 'assets/characters/Char5Map1_4.png']
 
+Char1Map2 = ['assets/characters/Char1Map2_1.png', 'assets/characters/Char1Map2_2.png',
+            'assets/characters/Char1Map2_3.png', 'assets/characters/Char1Map2_4.png']
+Char2Map2 = ['assets/characters/Char2Map2_1.png', 'assets/characters/Char2Map2_2.png',
+            'assets/characters/Char2Map2_3.png', 'assets/characters/Char2Map2_4.png']
+Char3Map2 = ['assets/characters/Char3Map2_1.png', 'assets/characters/Char3Map2_2.png',
+            'assets/characters/Char3Map2_3.png', 'assets/characters/Char3Map2_4.png']
+Char4Map2 = ['assets/characters/Char4Map2_1.png', 'assets/characters/Char4Map2_2.png',
+            'assets/characters/Char4Map1_3.png', 'assets/characters/Char4Map2_4.png']
+Char5Map2 = ['assets/characters/Char5Map2_1.png', 'assets/characters/Char5Map2_2.png',
+            'assets/characters/Char5Map2_3.png', 'assets/characters/Char5Map2_4.png']
+
+Char1Map3 = ['assets/characters/Char1Map3_1.png', 'assets/characters/Char1Map3_2.png',
+            'assets/characters/Char1Map3_3.png', 'assets/characters/Char1Map3_4.png']
+Char2Map3 = ['assets/characters/Char2Map3_1.png', 'assets/characters/Char2Map3_2.png',
+            'assets/characters/Char2Map3_3.png', 'assets/characters/Char2Map3_4.png']
+Char3Map3 = ['assets/characters/Char3Map3_1.png', 'assets/characters/Char3Map3_2.png',
+            'assets/characters/Char3Map3_3.png', 'assets/characters/Char3Map3_4.png']
+Char4Map3 = ['assets/characters/Char4Map3_1.png', 'assets/characters/Char4Map3_2.png',
+            'assets/characters/Char4Map3_3.png', 'assets/characters/Char4Map3_4.png']
+Char5Map3 = ['assets/characters/Char5Map3_1.png', 'assets/characters/Char5Map3_2.png',
+            'assets/characters/Char5Map3_3.png', 'assets/characters/Char5Map3_4.png']
+
+Char1Map4 = ['assets/characters/Char1Map4_1.png', 'assets/characters/Char1Map4_2.png',
+            'assets/characters/Char1Map4_3.png', 'assets/characters/Char1Map4_4.png']
+Char2Map4 = ['assets/characters/Char2Map4_1.png', 'assets/characters/Char2Map4_2.png',
+            'assets/characters/Char2Map4_3.png', 'assets/characters/Char2Map4_4.png']
+Char3Map4 = ['assets/characters/Char3Map4_1.png', 'assets/characters/Char3Map4_2.png',
+            'assets/characters/Char3Map4_3.png', 'assets/characters/Char3Map4_4.png']
+Char4Map4 = ['assets/characters/Char4Map4_1.png', 'assets/characters/Char4Map4_2.png',
+            'assets/characters/Char4Map4_3.png', 'assets/characters/Char4Map4_4.png']
+Char5Map4 = ['assets/characters/Char5Map4_1.png', 'assets/characters/Char5Map4_2.png',
+            'assets/characters/Char5Map4_3.png', 'assets/characters/Char5Map4_4.png']
+
+Char1Map5 = ['assets/characters/Char1Map5_1.png', 'assets/characters/Char1Map5_2.png',
+            'assets/characters/Char1Map5_3.png', 'assets/characters/Char1Map5_4.png']
+Char2Map5 = ['assets/characters/Char2Map5_1.png', 'assets/characters/Char2Map5_2.png',
+            'assets/characters/Char2Map5_3.png', 'assets/characters/Char2Map5_4.png']
+Char3Map5 = ['assets/characters/Char3Map5_1.png', 'assets/characters/Char3Map5_2.png',
+            'assets/characters/Char3Map5_3.png', 'assets/characters/Char3Map5_4.png']
+Char4Map5 = ['assets/characters/Char4Map5_1.png', 'assets/characters/Char4Map5_2.png',
+            'assets/characters/Char4Map5_3.png', 'assets/characters/Char4Map5_4.png']
+Char5Map5 = ['assets/characters/Char5Map5_1.png', 'assets/characters/Char5Map5_2.png',
+            'assets/characters/Char5Map5_3.png', 'assets/characters/Char5Map5_4.png']
+
+
 #Nhân vật, tốc độ, vị trí
 CharsMap1 = [Char1Map1, Char2Map1, Char3Map1, Char4Map1, Char5Map1]
+CharsMap2 = [Char1Map2, Char2Map2, Char3Map2, Char4Map2, Char5Map2]
+CharsMap3 = [Char1Map3, Char2Map3, Char3Map3, Char4Map3, Char5Map3]
+CharsMap4 = [Char1Map4, Char2Map4, Char3Map4, Char4Map4, Char5Map4]
+CharsMap5 = [Char1Map5, Char2Map5, Char3Map5, Char4Map5, Char5Map5]
 RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
 Speed = []
 for x in range(5):
