@@ -18,7 +18,6 @@ def FinishLine_Pass():
             return True
     return False
 
-
 #Đếm ngược
 countDownCheck = True
 NumberCountDown = ["assets/background/start.png", "assets/background/1.png", "assets/background/2.png", "assets/background/3.png"]
@@ -86,6 +85,7 @@ InitGame = False
 rankSound = False
 
 class Play:
+    from GameInit import set_choice
     def __init__(self):
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
