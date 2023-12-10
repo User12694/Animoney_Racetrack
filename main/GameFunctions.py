@@ -6,13 +6,12 @@ from money_bet import *
 
 #Check điều kiện thắng
 def FinishLine_Pass():
-    global Victory_sound_Play, rank
-    if len(rank) == 5:
+    global Victory_sound_Play
+    if len(GameInit.rank) == 5:
         if Victory_sound_Play:
             pygame.mixer.music.load('assets/sounds/Victorious.ogg')
             pygame.mixer.music.play(loops = 0)
             Victory_sound_Play = False
-            time.sleep(5)
             return True
     return False
 
@@ -58,8 +57,8 @@ class Congratulations:
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
-            rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
-            screen.blit(rank[i].image, rank[i].rect)
+            GameInit.rank[i].rect = GameInit.rank[i].image.get_rect(midbottom = Congratulations_pos[i])
+            screen.blit(GameInit.rank[i].image, GameInit.rank[i].rect)
 
         
 
@@ -151,7 +150,6 @@ class Play:
                     reset_game()
                     return MenuClass()
         if self.CheckPass:
-            print("Yes")
             return Congratulations()
             
         return self
