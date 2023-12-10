@@ -193,6 +193,131 @@ class Character():
                     self.count_run += 0.1
                 else:
                     self.image = pygame.image.load(CharsMap1[4][int(self.count_run)]).convert_alpha()
+        elif self.map == 1:
+            if self.number == 0:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap2[0][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap2[0][int(self.count_run)]).convert_alpha()
+            if self.number == 1:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap2[1][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap2[1][int(self.count_run)]).convert_alpha()
+            if self.number == 2:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap2[2][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap2[2][int(self.count_run)]).convert_alpha()
+            if self.number == 3:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap2[3][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap2[3][int(self.count_run)]).convert_alpha()
+            if self.number == 4:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap2[4][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap2[4][int(self.count_run)]).convert_alpha()
+        elif self.map == 2:
+            if self.number == 0:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap3[0][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap3[0][int(self.count_run)]).convert_alpha()
+            if self.number == 1:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap3[1][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap3[1][int(self.count_run)]).convert_alpha()
+            if self.number == 2:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap3[2][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap3[2][int(self.count_run)]).convert_alpha()
+            if self.number == 3:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap3[3][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap3[3][int(self.count_run)]).convert_alpha()
+            if self.number == 4:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap3[4][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap3[4][int(self.count_run)]).convert_alpha()
+        elif self.map == 3:
+            if self.number == 0:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap4[0][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap4[0][int(self.count_run)]).convert_alpha()
+            if self.number == 1:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap4[1][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap4[1][int(self.count_run)]).convert_alpha()
+            if self.number == 2:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap4[2][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap4[2][int(self.count_run)]).convert_alpha()
+            if self.number == 3:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap4[3][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap4[3][int(self.count_run)]).convert_alpha()
+            if self.number == 4:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap4[4][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap4[4][int(self.count_run)]).convert_alpha()
+        elif self.map == 4:
+            if self.number == 0:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap5[0][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap5[0][int(self.count_run)]).convert_alpha()
+            if self.number == 1:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap5[1][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap5[1][int(self.count_run)]).convert_alpha()
+            if self.number == 2:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap5[2][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap5[2][int(self.count_run)]).convert_alpha()
+            if self.number == 3:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap5[3][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap5[3][int(self.count_run)]).convert_alpha()
+            if self.number == 4:
+                if self.run:
+                    self.image = pygame.image.load(CharsMap5[4][int(self.count_run)]).convert_alpha()
+                    self.count_run += 0.1
+                else:
+                    self.image = pygame.image.load(CharsMap5[4][int(self.count_run)]).convert_alpha()
+
 
     def move(self):
         if self.run:
