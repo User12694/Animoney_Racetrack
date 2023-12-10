@@ -1,10 +1,8 @@
 import pygame_menu, pygame, random, sys, time
+import GameInit
 from GameInit import *
 
-#Reset game
-def reset_game():
-    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX
-    rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX = [], 0, [], 0, 0, [], 0, 0, []
+
 
 #Check điều kiện thắng
 def FinishLine_Pass():
@@ -41,8 +39,8 @@ class Congratulations:
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global rank, rankSound,  WINDOW_SIZES, WINDOW_SIZE_INDEX, LANGUAGE_INDEX
-        BG = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
+        global rank, rankSound,  WINDOW_SIZES, WINDOW_SIZE_INDEX
+        BG = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
         BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(BG, (0, 0))
         self.CONTINUE_BUTTON.update(mouse_pos)
@@ -163,9 +161,8 @@ class Play:
 #Tạm dừng trò chơi
 def Pause_Game():
      while True:
-        global LANGUAGE_INDEX
         #Ảnh nền
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Các nút ở trong Pause menu
@@ -200,8 +197,7 @@ def Pause_Game():
 
 def QuitConfirm():
     while True:
-        global LANGUAGE_INDEX
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'quitprompt.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'quitprompt.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         mouse_pos = pygame.mouse.get_pos()
@@ -290,8 +286,7 @@ class SettingClass: #Khởi tạo các nút, label và Button.
         self.changeLanguageButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.15), imageNormal = "lang.png", imageChanged = "lang2.png")
     #Vẽ các lớp phủ, các nút và chữ
     def draw(self, mouse_pos):
-        global LANGUAGE_INDEX
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + 'settingsMenu.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX] + 'settingsMenu.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0)) #Tạo một lớp phủ hình chữ nhật kích thước tối đa
         #Vẽ nút
@@ -301,7 +296,6 @@ class SettingClass: #Khởi tạo các nút, label và Button.
         self.changeLanguageButton.update(mouse_pos)
     #Cập nhật trạng thái của class
     def update(self, event):
-        global LANGUAGE_INDEX
         mouse_pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Kiểm tra các đối tượng như nút chọn Âm lượng, chọn tùy chọn Màn hình, nút thoát; có được nhấn hay không. 
@@ -313,10 +307,10 @@ class SettingClass: #Khởi tạo các nút, label và Button.
             if self.escButton.CheckClick(mouse_pos):
                 return MenuClass()
             if self.changeLanguageButton.CheckClick(mouse_pos):
-                if LANGUAGE_INDEX == 0:
-                    LANGUAGE_INDEX = 1
-                elif LANGUAGE_INDEX == 1:
-                    LANGUAGE_INDEX = 0
+                if GameInit.LANGUAGE_INDEX == 0:
+                    GameInit.LANGUAGE_INDEX = 1
+                elif GameInit.LANGUAGE_INDEX == 1:
+                    GameInit.LANGUAGE_INDEX = 0
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -345,9 +339,8 @@ class VolumeSettingClass:
         
     #Hàm vẽ các đối tượng trên màn hình
     def draw(self, mouse_pos):
-        global LANGUAGE_INDEX
         #Vẽ lớp phủ hình chữ nhật kích thước bằng kích thước cửa sổ hiện hành
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'soundMenu.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'soundMenu.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Vẽ các thuộc tính khác đã nêu
@@ -426,7 +419,7 @@ class WindowModeSettingClass:
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, mouse_pos):
         global LANGUAGE_INDEX
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         # if halfScreen_active:
@@ -436,7 +429,7 @@ class WindowModeSettingClass:
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global WINDOW_SIZE_INDEX, halfScreen_active, screen, Background
+        global WINDOW_SIZE_INDEX, halfScreen_active, screen
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
@@ -459,13 +452,12 @@ class WindowModeSettingClass:
 
 class MapSelection:
     def draw(self, mouse_pos):
-        global LANGUAGE_INDEX
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'mapselection.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'mapselection.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global set_choice, InitGame
+        global InitGame, MAP_INDEX
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -476,32 +468,36 @@ class MapSelection:
                     InitGame = False
                     return MenuClass()
             if event.key == pygame.K_1:
-                set_choice = 1
+                GameInit.set_choice = 1
+                MAP_INDEX = 0
                 return CharacterSelection()
             if event.key == pygame.K_2:
-                set_choice = 2
+                GameInit.set_choice = 2
+                MAP_INDEX = 1
                 return CharacterSelection()
             if event.key == pygame.K_3:
-                set_choice = 3
+                GameInit.set_choice = 3
+                MAP_INDEX = 2
                 return CharacterSelection()
             if event.key == pygame.K_4:
-                set_choice = 4
+                GameInit.set_choice = 4
+                MAP_INDEX = 3
                 return CharacterSelection()
             if event.key == pygame.K_5:
-                set_choice = 5
+                GameInit.set_choice = 5
+                MAP_INDEX = 4
                 return CharacterSelection()
                 
         return self
     
 class CharacterSelection: 
     def draw(self, mouse_pos):
-        global LANGUAGE_INDEX
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'choose.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'choose.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global choice, InitGame
+        global InitGame
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -512,19 +508,19 @@ class CharacterSelection:
                     InitGame = False
                     return MenuClass()
             if event.key == pygame.K_1:
-                choice = 1
+                GameInit.choice = 1
                 return Play()
             if event.key == pygame.K_2:
-                choice = 2
+                GameInit.choice = 2
                 return Play()
             if event.key == pygame.K_3:
-                choice = 3
+                GameInit.choice = 3
                 return Play()
             if event.key == pygame.K_4:
-                choice = 4
+                GameInit.choice = 4
                 return Play()
             if event.key == pygame.K_5:
-                choice = 5
+                GameInit.choice = 5
                 return Play()
                 
         return self

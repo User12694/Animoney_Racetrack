@@ -28,7 +28,10 @@ rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
 
-
+#Reset game
+def reset_game():
+    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX
+    rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last, LUCKYBOX = [], 0, [], 0, 0, [], 0, 0, []
 
 
 #Màn hình cài đặt âm lượng
@@ -200,8 +203,8 @@ class Character():
             self.isGoBack = True
 
 def init_character_luckybox():
+    global set_choice
     for i in range(5):
-        global set_choice
         new_character = Character(speed = Speed[i], 
                                   pos = Position[i], 
                                   number = i, 
