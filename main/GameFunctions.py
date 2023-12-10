@@ -38,9 +38,9 @@ class Congratulations:
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global rank, rankSound,  WINDOW_SIZES, WINDOW_SIZE_INDEX
+        global rank, rankSound,  WINDOW_SIZES
         BG = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
-        BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(BG, (0, 0))
         self.CONTINUE_BUTTON.update(mouse_pos)
 
@@ -50,11 +50,11 @@ class Congratulations:
             pygame.mixer.music.play(loops = -1)
             rankSound = True
         
-        Congratulations_pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.78), 
-                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.6, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
-                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.5, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
-                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.42, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93), 
-                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
+        Congratulations_pos = [(WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1] * 0.78), 
+                                (WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 0.6, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1]* 0.85), 
+                                (WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 1.5, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1]* 0.85), 
+                                (WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 0.42, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1] * 0.93), 
+                                (WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
             GameInit.rank[i].rect = GameInit.rank[i].image.get_rect(midbottom = Congratulations_pos[i])
@@ -159,7 +159,7 @@ def Pause_Game():
      while True:
         #Ảnh nền
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'background.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
@@ -194,7 +194,7 @@ def Pause_Game():
 def QuitConfirm():
     while True:
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'quitprompt.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         mouse_pos = pygame.mouse.get_pos()
         #Các nút trong quit confirm
@@ -235,7 +235,7 @@ class MenuClass:
     def draw(self, mouse_pos):
         read_data()
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'background.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         self.playButton.update(mouse_pos)
         self.settingsButton.update(mouse_pos)
@@ -282,7 +282,7 @@ class SettingClass: #Khởi tạo các nút, label và Button.
     #Vẽ các lớp phủ, các nút và chữ
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX] + 'settingsMenu.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0)) #Tạo một lớp phủ hình chữ nhật kích thước tối đa
         #Vẽ nút
         self.soundButton.update(mouse_pos)
@@ -336,7 +336,7 @@ class VolumeSettingClass:
     def draw(self, mouse_pos):
         #Vẽ lớp phủ hình chữ nhật kích thước bằng kích thước cửa sổ hiện hành
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'soundMenu.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Vẽ các thuộc tính khác đã nêu
         # self.label1.draw(screen)
@@ -408,34 +408,38 @@ class VolumeSettingClass:
 class WindowModeSettingClass:
     def __init__(self):
         #Khởi tạo các thuộc tính
-        # self.fullScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="FULLSCREEN") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
-        # self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2), text_base_color="Black", text_active_color="white", textIn="25%") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
+        self.fullScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = "continue.png", imageChanged = "continue2.png") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
+        self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = "continue.png", imageChanged = "continue2.png") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
         self.esc_button = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "back.png", imageChanged = "back2.png") # Nút quay về
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, mouse_pos):
         global LANGUAGE_INDEX
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'background.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
-        # if halfScreen_active:
-        #     self.fullScreenButton.update(mouse_pos)
-        # else:
-        #     self.halfScreenButton.update(mouse_pos)
+        if halfScreen_active:
+            self.fullScreenButton.update(mouse_pos)
+        else:
+            self.halfScreenButton.update(mouse_pos)
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global WINDOW_SIZE_INDEX, halfScreen_active, screen
+        global halfScreen_active, screen
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
         if event.type == pygame.MOUSEBUTTONDOWN:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
-            # if self.fullScreenButton.CheckClick(pos):
-            #     halfScreen_active = not halfScreen_active
-            #     return self
-            # elif self.halfScreenButton.CheckClick(pos):
-            #     halfScreen_active = True
-            #     return self
+            if self.fullScreenButton.CheckClick(pos):
+                GameInit.halfScreen_active = not GameInit.halfScreen_active
+                GameInit.WINDOW_SIZE_INDEX = 0
+                GameInit.SCREEN_SIZE_INDEX = 0
+                return self
+            elif self.halfScreenButton.CheckClick(pos):
+                GameInit.WINDOW_SIZE_INDEX = 1
+                GameInit.SCREEN_SIZE_INDEX = 1
+                GameInit.halfScreen_active = True
+                return self
             if self.esc_button.CheckClick(pos):
                 return SettingClass() #Trả về màn hình cài đặt
             elif event.type == pygame.VIDEORESIZE:
@@ -448,7 +452,7 @@ class WindowModeSettingClass:
 class MapSelection:
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'mapselection.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
@@ -488,7 +492,7 @@ class MapSelection:
 class CharacterSelection: 
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'choose.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
