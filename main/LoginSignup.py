@@ -264,7 +264,6 @@ class LoginRegisterMenu:
 subprocess.run(['cmd', '/c', 'chcp', '65001'])
 # Tạo một cửa sổ gốc
 root = tk.Tk()
-root.wm_iconbitmap('assets/icon/ic_launcher.png')
 # root.protocol("WM_DELETE_WINDOW", disable_event)
 root.title("Animoney RaceTrack - Login")
 root.config(bg=bg_color)
