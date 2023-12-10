@@ -1,5 +1,6 @@
 import pygame_menu, pygame, random, sys, time
 from GameInit import *
+from flappybird import minigame
 
 #Reset game
 def reset_game():
@@ -230,8 +231,9 @@ class MenuClass:
     #Khởi tạo các thuộc tính
     def __init__(self):
         global VOLUME_INDEX, present_volume
-        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
-        self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
+        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.95), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
+        self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
+        self.minigame = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.45), imageNormal = "continue.png", imageChanged = "continue2.png")
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
@@ -242,6 +244,7 @@ class MenuClass:
         self.playButton.update(mouse_pos)
         self.settingsButton.update(mouse_pos)
         self.quitButton.update(mouse_pos)
+        self.minigame.update(mouse_pos)
         # self.changeLanguageButton.update(mouse_pos)
 
     # Cập nhật các trạng thái của thuộc tính
@@ -266,6 +269,8 @@ class MenuClass:
             if self.quitButton.CheckClick(pos):
                 pygame.quit()
                 sys.exit()
+            if self.minigame.CheckClick(pos):
+                minigame.flappy_bird()
             '''if self.changeLanguageButton.CheckClick(pos):
                 if LANGUAGE_INDEX == 0:
                     LANGUAGE_INDEX = 1
