@@ -146,6 +146,7 @@ Victory_sound_Play = True
 class Character():
     def __init__(self, speed, pos, number, image, map):
         self.speed = speed
+        self.tempSpeed = speed
         self.pos = pos
         self.x = self.pos[0]
         self.y = self.pos[1]
@@ -161,6 +162,7 @@ class Character():
         self.PhanKhich = False
         self.TroiHon = False
         self.NhanhNhen = False
+        self.KichHoatBua = False
     def animation(self):
         #Vẽ nhân vật
         if self.count_run >= 3:
@@ -338,11 +340,52 @@ class Character():
         self.animation()
         self.move()
         self.checkFinishLine()
+        if self.NhanhNhen:
+            active_time = pygame.time.get_ticks()
+            self.Bua(active_time)
+            if not self.KichHoatBua:
+                self.speed += 2
+                self.KichHoatBua = True
+        if self.TroiHon:
+            active_time = pygame.time.get_ticks()
+            self.Bua(active_time)
+            if not self.KichHoatBua:
+                for i in range(5):
+                        if(i != (choice - 1)):
+                            CHARACTERS[i].run = False
+                self.KichHoatBua = True
         if self.isGoBack: #Đi ngược lại
             goBackImage = pygame.transform.flip(self.image, True, False)
             screen.blit(goBackImage, self.rect)
         else:
             screen.blit(self.image, self.rect)
+
+    def Bua(self, active_time):
+        if self.PhanKhich:
+            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha() #Ảnh tạm
+            effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
+            screen.blit(effectImage, effectImage_rect)
+        if self.NhanhNhen:
+            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
+            effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
+            screen.blit(effectImage, effectImage_rect)
+            current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
+            elapsed_time = current_time - active_time
+            if elapsed_time >= 2000:
+                    self.NhanhNhen = False
+                    self.speed = self.tempSpeed
+        if self.TroiHon:
+            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
+            effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
+            screen.blit(effectImage, effectImage_rect)
+            current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
+            elapsed_time = current_time - active_time
+            if elapsed_time >= 1000:
+                    self.TroiHon = False
+                    for i in range(5):
+                        if(i != (choice - 1)):
+                            CHARACTERS[i].run = True
+                    
 
     def stop(self, activated):
         if not activated:
@@ -447,7 +490,11 @@ class LuckyBox():
         self.activation_time = pygame.time.get_ticks()
 
         if self.active_effect == "stun":
-            character.stop(self.activated)
+            if character.PhanKhich:
+                self.active_effect = None
+                character.PhanKhich = False
+            else:
+                character.stop(self.activated)
         elif self.active_effect == "slow":
             character.slow(self.activated)
         elif self.active_effect == "accelerate":
