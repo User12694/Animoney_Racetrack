@@ -41,7 +41,7 @@ class LoginMenu:
         self.username_entry.place(x=92, y=370)
 
         # Tạo hộp nhập liệu thứ hai và đặt ở tọa độ (92,478)
-        self.password_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20))
+        self.password_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20), show='•')
         self.password_entry.configure(text_color="black")
         self.password_entry.place(x=92, y=478)
 
@@ -68,10 +68,18 @@ class LoginMenu:
         self.login_label = ctk.CTkLabel(self.frame, text="Login", font=("default", 32, "bold"), fg_color="transparent", width=177, height=45)
         self.login_label.place(x=167, y=271)
 
+        self.confirm_password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20, "bold"))
+
+        self.confirm_password_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20),show='•')
+
+
     def draw(self):
         # Lặp vô tận để hiển thị cửa sổ
         self.window.mainloop()
     def switch_to_register(self):
+        clear_entry(self.username_entry)
+        clear_entry(self.password_entry)
+        clear_entry(self.confirm_password_entry)
         self.login_label.configure(text="Register")
         self.username_label.configure(text="Email")
         self.password_label.place_forget()
@@ -86,8 +94,19 @@ class LoginMenu:
         # Thay đổi chữ trên nút "Sign up" thành "Sign in"
         self.signup_button.configure(text="Sign in", command=self.switch_to_login)
     def switch_to_login(self):
+        self.login_label.configure(text="Login")
         self.username_label.configure(text="Username/Email")
         self.login_button.configure(text="Login")
+        self.confirm_password_entry.place_forget()
+        self.confirm_password_label.place_forget()
+        self.login_button.place_forget()
+        self.password_label.place_forget()
+        self.password_entry.place_forget()
+        clear_entry(self.username_entry)
+        clear_entry(self.password_entry)
+        clear_entry(self.confirm_password_entry)
+        self.login_button.configure(command=self.login)
+        self.login_button.place(x = 179, y = 575)
         self.password_label.place(x = 92, y = 443)
         self.password_entry.place(x = 92, y = 478)
         self.account_label.configure(text="Don't have an account?")
@@ -132,7 +151,11 @@ class LoginMenu:
                 tkinter.messagebox.showerror("Invalid!","Invalid code!")
 
     def create_account(self):
+        clear_entry(self.username_entry)
+        clear_entry(self.password_entry)
+        clear_entry(self.confirm_password_entry)
         self.username_label.place_forget()
+        self.username_label.configure(text="Username")
         self.password_entry.place_forget()
         self.password_entry.place_forget()
         self.login_button.place_forget()
@@ -140,11 +163,9 @@ class LoginMenu:
         self.password_label.place(x=92, y=443)
         self.password_entry.place(x=92, y=478)
         # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
-        self.confirm_password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20, "bold"))
         self.confirm_password_label.place(x=92, y=549)
 
         # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
-        self.confirm_password_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20))
         self.confirm_password_entry.place(x=92, y=584)
 
         self.login_button.configure(text="Register", command=self.register)
@@ -216,7 +237,8 @@ def send_verification_code(receiver_email):
 
     print(f"Verification code sent to {receiver_email}.")
     return code
-
+def clear_entry(entry):
+    entry.delete(0,'end')
 # Tạo một đối tượng LoginMenu và vẽ nó
 login_menu = LoginMenu()
 login_menu.draw()
