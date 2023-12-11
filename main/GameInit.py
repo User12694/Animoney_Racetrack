@@ -497,13 +497,21 @@ class LuckyBox():
             else:
                 character.stop(self.activated)
         elif self.active_effect == "slow":
-            character.slow(self.activated)
+            if character.PhanKhich == True:
+                self.active_effect = None
+                character.PhanKhich = False
+            else:
+                character.slow(self.activated)
         elif self.active_effect == "accelerate":
             character.accelerate(self.activated)
         elif self.active_effect == "teleport":
             character.teleport(self.activated)
         elif self.active_effect == "goback":
-            character.goback(self.activated)
+            if character.PhanKhich:
+                self.active_effect = None
+                character.PhanKhich = False
+            else:
+                character.goback(self.activated)
 
     def effect_Image(self, character):
         if self.active_effect == "stun":
