@@ -341,6 +341,10 @@ class Character():
         self.animation()
         self.move()
         self.checkFinishLine()
+        if self.PhanKhich:
+            if not self.KichHoatBua:
+                self.KichHoatBua = True
+            self.Bua()
         if self.NhanhNhen:
             if not self.KichHoatBua:
                 self.active_time = pygame.time.get_ticks()
