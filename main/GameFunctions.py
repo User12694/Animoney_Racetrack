@@ -90,11 +90,7 @@ class Play:
         self.CheckPass = False #Check xem 5 nv có về đích chưa
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global VOLUME_INDEX, present_volume, countDownCheck, gameSound, InitGame
-        if not InitGame:
-            # reset_game()
-            init_character_luckybox()
-            InitGame = True
+        global VOLUME_INDEX, present_volume, countDownCheck, gameSound
         #Ảnh nền
         if MAP_INDEX == 0:
              screen.blit(MAPS[0],(0,0))
@@ -508,18 +504,51 @@ class CharacterSelection:
                     return MenuClass()
             if event.key == pygame.K_1:
                 GameInit.choice = 1
-                return Play()
+                return Shop()
             if event.key == pygame.K_2:
                 GameInit.choice = 2
-                return Play()
+                return Shop()
             if event.key == pygame.K_3:
                 GameInit.choice = 3
-                return Play()
+                return Shop()
             if event.key == pygame.K_4:
                 GameInit.choice = 4
-                return Play()
+                return Shop()
             if event.key == pygame.K_5:
                 GameInit.choice = 5
+                return Shop()
+                
+        return self
+
+
+class Shop: 
+    def draw(self, mouse_pos):
+        Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'shopee.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
+        screen.blit(Background, (0, 0))
+    #Cập nhật trạng thái cho các thuộc tính
+    def update(self, event):
+        global InitGame
+        if not InitGame:
+            init_character_luckybox()
+            InitGame = True
+        if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                Back_To_Menu = Pause_Game()
+                if Back_To_Menu:
+                    InitGame = False
+                    return MenuClass()
+            if event.key == pygame.K_1:
+                GameInit.CHARACTERS[GameInit.choice - 1].NhanhNhen = True
+                return Play()
+            if event.key == pygame.K_2:
+                GameInit.CHARACTERS[GameInit.choice - 1].TroiHon = True
+                return Play()
+            if event.key == pygame.K_3:
+                GameInit.CHARACTERS[GameInit.choice - 1].PhanKhich = True
                 return Play()
                 
         return self

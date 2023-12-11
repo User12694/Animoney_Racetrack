@@ -158,6 +158,9 @@ class Character():
         self.map = map
         self.Finish = False
         self.isGoBack = False
+        self.PhanKhich = False
+        self.TroiHon = False
+        self.NhanhNhen = False
     def animation(self):
         #Vẽ nhân vật
         if self.count_run >= 3:
