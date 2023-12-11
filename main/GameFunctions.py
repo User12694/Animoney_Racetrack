@@ -14,7 +14,6 @@ def FinishLine_Pass():
             Victory_sound_Play = False
             return True
     return False
-
 #Đếm ngược
 countDownCheck = True
 NumberCountDown = ["assets/background/start.png", "assets/background/1.png", "assets/background/2.png", "assets/background/3.png"]
@@ -32,7 +31,7 @@ def count_down():
     pygame.mixer.music.load('assets/sounds/set1.mp3')
     pygame.mixer.music.play(loops = -1)
     gameSound = True
-
+# Tạo ra ba biến cục bộ để lưu trữ set ảnh nhân vật, tránh đè vị trí lên Class Play()
 class Congratulations:
     def __init__(self):
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
@@ -55,10 +54,11 @@ class Congratulations:
                                 (WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 1.5, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1]* 0.85), 
                                 (WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 0.42, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1] * 0.93), 
                                 (WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX][1] * 0.93)]
-
-        for i in range(5):
-            GameInit.rank[i].rect = GameInit.rank[i].image.get_rect(midbottom = Congratulations_pos[i])
-            screen.blit(GameInit.rank[i].image, GameInit.rank[i].rect)
+        # Ghi chú
+        if len(GameInit.rank) == 5:
+            for i in range(5):
+                GameInit.rank[i].rect = GameInit.rank[i].image.get_rect(midbottom = Congratulations_pos[i])
+                screen.blit(GameInit.rank[i].image, GameInit.rank[i].rect)
 
         
 
@@ -84,6 +84,7 @@ rankSound = False
 class Play:
     def __init__(self):
         money_bet()
+        GameInit.rank = []
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
@@ -108,6 +109,7 @@ class Play:
             count_down()
             countDownCheck = False
 
+        # Chạy nhạc vô tận
         if not gameSound:
             pygame.mixer.music.set_volume(present_volume)
             pygame.mixer.music.load('assets/sounds/set1.mp3')
@@ -229,7 +231,7 @@ class MenuClass:
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        read_data()
+        money_bet()
         Background = pygame.image.load(LANGUAGE[GameInit.LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[GameInit.WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))

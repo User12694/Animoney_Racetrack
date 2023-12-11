@@ -1,6 +1,7 @@
 import pygame, sys
 from GameInit import *
 import GameInit
+import LoginSignup
 
 clock = pygame.time.Clock()
 WINDOW_SIZE = [(1536,864),(768,432)]
@@ -52,15 +53,10 @@ winner = 0
 line = screen_Width - screen_Width / 20
 start = screen_Width / 300
 # Tạo một hàm read_data lên
-def read_data():
-    global user_money
-    username = 'phuoc'
-    with open(f'./assets/player/{username}/{username}.txt','r') as f:
-        lines = f.readlines()
-    user_money = int(lines[1])
-    return username, user_money
+
+
 def money_bet():
-    global screen_Width, screen_Height, screen, text_Font, menu_Font, font
+    global screen_Width, screen_Height, screen, text_Font, menu_Font, font, LANGUAGE_INDEX
     active = True
     user_text = ''
     money_bet = 0
@@ -77,7 +73,7 @@ def money_bet():
         backgroundmenu1 = pygame.transform.scale(backgroundmenu1, (screen_Width, screen_Height))
         screen.blit(backgroundmenu1, (0, 0))
         global user_id, user_money, back_button
-        user_id, user_money = read_data()
+        user_id, user_money = LoginSignup.user_id, LoginSignup.user_money
         user_info = text_Font.render('ID: ' + user_id, True, black)
         money_info = text_Font.render('Money: ' + str(user_money), True, black)
         store = menu_Font.render('BUY RANDOM SPELL (100$)', True, white)
@@ -107,6 +103,7 @@ def money_bet():
 
         if hihi == 1:
             title2 = text_Font.render('Dont have enough money? play mini game to get more !', True, white)
+            LANGUAGE_INDEX = 1
             screen.blit(title2, (screen_Width / 2 - title2.get_width() / 2, screen_Height / (8 / 6)))
 
         if (x_store_button + store.get_width() * 1.5 > mouse[

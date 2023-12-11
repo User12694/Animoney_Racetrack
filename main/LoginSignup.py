@@ -17,7 +17,14 @@ login_lock = False
 img_label = None
 # confirm_button = None Nút xác nhận được gắn hàm kiểm tra trong FindPicture.py (hiện bị disable)
 bg_color = "#2b95d1"
-image_load_path = None 
+image_load_path = None
+user_id, user_money = None, None 
+def fileread(username):
+    global user_id, user_money
+    with open(f"assets/player/{username}/{username}.txt") as f:
+        lines = f.readlines()
+        user_id = username
+        user_money = lines[1]
 
 def filePath():
     anh = "captured_image.png"
@@ -141,6 +148,7 @@ class LoginRegisterMenu:
                     tk.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
                     global login_lock
                     login_lock = True
+                    fileread(username)
                     self.root.quit()  # Thoát chương trình
                 else:
                     tk.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi

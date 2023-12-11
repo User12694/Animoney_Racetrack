@@ -9,19 +9,21 @@ import os
 
 code = None
 login_lock = False
+WINDOW_SIZES = [(1536,864),(768,432)]
+WINDOW_SIZES_INDEX = 0
+ratio = WINDOW_SIZES[WINDOW_SIZES_INDEX][0]/WINDOW_SIZES[0][0]
 class LoginMenu:
     def __init__(self):
         # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
         self.window = ctk.CTk()
-        self.window.geometry('1536x864')
+        self.window.geometry(f'{WINDOW_SIZES[WINDOW_SIZES_INDEX][0]}x{WINDOW_SIZES[WINDOW_SIZES_INDEX][1]}')
         self.window.config(bg='white')
 
         # Tạo hình ảnh 
         self.background = Image.open("./main/image.png")
-        self.background = self.background.resize((1173,864))
         self.photo_background = ImageTk.PhotoImage(self.background)
         self.background_label = ctk.CTkLabel(self.window, image=self.photo_background,width=1173, height=864, text='')
-        self.background_label.place(x=362, y=0)
+        self.background_label.place(x=363, y=0)
         
         # Tạo một khung CTKFrame với màu nền là màu hex #2b95d1 và đặt ở vị trí x = 0, y = 0
         self.frame = ctk.CTkFrame(self.window,width=512, height=864, fg_color="#2b95d1")
