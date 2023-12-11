@@ -5,6 +5,8 @@ from PIL import Image, ImageTk
 import smtplib
 import random
 import string
+
+code = None
 class LoginMenu:
     def __init__(self):
         # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
@@ -78,16 +80,25 @@ class LoginMenu:
         self.account_label.configure(text="Don't have an account?")
         self.signup_button.configure(text="Sign up", command=self.switch_to_register)
     def confirm_email(self):
+        global code
         email = self.username_entry.get()
         if email == '':
             tkinter.messagebox.showerror('Empty email', 'Email must be filled!')
         else:
             if check_gmail_in_string(email) == True:
-                send_verification_code(email)
-                self.login_button.configure(text="Create account", command= self.create_account)
+                code = send_verification_code(email)
+                self.login_button.configure(text="Create account", command= self.veri_confirm)
             else:
-                send_verification_code(email + "@gmail.com")
-                self.login_button.configure(text="Create account", command= self.create_account)
+                code = send_verification_code(email + "@gmail.com")
+                self.login_button.configure(text="Create account", command= self.veri_confirm)
+        return code
+    def veri_confirm(self):
+        global code
+        veri_code = self.username_entry.get()
+        if veri_code == '':
+            tkinter.messagebox.showinfo("Check")
+        if veri_code == code:
+            tkinter.messagebox.showinfo("Success!","Confirm success!")
     def create_account(self):
         self.username_label.place_forget()
         self.password_entry.place_forget()
@@ -95,13 +106,19 @@ class LoginMenu:
         self.login_button.place_forget()
         # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
         self.confirm_password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20, "bold"))
-        self.confirm_password_label.place(x=92, y=443)
+        self.confirm_password_label.place(x=92, y=549)
 
         # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
-        self.username_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20))
-        self.username_entry.place(x=92, y=370)
-        pass
+        self.confirm_password_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20))
+        self.confirm_password_entry.place(x=92, y=584)
 
+        self.login_button.configure(text="Register", command=self.register)
+        self.login_button.place(x = 179, y = 651)
+
+    def login(self):
+        pass
+    def register(self):
+        pass
 def check_gmail_in_string(s):
     return "@gmail.com" in s
 def send_verification_code(receiver_email):
@@ -127,6 +144,7 @@ def send_verification_code(receiver_email):
         server.sendmail(sender_email, receiver_email, message)
 
     print(f"Verification code sent to {receiver_email}.")
+    return code
 
 # Tạo một đối tượng LoginMenu và vẽ nó
 login_menu = LoginMenu()
