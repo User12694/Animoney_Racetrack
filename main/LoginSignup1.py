@@ -178,31 +178,29 @@ class LoginMenu:
 
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
-        global email
+        global email, login_lock
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
         emails = find_file_in_subdirectories('./assets/player',f'{username}.txt')
         if len(emails) == 0:
-            tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
-        else: 
+                if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
+                    with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
+                        if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
+                            tkinter.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
+                            login_lock = True
+                            self.window.quit()  # Thoát chương trình
+                        else:
+                            tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
+                else:
+                    tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi        else: 
+        else:
             if check_first_line_in_files(emails,password):
                 tkinter.messagebox.showinfo("Success!", "Login successful!")  # Hiển thị thông báo 
-                global login_lock
                 login_lock = True
                 self.window.quit()
             else:
                 tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
-        if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
-            with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
-                if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
-                    tkinter.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
-                    global login_lock
-                    login_lock = True
-                    self.window.quit()  # Thoát chương trình
-                else:
-                    tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
-        else:
-            tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
+        
     # Hàm xử lí sự kiện đăng nhập bằng khuôn mặt
     
     # Hàm xử lí sự kiện đăng kí bằng khuôn mặt
