@@ -163,6 +163,7 @@ class Character():
         self.TroiHon = False
         self.NhanhNhen = False
         self.KichHoatBua = False
+        self.active_time = pygame.time.get_ticks()
     def animation(self):
         #Vẽ nhân vật
         if self.count_run >= 3:
@@ -341,26 +342,26 @@ class Character():
         self.move()
         self.checkFinishLine()
         if self.NhanhNhen:
-            active_time = pygame.time.get_ticks()
-            self.Bua(active_time)
             if not self.KichHoatBua:
+                self.active_time = pygame.time.get_ticks()
                 self.speed += 2
                 self.KichHoatBua = True
+            self.Bua()
         if self.TroiHon:
-            active_time = pygame.time.get_ticks()
-            self.Bua(active_time)
             if not self.KichHoatBua:
+                self.active_time = pygame.time.get_ticks()
                 for i in range(5):
                         if(i != (choice - 1)):
                             CHARACTERS[i].run = False
                 self.KichHoatBua = True
+            self.Bua()
         if self.isGoBack: #Đi ngược lại
             goBackImage = pygame.transform.flip(self.image, True, False)
             screen.blit(goBackImage, self.rect)
         else:
             screen.blit(self.image, self.rect)
 
-    def Bua(self, active_time):
+    def Bua(self):
         if self.PhanKhich:
             effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha() #Ảnh tạm
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
@@ -370,7 +371,7 @@ class Character():
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
-            elapsed_time = current_time - active_time
+            elapsed_time = current_time - self.active_time
             if elapsed_time >= 2000:
                     self.NhanhNhen = False
                     self.speed = self.tempSpeed
@@ -379,7 +380,7 @@ class Character():
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
-            elapsed_time = current_time - active_time
+            elapsed_time = current_time - self.active_time
             if elapsed_time >= 1000:
                     self.TroiHon = False
                     for i in range(5):
