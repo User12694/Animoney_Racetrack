@@ -1,152 +1,133 @@
-from tkinter import * 
-from tkinter import messagebox
-import numpy as np
-from tkinter import filedialog
+# Import thư viện CustomTkinter
+import customtkinter as ctk
+import tkinter.messagebox
 from PIL import Image, ImageTk
-import subprocess
-import os
-
-bg_color = '#2b95d1'
-
-class RegisterMenu:
-    def __init__(self, root):
-        self.root = root
-        self.root.title('Sign up')
-        self.background = Frame(root, bg=bg_color)
-        self.background.place(x=0, y=0, relwidth=1, relheight=1)
-        self.root.geometry('925x500+300+200')
-        self.root.configure(bg="#ffffff")
-        self.root.resizable(False,False)
-        self.login_lock = False
-
-        self.img = PhotoImage(file='./assets/icon/banner1.png')
-        Label(self.root,image=self.img, bg=bg_color).place(x=50,y=50)
-
-        self.frame=Frame(self.root,width=350,height=390,bg=bg_color)
-        self.frame.place(x=480,y=50)
-
-        heading = Label(self.frame, text="Sign up",fg='ư',bg=bg_color,font=('./assets/font/SVN-Retron_2000.ttf',23,'bold'))
-        heading.place(x=100,y=5)
-
-        self.username_entry = self.create_entry(self.frame, 'Username', 30, 80)
-        self.password_entry = self.create_entry(self.frame, 'Password', 30, 150)
-        self.password_confirm_entry = self.create_entry(self.frame, 'Confirm Password', 30, 220)
-
-        Button(self.frame,width=39,pady=7,text='Sign up',bg='#57a1f8',fg=bg_color,cursor='hand2',border=0,command=self.sign_up).place(x=35,y=280)
-        label = Label(self.frame,text="Have an account?",fg='white',bg=bg_color,font=('./assets/font/SVN-Retron_2000.ttf',9))
-        label.place(x=90,y=340)
-
-        sign_in = Button(self.frame,width=5,text="Sign in",border=0,bg=bg_color,cursor='hand2',fg='#57a1f8',command=self.switch)
-        sign_in.place(x=200,y=340)
-
-        subprocess.run(['cmd', '/c', 'chcp', '65001'])
-
-    def create_entry(self, frame, text, x, y):
-        def on_enter(e):
-            entry.delete(0,'end')
-        def on_leave(e):
-            name = entry.get()
-            if name=='':
-                entry.insert(0,text)
-
-        entry = Entry(frame,width=25,fg='white',border=0,bg=bg_color,font=('./assets/font/SVN-Retron_2000.ttf',11))
-        entry.place(x=x,y=y)
-        entry.insert(0,text)
-        entry.bind('<FocusIn>',on_enter)
-        entry.bind('<FocusOut>',on_leave)
-
-        Frame(frame,width=295,height=2,bg='white').place(x=25,y=y+27)
-        return entry
-
-    def sign_up(self):
-        username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
-        password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
-        repeat_password = self.password_confirm_entry.get()  # Lấy mật khẩu nhập lại từ trường nhập liệu
-        if username == "" or password == "" or repeat_password == "":
-            messagebox.showerror("Have blank emulation!", "Have blank emulation!")
-        else:
-            if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
-                messagebox.showerror("Username existed!", "Username existed!")  # Hiển thị thông báo lỗi
-            elif password == repeat_password:  # Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp không
-                os.makedirs(f"assets/player/{username}",exist_ok=True)
-                with open(f"assets/player/{username}/{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
-                    file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
-                    file.write("500" + "\n")  # Ghi "500" vào dòng thứ hai của file
-                messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
-                self.switch()  # Chuyển về chế độ đăng nhập
-            else:
-                messagebox.showerror("Passwords do not match!", "Passwords do not match!")  # Hiển thị thông báo lỗi
-    
-    def switch(self):
-        global app
-        app = LoginMenu(root)
-        return app
-
+import smtplib
+import random
+import string
 class LoginMenu:
-    def __init__(self, root):
-        self.root = root
-        self.root.title('Login')
-        self.background = Frame(root, bg=bg_color)
-        self.background.place(x=0, y=0, relwidth=1, relheight=1)
-        self.root.geometry('925x500+300+200')
-        self.root.configure(bg="#ffffff")
-        self.root.resizable(False,False)
+    def __init__(self):
+        # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
+        self.window = ctk.CTk()
+        self.window.geometry('1536x864')
+        self.window.config(bg='white')
 
-        self.img = PhotoImage(file='./assets/icon/banner1.png')
-        Label(self.root,image=self.img, bg=bg_color).place(x=50,y=50)
+        # Tạo một khung CTKFrame với màu nền là màu hex #2b95d1 và đặt ở vị trí x = 0, y = 0
+        self.frame = ctk.CTkFrame(self.window,width=512, height=864, fg_color="#2b95d1")
+        self.frame.place(x=0, y=0)
 
-        self.frame=Frame(self.root,width=350,height=350,bg=bg_color)
-        self.frame.place(x=480,y=70)
+        # Tạo nhãn "Username/Email" và đặt ở tọa độ (92,334)
+        self.username_label = ctk.CTkLabel(self.frame, text="Username/Email", font=("default", 20, "bold"))
+        self.username_label.place(x=92, y=334)
 
-        heading = Label(self.frame, text="Sign in",fg='white',bg=bg_color,font=('./assets/font/SVN-Retron_2000.ttf',23,'bold'))
-        heading.place(x=100,y=5)
+        # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
+        self.password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20, "bold"))
+        self.password_label.place(x=92, y=443)
 
-        self.username_entry = self.create_entry(self.frame, 'Username', 30, 80)
-        self.password_entry = self.create_entry(self.frame, 'Password', 30, 150)
+        # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
+        self.username_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20))
+        self.username_entry.place(x=92, y=370)
 
-        Button(self.frame,width=39,pady=7,text='Sign in',bg='#57a1f8',fg=bg_color,cursor='hand2',border=0,command=self.sign_in).place(x=35,y=204)
-        label = Label(self.frame,text="Don't have an account?",fg='white',bg=bg_color,font=('./assets/font/SVN-Retron_2000.ttf',9))
-        label.place(x=75,y=270)
+        # Tạo hộp nhập liệu thứ hai và đặt ở tọa độ (92,478)
+        self.password_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20))
+        self.password_entry.place(x=92, y=478)
 
-        sign_up = Button(self.frame,width=6,text="Sign up",border=0,bg=bg_color,cursor='hand2',fg='#57a1f8',command=self.switch)
-        sign_up.place(x=215,y=270)
+        # Tạo nhãn "Don't have an account?" và đặt ở tọa độ (158,728)
+        self.account_label = ctk.CTkLabel(self.frame, text="Don't have an account?", font=("default", 12, "bold"), fg_color="transparent", width=145, height=20)
+        self.account_label.place(x=158, y=728)
 
-    def create_entry(self, frame, text, x, y):
-        def on_enter(e):
-            entry.delete(0,'end')
-        def on_leave(e):
-            name = entry.get()
-            if name=='':
-                entry.insert(0,text)
+        # Tạo nút "Sign up" và đặt ở tọa độ (303,728)
+        self.signup_button = ctk.CTkButton(self.frame, text="Sign up", font=("default", 12, "bold"), fg_color="transparent", width=51, height=20, command=self.switch_to_register)
+        self.signup_button.place(x=303, y=728)
 
-        entry = Entry(frame,width=25,fg='white',border=0,bg=bg_color,font=('./assets/font/SVN-Retron_2000.ttf',11))
-        entry.place(x=x,y=y)
-        entry.insert(0,text)
-        entry.bind('<FocusIn>',on_enter)
-        entry.bind('<FocusOut>',on_leave)
+        # Tạo nút "Login" và đặt ở tọa độ (213,608)
+        self.login_button = ctk.CTkButton(self.frame, text="Login", font=("default", 20, "bold"), fg_color="#F7B104", width=169, height=47, corner_radius=30)
+        self.login_button.place(x=179, y=575)
 
-        Frame(frame,width=295,height=2,bg='white').place(x=25,y=y+27)
-        return entry
+        # Tạo hình ảnh và đặt ở tọa độ (156,71)
+        self.image = Image.open("./main/image_transparent.png")
+        self.image = self.image.resize((200, 200))
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.image_label = ctk.CTkLabel(self.frame, image=self.photo, width=200, height=200, text='')
+        self.image_label.place(x=156, y=71)
 
-    def sign_in(self):
-        username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
-        password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
-        if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
-            with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
-                if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
-                    messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
-                    global login_lock
-                    login_lock = True
-                    self.root.quit()  # Thoát chương trình
-                else:
-                    messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
+        # Tạo nhãn "Login" và đặt ở tọa độ (167,271)
+        self.login_label = ctk.CTkLabel(self.frame, text="Login", font=("default", 32, "bold"), fg_color="transparent", width=177, height=45)
+        self.login_label.place(x=167, y=271)
+
+    def draw(self):
+        # Lặp vô tận để hiển thị cửa sổ
+        self.window.mainloop()
+    def switch_to_register(self):
+        self.login_label.configure(text="Register")
+        self.password_label.place_forget()
+        self.password_entry.place_forget()
+
+        # Chuyển đổi text trên nút "Login" thành "Register"
+        self.login_button.configure(text="Confirm Email", command= self.confirm_email)
+
+        # Thay đổi chữ trong label "Don't have an account?" thành "Already have one?"
+        self.account_label.configure(text="Already have one?")
+
+        # Thay đổi chữ trên nút "Sign up" thành "Sign in"
+        self.signup_button.configure(text="Sign in", command=self.switch_to_login)
+    def switch_to_login(self):
+        self.login_button.configure(text="Login")
+        self.password_label.place(x = 92, y = 443)
+        self.password_entry.place(x = 92, y = 478)
+        self.account_label.configure(text="Don't have an account?")
+        self.signup_button.configure(text="Sign up", command=self.switch_to_register)
+    def confirm_email(self):
+        email = self.username_entry.get()
+        if email == '':
+            tkinter.messagebox.showerror('Empty email', 'Email must be filled!')
         else:
-            messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
-    def switch(self):
-        global app
-        app = RegisterMenu(root)
-        return app
+            if check_gmail_in_string(email) == True:
+                send_verification_code(email)
+                self.login_button.configure(text="Create account", command= self.create_account)
+            else:
+                send_verification_code(email + "@gmail.com")
+                self.login_button.configure(text="Create account", command= self.create_account)
+    def create_account(self):
+        self.username_label.place_forget()
+        self.password_entry.place_forget()
+        self.password_entry.place_forget()
+        self.login_button.place_forget()
+        # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
+        self.confirm_password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20, "bold"))
+        self.confirm_password_label.place(x=92, y=443)
 
-root = Tk()
-app = LoginMenu(root)
-root.mainloop()
+        # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
+        self.username_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20))
+        self.username_entry.place(x=92, y=370)
+        pass
+
+def check_gmail_in_string(s):
+    return "@gmail.com" in s
+def send_verification_code(receiver_email):
+    # Tạo mã xác minh ngẫu nhiên
+    code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+
+    # Tạo nội dung email
+    subject = "Your verification code confirm the email to login/signup into Animal RaceTrack"
+    body = f"""Hello {receiver_email}.
+    We have sent a verificaion code to verify your login or registration.
+    Your verification code is: {code}
+    You have sent this email because you requested the registration or login into your account.
+    If not, you can ignore this."""
+    message = f"Subject: {subject}\n\n{body}"
+
+    # Thông tin tài khoản Gmail của bạn
+    sender_email = "devteam.animalracetrack@gmail.com"
+    password = "dzlh mowf obyr bfei"
+
+    # Gửi email
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+
+    print(f"Verification code sent to {receiver_email}.")
+
+# Tạo một đối tượng LoginMenu và vẽ nó
+login_menu = LoginMenu()
+login_menu.draw()
