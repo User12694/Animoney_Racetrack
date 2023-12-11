@@ -1,4 +1,4 @@
-import pygame_menu, pygame, random, sys, time
+import pygame, random, sys, time
 import GameInit
 from GameInit import *
 from money_bet import *
