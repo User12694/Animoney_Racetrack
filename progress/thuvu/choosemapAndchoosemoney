@@ -1,0 +1,164 @@
+import pygame
+import sys
+
+pygame.init()
+
+SCREEN_SIZE = [(1536, 864), (768, 432)]
+SCREEN_INDEX = 0
+
+SCREEN_WIDTH = SCREEN_SIZE[SCREEN_INDEX][0]
+SCREEN_HEIGHT = SCREEN_SIZE[SCREEN_INDEX][1]
+FPS = 30
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+map_choice = None
+char_choice = None
+bet_money = None
+item_choice = None
+font = pygame.font.Font(None, 36)
+
+class GameState:
+    MAP_SELECTION = 1
+    CHARACTER_SELECTION = 2
+    BETTING = 3
+
+current_state = GameState.MAP_SELECTION
+
+class MapSelector:
+    def __init__(self, map_image, character_selector):
+        self.map_image = map_image
+        self.map_number = None
+        self.character_selector = character_selector
+
+    def draw(self, screen):
+        screen.blit(
+            self.map_image,
+            (
+                SCREEN_WIDTH // 2 - self.map_image.get_width() // 2,
+                SCREEN_HEIGHT // 2 - self.map_image.get_height() // 2,
+            ),
+        )
+
+    def update(self, event):
+        global map_choice, current_state
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                self.map_number = 1
+                map_choice = self.map_number
+                self.character_selector.choose_character(self.map_number)
+                current_state = GameState.CHARACTER_SELECTION
+            elif event.key == pygame.K_2:
+                self.map_number = 2
+                map_choice = self.map_number
+                self.character_selector.choose_character(self.map_number)
+                current_state = GameState.CHARACTER_SELECTION
+            elif event.key == pygame.K_3:
+                self.map_number = 3
+                map_choice = self.map_number
+                self.character_selector.choose_character(self.map_number)
+                current_state = GameState.CHARACTER_SELECTION
+            elif event.key == pygame.K_4:
+                self.map_number = 4
+                map_choice = self.map_number
+                self.character_selector.choose_character(self.map_number)
+                current_state = GameState.CHARACTER_SELECTION
+            elif event.key == pygame.K_5:
+                self.map_number = 5
+                map_choice = self.map_number
+                self.character_selector.choose_character(self.map_number)
+                current_state = GameState.CHARACTER_SELECTION
+
+    def back(self):
+        global current_state
+        current_state = GameState.MAP_SELECTION
+
+class BetSelector:
+    def __init__(self):
+        self.amount = 200
+        self.min_bet = 200
+        self.max_bet = 1000
+        self.player_gold = 500
+
+    def increase_bet(self):
+        if self.amount + 10 <= self.max_bet and self.amount + 10 <= self.player_gold:
+            self.amount += 10
+
+    def decrease_bet(self):
+        if self.amount - 10 >= self.min_bet:
+            self.amount -= 10
+
+    def set_bet(self, amount):
+        if self.min_bet <= amount <= self.max_bet and amount <= self.player_gold:
+            self.amount = amount
+
+    def draw(self, screen):
+        text_bet = font.render(f"Bet: {self.amount}", True, BLACK)
+        text_gold = font.render(f"Gold: {self.player_gold}", True, BLACK)
+        screen.blit(text_bet, (10, 10))
+        screen.blit(text_gold, (10, 50))
+
+    def back(self):
+        global current_state
+        current_state = GameState.CHARACTER_SELECTION
+
+class CharacterSelector:
+    def __init__(self, map_selector):
+        self.selected_character = None
+        self.map_selector = map_selector
+
+    def choose_character(self, character_number):
+        self.selected_character = character_number
+        print(f"Player chose character: {self.selected_character}")
+
+    def back(self):
+        global current_state
+        current_state = GameState.MAP_SELECTION
+
+# Load hình ảnh của map từ bên ngoài (chú ý: cần thay đổi đường dẫn dựa vào thực tế)
+map_image = pygame.image.load("./assets/background/choosemap.png")
+
+# Khởi tạo các đối tượng
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Map and Bet Selector")
+clock = pygame.time.Clock()
+character_selector = CharacterSelector(None)
+map_selector = MapSelector(map_image, character_selector)
+character_selector.map_selector = map_selector
+bet_selector = BetSelector()
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                bet_selector.increase_bet()
+            elif event.key == pygame.K_DOWN:
+                bet_selector.decrease_bet()
+            elif event.key == pygame.K_RETURN:
+                if current_state == GameState.BETTING:
+                    # Code để xác nhận cược ở đây (ví dụ: bắt đầu game)
+                    print(f"Player placed bet: {bet_selector.amount}")
+                    bet_selector.player_gold -= bet_selector.amount
+                current_state = GameState.BETTING
+            elif event.key == pygame.K_BACKSPACE:
+                if current_state == GameState.MAP_SELECTION:
+                    map_selector.back()
+                elif current_state == GameState.BETTING:
+                    bet_selector.back()
+                elif current_state == GameState.CHARACTER_SELECTION:
+                    character_selector.back()
+        map_selector.update(event)
+
+    screen.fill(WHITE)
+    map_selector.draw(screen)
+    if current_state == GameState.BETTING:
+        bet_selector.draw(screen)
+    pygame.display.flip()
+    clock.tick(FPS)
+
+pygame.quit()
+sys.exit()

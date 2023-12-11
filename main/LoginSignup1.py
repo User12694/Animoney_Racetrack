@@ -12,6 +12,7 @@ login_lock = False
 WINDOW_SIZES = [(1536,864),(768,432)]
 WINDOW_SIZES_INDEX = 0
 ratio = WINDOW_SIZES[WINDOW_SIZES_INDEX][0]/WINDOW_SIZES[0][0]
+email = None
 class LoginMenu:
     def __init__(self):
         # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
@@ -115,20 +116,22 @@ class LoginMenu:
         self.signup_button.configure(text="Sign up", command=self.switch_to_register)
 
     def confirm_email(self):
-        global code
-        email = self.username_entry.get()
-        if email == '':
+        global code, email
+        email_input = self.username_entry.get()
+        if email_input == '':
             tkinter.messagebox.showerror('Empty email', 'Email must be filled!')
         else:
-            if check_gmail_in_string(email) == True:
-                code = send_verification_code(email)
+            if check_gmail_in_string(email_input) == True:
+                code = send_verification_code(email_input)
+                email = email_input
                 self.login_button.configure(text="Confirm", command= self.veri_confirm)
                 self.login_label.configure(text="Confirmation")
                 self.username_label.configure(text="Enter the code")
                 self.username_entry.place_forget()
                 self.username_entry.place(x=92, y = 370)
             else:
-                code = send_verification_code(email + "@gmail.com")
+                code = send_verification_code(email_input + "@gmail.com")
+                email = email_input
                 self.login_button.configure(text="Confirm", command= self.veri_confirm)
                 self.login_label.configure(text="Confirmation code")
                 self.username_label.configure(text="Enter the code")
@@ -137,7 +140,7 @@ class LoginMenu:
         return code
     
     def veri_confirm(self):
-        global code
+        global code, email
         self.login_label.configure(text="Confirmation code")
         self.username_label.configure(text="Enter the code")
         self.username_entry.place_forget()
@@ -175,9 +178,20 @@ class LoginMenu:
 
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
+        global email
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
-        
+        emails = find_file_in_subdirectories('./assets/player',f'{username}.txt')
+        if len(emails) == 0:
+            tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
+        else: 
+            if check_first_line_in_files(emails,password):
+                tkinter.messagebox.showinfo("Success!", "Login successful!")  # Hiển thị thông báo 
+                global login_lock
+                login_lock = True
+                self.window.quit()
+            else:
+                tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
         if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
             with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
                 if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
@@ -195,6 +209,7 @@ class LoginMenu:
 
     # Hàm xử lý sự kiện đăng ký
     def register(self):
+        global email
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
         repeat_password = self.repeat_password_entry.get()  # Lấy mật khẩu nhập lại từ trường nhập liệu
@@ -208,6 +223,8 @@ class LoginMenu:
                 with open(f"assets/player/{username}/{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
                     file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
                     file.write("500" + "\n")  # Ghi "500" vào dòng thứ hai của file
+                with open(f"assets/player/{username}/{email}.txt") as file:
+                    file.write(email + '\n')
                 tkinter.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
                 self.switch_to_login()  # Chuyển về chế độ đăng nhập
             else:
@@ -241,6 +258,24 @@ def send_verification_code(receiver_email):
     return code
 def clear_entry(entry):
     entry.delete(0,'end')
+def find_file_in_subdirectories(relative_path, filename):
+    # Chuyển đổi đường dẫn phụ thuộc thành đường dẫn tuyệt đối
+    directory = os.path.abspath(relative_path)
+    
+    matching_files = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file == filename + '.txt':
+                # Chuyển đổi đường dẫn tuyệt đối thành đường dẫn phụ thuộc
+                matching_files.append(os.path.relpath(os.path.join(root, file), directory))
+    return matching_files
+def check_first_line_in_files(file_list, target_string):
+    for file_path in file_list:
+        with open(file_path, 'r') as file:
+            first_line = file.readline().strip()
+            if first_line == target_string:
+                return True
+    return False
 # Tạo một đối tượng LoginMenu và vẽ nó
 login_menu = LoginMenu()
 login_menu.draw()
