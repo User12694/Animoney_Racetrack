@@ -703,7 +703,7 @@ rankSound = False
 
 class Play:
     def __init__(self):
-        money_bet()
+        # money_bet()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
@@ -1188,14 +1188,59 @@ class Shop:
                     return MenuClass()
             if event.key == pygame.K_1:
                 CHARACTERS[choice - 1].NhanhNhen = True
-                return Play()
+                return MoneyBet()
             if event.key == pygame.K_2:
                 CHARACTERS[choice - 1].TroiHon = True
-                return Play()
+                return MoneyBet()
             if event.key == pygame.K_3:
                 CHARACTERS[choice - 1].PhanKhich = True
-                return Play()
+                return MoneyBet()
         return self
+
+class MoneyBet: 
+    global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_bet
+    def draw(self, mouse_pos):
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'moneyshop.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        screen.blit(Background, (0, 0))
+    #Cập nhật trạng thái cho các thuộc tính
+    def update(self, event):
+        global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money
+        bet_values = {1: 200, 2: 500, 3: 1000}
+        if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                Back_To_Menu = Pause_Game()
+                if Back_To_Menu:
+                    InitGame = False
+                    return MenuClass()
+            if event.key in [pygame.K_1, pygame.K_2, pygame.K_3]:
+                choice = event.key - pygame.K_0
+                bet_money = bet_values[choice]
+                if user_money < bet_money:
+                    self.show_insufficient_funds_message()
+                else:
+                    user_money -= bet_money
+                    money_bet = bet_money
+                    return Play()
+        return self
+
+    def show_insufficient_funds_message(self):
+        messages = {
+            'VIE': "Bạn không đủ tiền để chơi. Bạn có thể chơi minigame để lấy thêm tiền",
+            'en': "You don't have enough money. You can play Minigame to earn"
+        }
+        spilt_text = []
+        for item in LANGUAGE:
+            parts = item.split('/')
+            spilt_text.append(parts[-3])
+        message = messages[LANGUAGE[LANGUAGE_INDEX]]
+        font = pygame.font.Font(None, 36)
+        text = font.render(message, True, (255, 255, 255))
+        screen.blit(text, (10, 10))
+        pygame.display.flip()
 
 #Đây là main loop
 def main():
