@@ -196,11 +196,36 @@ def update_account(usr_id, money):
         for line in data:
             new_file.write(line)
 
+    
+# Đây chứa hàm reset game
 def reset_game():
+    global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
+    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos
     file = './assets/sounds/mainmenu.mp3'
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load(file)
     pygame.mixer.music.set_volume(volume)
     pygame.mixer.music.play()
-    GameInit.rank, GameInit.winner, GameInit.CHARACTERS, GameInit.choice, GameInit.bet_money, GameInit.GROUP, GameInit.set_choice, GameInit.last, GameInit.LUCKYBOX = [], 0, [], 0, 0, [], 0, 0, []
+    set_choice = 1
+    choice = 0
+    bet_money = 0
+    CHARACTERS = []
+    LUCKYBOX = []
+    GROUP = []
+    rank = [] #List nhân vật khi thắng đc thêm vào
+    winner = 0
+    last = 0
+    Speed = []
+    Victory_sound_Play = True
+    rankSound = True
+    InitGame = False
+    countDownCheck = False
+    gameSound = True
+    countDownCheck = True
+    Position = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
+    LuckyBox_Pos = []
