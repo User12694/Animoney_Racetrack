@@ -13,9 +13,9 @@ random.seed(datetime.now().timestamp())
 
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
-user_id = ''
+user_id = LoginSignup.user_id
 user_pwd = ''
-user_money = 0
+user_money = int(LoginSignup.user_money)
 set_choice = 1
 choice = 0
 bet_money = 0
@@ -86,7 +86,7 @@ Char2Map2 = ['assets/characters/Char2Map2_1.png', 'assets/characters/Char2Map2_2
 Char3Map2 = ['assets/characters/Char3Map2_1.png', 'assets/characters/Char3Map2_2.png',
             'assets/characters/Char3Map2_3.png', 'assets/characters/Char3Map2_4.png']
 Char4Map2 = ['assets/characters/Char4Map2_1.png', 'assets/characters/Char4Map2_2.png',
-            'assets/characters/Char4Map1_3.png', 'assets/characters/Char4Map2_4.png']
+            'assets/characters/Char4Map2_3.png', 'assets/characters/Char4Map2_4.png']
 Char5Map2 = ['assets/characters/Char5Map2_1.png', 'assets/characters/Char5Map2_2.png',
             'assets/characters/Char5Map2_3.png', 'assets/characters/Char5Map2_4.png']
 
@@ -337,7 +337,6 @@ class Character():
                 self.run = False
                 self.Finish = True
         
-
     def update(self):
         self.animation()
         self.move()
@@ -392,7 +391,6 @@ class Character():
                         if(i != (choice - 1)):
                             CHARACTERS[i].run = True
                     
-
     def stop(self, activated):
         if not activated:
             self.run = False
@@ -684,7 +682,6 @@ class Congratulations:
             rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
             screen.blit(rank[i].image, rank[i].rect)
 
-        
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
@@ -840,6 +837,35 @@ def QuitConfirm():
         pygame.display.update()
         clock.tick(60)
 
+#Hàm read_data để đọc dữ liệu
+def read_data(filename):
+    # Đọc dữ liệu từ file
+    with open(f'./assets/player/{filename}/{filename}.txt', 'r') as f:
+        lines = f.readlines()
+        user_id = filename
+        user_money = lines[1]
+        
+    # Lấy kích thước màn hình
+    screen_info = pygame.display.Info()
+
+    # Tính toán kích thước của hình chữ nhật
+    rect_width = screen_info.current_w // 10
+    rect_height = screen_info.current_h // 8
+    # Vẽ hình chữ nhật
+    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, rect_width, rect_height))
+
+    # Tạo font chữ
+    font = pygame.font.Font(None, 36)
+
+    # Render thông tin user_id và user_money
+    text_id = font.render('User ID: ' + user_id, True, (0, 128, 0))
+    text_money = font.render('User Money: ' + user_money, True, (0, 128, 0))
+
+    # Hiển thị thông tin lên hình chữ nhật
+    screen.blit(text_id, (10, 10))
+    screen.blit(text_money, (10, 50))
+
+
 
 # Lớp menu chính
 class MenuClass: 
@@ -853,7 +879,8 @@ class MenuClass:
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        read_data()
+        global user_id
+        read_data(user_id)
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
@@ -1076,7 +1103,7 @@ class MapSelection:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, MAP_INDEX
+        global InitGame, MAP_INDEX, set_choice
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -1110,13 +1137,14 @@ class MapSelection:
         return self
     
 class CharacterSelection: 
+    global InitGame, MAP_INDEX, set_choice, choice
     def draw(self, mouse_pos):
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'choose.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+f'choose_char{set_choice}.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame
+        global InitGame, MAP_INDEX, set_choice, choice
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -1152,7 +1180,7 @@ class Shop:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame
+        global InitGame, choice
         if not InitGame:
             init_character_luckybox()
             InitGame = True
@@ -1174,7 +1202,6 @@ class Shop:
             if event.key == pygame.K_3:
                 CHARACTERS[choice - 1].PhanKhich = True
                 return Play()
-                
         return self
 
 #Đây là main loop
