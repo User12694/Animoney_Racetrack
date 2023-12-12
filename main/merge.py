@@ -56,16 +56,15 @@ scoreBoard_Box = scoreBoard.get_rect(center = (screen.get_width() * 0.13, screen
 map1 = pygame.image.load('assets/background/map1.png').convert_alpha()
 map1 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map2 = pygame.image.load('assets/background/map2.png').convert_alpha()
-map2 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map2 = pygame.transform.smoothscale(map2, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map3 = pygame.image.load('assets/background/map3.png').convert_alpha()
-map3 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map3 = pygame.transform.smoothscale(map3, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map4 = pygame.image.load('assets/background/map4.png').convert_alpha()
-map4 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map4 = pygame.transform.smoothscale(map4, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map5 = pygame.image.load('assets/background/map5.png').convert_alpha()
-map5 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map5 = pygame.transform.smoothscale(map5, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 MAPS = [map1, map2, map3, map4, map5]
 MAP_INDEX = 0
-
 #Các ảnh cần dùng đến
 #1. Nhân vật (Đặt tên theo dạng Char#Map#_#)
 Char1Map1 = ['assets/characters/Char1Map1_1.png', 'assets/characters/Char1Map1_2.png',
@@ -711,18 +710,12 @@ class Play:
         self.CheckPass = False #Check xem 5 nv có về đích chưa
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global VOLUME_INDEX, present_volume, countDownCheck, gameSound
+        global VOLUME_INDEX, present_volume, countDownCheck, gameSound, set_choice, MAP_INDEX
         #Ảnh nền
-        if MAP_INDEX == 0:
-             screen.blit(MAPS[0],(0,0))
-        if MAP_INDEX == 1:
-             screen.blit(MAPS[1],(0,0))
-        if MAP_INDEX == 2:
-             screen.blit(MAPS[2],(0,0))
-        if MAP_INDEX == 3:
-             screen.blit(MAPS[3],(0,0))
-        if MAP_INDEX == 4:
-             screen.blit(MAPS[4],(0,0))
+        MAP_INDEX = set_choice - 1
+        print(set_choice, MAP_INDEX)
+        if MAP_INDEX == set_choice - 1 :
+            screen.blit(MAPS[MAP_INDEX],(0,0))
         
         #Đếm ngược trước khi vào game
         if countDownCheck:
