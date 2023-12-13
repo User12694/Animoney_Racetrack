@@ -4,6 +4,7 @@ from datetime import datetime
 from io import StringIO 
 from LoginSignup1 import *
 from flappybird import minigame
+import re
 #Khởi tạo các thứ
 
 # Luôn đặt cửa sổ xuất hiện từ góc trái màn hình
@@ -26,6 +27,8 @@ traceBackCount = 0
 user_money = int(LoginSignup1.user_money)
 set_choice = 1
 choice = 0
+list_image_load = []
+list_charImage = [] # Lưu trữ lại giá trị của list_image_load
 money_choice = 0
 bet_money = 0
 bua_money = 0
@@ -38,6 +41,7 @@ rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
 doesWin = 0
+
 class Money:
     global user_money, user_id
     global bet_money, bua_money
@@ -53,6 +57,7 @@ class Money:
             f.writelines(lines) # Ghi lại tien
     
     def updateMoneyAndWriteHistory():
+        global traceBackCount
         if doesWin:
             user_money += bet_money * 3 
             result = f"win +{bet_money * 3}"
@@ -69,7 +74,9 @@ class Money:
     def updateMuaBuaMoney():
         user_money -= bua_money
 
-
+'''class Result:
+    def __init__(self):
+        global winner, '''
 class History:
     global traceBackCount, user_id, historyLine
     def readHistorLineFromFile():
@@ -209,6 +216,7 @@ class Character():
         self.number = number
         self.run = True
         self.count_run = 0
+        self.image_path = image
         self.image = pygame.image.load(image).convert_alpha()
         self.original_image = pygame.image.load(image).convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
@@ -387,12 +395,14 @@ class Character():
             self.rect.x += self.speed
     #Check điều kiện thắng
     def checkFinishLine(self):
+        global list_image_load
         if self.rect.x > WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.95:
             if not self.Finish:
                 rank.append(self)
+                list_image_load.append(self.image_path)
                 self.run = False
                 self.Finish = True
-        
+
     def update(self):
         global choice
         self.animation()
@@ -545,7 +555,7 @@ class LuckyBox():
         self.active_effect = None #Kích hoạt hiệu ứng
         self.effect_duration = random.randint(1000, 3000) #Tính theo mili giây
         self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
-        self.effects = ["goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
+        self.effects = ["stun", "stun", "stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "accelerate", "accelerate", "teleport","goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.tempSpeed = character.speed #Dùng để lưu tốc chạy của nhân vật tạm thời
@@ -871,7 +881,9 @@ class Play:
                     reset_game()
                     return MenuClass()
         if self.CheckPass:
-            return Congratulations()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return Congratulations()
             
         return self
 
@@ -1398,7 +1410,23 @@ def reset_game():
     countDownCheck = False
     gameSound = True
     countDownCheck = True
-
+# # # # # Thông báo kết quả # # # # # # # # # # # # 
+def reset_list_image():
+    global list_image_load, list_charImage
+    list_charImage = list_image_load
+    list_image_load = []
+def WinorLose():
+    global list_charImage, choice
+    # Tìm ra xem ai đứng thứ nhất bằng cách trích xuât
+    char_arrange = []
+    for item in list_charImage:
+        match = re.search(r'Char(\d)Map',item)
+        print(match)
+        if match:
+            char_arrange.append(int(match.group(1)))
+    print(char_arrange)
+WinorLose()
+# # # # # # # # # # # # # # # # # # # # # # # # # #
 def show_fps(screen, clock):
     # Tạo font chữ
     font = pygame.font.Font(None, 30)
@@ -1408,7 +1436,6 @@ def show_fps(screen, clock):
     text = font.render("FPS: " + fps, 1, pygame.Color("red"))
     # Vẽ text surface lên màn hình
     screen.blit(text, (0, 0))
-
 
 #Đây là main loop
 def main():
@@ -1423,6 +1450,7 @@ def main():
     while True:  # Vòng lặp vô hạn, chương trình sẽ chạy cho đến khi có sự kiện thoát
         for event in pygame.event.get():  # Duyệt qua tất cả sự kiện đang chờ xử lý trong hàng đợi sự kiện của Pygame
             if event.type == pygame.QUIT:  # Nếu sự kiện là loại thoát (như nhấn nút đóng cửa sổ)
+                print(list_image_load)
                 pygame.quit()  # Thoát khỏi Pygame
                 sys.exit()  # Thoát khỏi chương trình
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
