@@ -101,7 +101,7 @@ WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 SCREEN_SIZE = ['assets/characters/']
 SCREEN_SIZE_INDEX = 0
-screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.FULLSCREEN)
 halfScreen_active = False
 
 #Kiểu chữ
@@ -963,22 +963,20 @@ def DrawInfo():
     # Lấy kích thước màn hình hiện tại
     screen_info = pygame.display.Info()
     # Tính toán kích thước của hình chữ nhật
-    rect_width = screen_info.current_w // 8
-    rect_height = screen_info.current_h // 8
     # Vẽ hình chữ nhật
     image = pygame.image.load('./assets/menu/nameAndMoney.png').convert_alpha()
     image = pygame.transform.smoothscale(image,(image.get_width()*ratio, image.get_height()*ratio))
     # Tạo font chữ
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
 
     # Render thông tin user_id và user_money
-    text_id = font.render(user_id, True, '#F79604')
-    text_money = font.render(str(user_money), True, '#F79604')
+    text_id = font.render(user_id, True, '#2B95D1')
+    text_money = font.render(str(user_money), True, '#2B95D1')
 
     # Hiển thị thông tin lên hình chữ nhật
     screen.blit(image,(0,0))
-    screen.blit(text_id, (20, 10))
-    screen.blit(text_money, (20, 50))
+    screen.blit(text_id, (30, 10))
+    screen.blit(text_money, (30, 50))
 
 
 # Lớp menu chính
