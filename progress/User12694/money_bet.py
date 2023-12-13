@@ -1,7 +1,11 @@
 import pygame, sys
-from GameInit import *
-import GameInit
-import LoginSignup
+
+
+user_id = ''
+user_money = 0
+set_choice = 0
+choice = 0
+bet_money = 0
 
 clock = pygame.time.Clock()
 WINDOW_SIZE = [(1536,864),(768,432)]
@@ -19,7 +23,6 @@ old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 orange = "#EE7214"
 
-#Ngôn ngữ
 LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
 LANGUAGE_INDEX = 0
 
@@ -53,10 +56,15 @@ winner = 0
 line = screen_Width - screen_Width / 20
 start = screen_Width / 300
 # Tạo một hàm read_data lên
-
-
+def read_data():
+    global user_money
+    username = 'phuoc'
+    with open(f'./assets/player/{username}/{username}.txt','r') as f:
+        lines = f.readlines()
+    user_money = int(lines[1])
+    return username, user_money
 def money_bet():
-    global screen_Width, screen_Height, screen, text_Font, menu_Font, font, LANGUAGE_INDEX
+    global screen_Width, screen_Height, screen, text_Font, menu_Font, font
     active = True
     user_text = ''
     money_bet = 0
@@ -73,7 +81,7 @@ def money_bet():
         backgroundmenu1 = pygame.transform.scale(backgroundmenu1, (screen_Width, screen_Height))
         screen.blit(backgroundmenu1, (0, 0))
         global user_id, user_money, back_button
-        user_id, user_money = LoginSignup.user_id, LoginSignup.user_money
+        user_id, user_money = read_data()
         user_info = text_Font.render('ID: ' + user_id, True, black)
         money_info = text_Font.render('Money: ' + str(user_money), True, black)
         store = menu_Font.render('BUY RANDOM SPELL (100$)', True, white)
@@ -103,7 +111,6 @@ def money_bet():
 
         if hihi == 1:
             title2 = text_Font.render('Dont have enough money? play mini game to get more !', True, white)
-            LANGUAGE_INDEX = 1
             screen.blit(title2, (screen_Width / 2 - title2.get_width() / 2, screen_Height / (8 / 6)))
 
         if (x_store_button + store.get_width() * 1.5 > mouse[
@@ -196,36 +203,13 @@ def update_account(usr_id, money):
         for line in data:
             new_file.write(line)
 
-    
-# Đây chứa hàm reset game
 def reset_game():
-    global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
-    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos
     file = './assets/sounds/mainmenu.mp3'
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load(file)
     pygame.mixer.music.set_volume(volume)
     pygame.mixer.music.play()
-    set_choice = 1
-    choice = 0
-    bet_money = 0
-    CHARACTERS = []
-    LUCKYBOX = []
-    GROUP = []
-    rank = [] #List nhân vật khi thắng đc thêm vào
-    winner = 0
-    last = 0
-    Speed = []
-    Victory_sound_Play = True
-    rankSound = True
-    InitGame = False
-    countDownCheck = False
-    gameSound = True
-    countDownCheck = True
-    Position = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
-    LuckyBox_Pos = []
+    global rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last
+    rank, winner, CHARACTERS, choice, bet_money, GROUP, set_choice, last = [], 0, [], 0, 0, [], 0, 0
+money_bet()
