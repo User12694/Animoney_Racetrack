@@ -182,7 +182,7 @@ CharsMap2 = [Char1Map2, Char2Map2, Char3Map2, Char4Map2, Char5Map2]
 CharsMap3 = [Char1Map3, Char2Map3, Char3Map3, Char4Map3, Char5Map3]
 CharsMap4 = [Char1Map4, Char2Map4, Char3Map4, Char4Map4, Char5Map4]
 CharsMap5 = [Char1Map5, Char2Map5, Char3Map5, Char4Map5, Char5Map5]
-RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
+RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
 Speed = []
 for x in range(5):
     Speed.append(random.choice(RandSpeed))
