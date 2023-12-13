@@ -756,7 +756,6 @@ class Congratulations:
 
         for i in range(5):
             rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
-
             screen.blit(rank[i].image, rank[i].rect)
 
 
@@ -958,7 +957,6 @@ class MenuClass:
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
         global user_id
-        read_data(user_id)
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
