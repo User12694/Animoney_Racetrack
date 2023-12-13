@@ -388,6 +388,7 @@ class Character():
                 self.Finish = True
         
     def update(self):
+        global choice
         self.animation()
         self.move()
         self.checkFinishLine()
@@ -1195,7 +1196,7 @@ class CharacterSelection:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, MAP_INDEX, set_choice, choice
+        global InitGame, choice
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
