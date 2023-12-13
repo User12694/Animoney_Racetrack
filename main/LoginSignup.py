@@ -11,6 +11,7 @@ import time
 import fnmatch
 import subprocess
 
+code = None
 # Các khai báo cho biến toàn cục
 login_lock = False
 # img = fp.find_images('assets/player') # Kiểm tra file được tìm thấy không
