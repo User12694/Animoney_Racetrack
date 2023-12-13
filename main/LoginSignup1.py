@@ -33,7 +33,7 @@ class LoginMenu:
     def __init__(self):
         # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
         self.window = ctk.CTk()
-        self.window.geometry(f'{WINDOW_SIZES[WINDOW_SIZES_INDEX][0]}x{WINDOW_SIZES[WINDOW_SIZES_INDEX][1]}')
+        self.window.geometry(f'{WINDOW_SIZES[WINDOW_SIZES_INDEX][0]}x{WINDOW_SIZES[WINDOW_SIZES_INDEX][1]}+0+0')
         self.window.config(bg='white')
 
         # Tạo hình ảnh 
@@ -68,8 +68,8 @@ class LoginMenu:
         self.account_label = ctk.CTkLabel(self.frame, text="Don't have an account?", font=("default", 12, "bold"), fg_color="transparent", width=145, height=20)
         self.account_label.place(x=158, y=728)
 
-        # Tạo nút "Sign up" và đặt ở tọa độ (303,728)
-        self.signup_button = ctk.CTkButton(self.frame, text="Sign up", font=("default", 12, "bold"), fg_color="transparent", width=51, height=20, command=self.switch_to_register)
+        # Tạo nút "Sign up" và đặt ở tọa độ (303,728)sel
+        self.signup_button = ctk.CTkButton(self.frame, text="Sign up", font=("default", 12, "bold"), fg_color="transparent", width=51, height=20, command=self.create_account)
         self.signup_button.place(x=303, y=728)
 
         # Tạo nút "Login" và đặt ở tọa độ (213,608)
@@ -91,11 +91,22 @@ class LoginMenu:
 
         self.confirm_password_entry = ctk.CTkEntry(self.frame, width=343, height=54, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20),show='•')
 
-
     def draw(self):
         # Lặp vô tận để hiển thị cửa sổ
         self.window.mainloop()
-    def switch_to_register(self):
+    def choice_to_register(self):
+        self.new_window = ctk.CTkToplevel(self.window)
+        self.new_window.title("Register")
+        self.new_window.geometry('250x200')
+        self.new_frame = ctk.CTkFrame(self.new_window, width= self.new_window._current_width, height=self.new_window._current_height)
+        self.new_frame.place(x=0, y=0)
+        self.signup_button1 = ctk.CTkButton(self.new_frame, text="Sign up by Google", font=('Montserrat',16,"bold"), width=100, height=40, command=self.switch_to_register)
+        self.signup_button1.place(x = 25, y = 40)
+        
+        self.signup_button2 = ctk.CTkButton(self.new_frame, text="Sign up by local account", width=100, height=40, command=self.create_account)
+        self.signup_button2.place(x = 25, y = 100)
+
+    def switch_to_register(self): # Đăng kí bằng email
         clear_entry(self.username_entry)
         clear_entry(self.password_entry)
         clear_entry(self.confirm_password_entry)
@@ -129,7 +140,7 @@ class LoginMenu:
         self.password_label.place(x = 92, y = 443)
         self.password_entry.place(x = 92, y = 478)
         self.account_label.configure(text="Don't have an account?")
-        self.signup_button.configure(text="Sign up", command=self.switch_to_register)
+        self.signup_button.configure(text="Sign up", command=self.create_account)
 
     def confirm_email(self):
         global code, email
@@ -183,9 +194,10 @@ class LoginMenu:
         self.username_label.place(x=92, y=334)
         self.password_label.place(x=92, y=443)
         self.password_entry.place(x=92, y=478)
+        self.account_label.configure(text="Already have account?")
+        self.signup_button.configure(text="Sign in", command=self.switch_to_login)
         # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
         self.confirm_password_label.place(x=92, y=549)
-
         # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
         self.confirm_password_entry.place(x=92, y=584)
 
@@ -229,7 +241,7 @@ class LoginMenu:
         global email
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
-        repeat_password = self.repeat_password_entry.get()  # Lấy mật khẩu nhập lại từ trường nhập liệu
+        repeat_password = self.confirm_password_entry.get()  # Lấy mật khẩu nhập lại từ trường nhập liệu
         if username == "" or password == "" or repeat_password == "":
             tkinter.messagebox.showerror("Have blank emulation!", "Have blank emulation!")
         else:
@@ -240,8 +252,8 @@ class LoginMenu:
                 with open(f"assets/player/{username}/{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
                     file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
                     file.write("500" + "\n")  # Ghi "500" vào dòng thứ hai của file
-                with open(f"assets/player/{username}/{email}.txt") as file:
-                    file.write(email + '\n')
+                '''with open(f"assets/player/{username}/{email}.txt") as file:
+                    file.write(email + '\n')'''
                 tkinter.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
                 self.switch_to_login()  # Chuyển về chế độ đăng nhập
             else:
