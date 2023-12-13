@@ -1,8 +1,8 @@
 import pygame, random, sys, time
-import LoginSignup1
+import LoginSignup
 from datetime import datetime
 from io import StringIO 
-from LoginSignup1 import *
+from LoginSignup import *
 from flappybird import minigame
 #Khởi tạo các thứ
 pygame.init()
@@ -16,13 +16,14 @@ LANGUAGE_INDEX = 0
 
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
-user_id = LoginSignup1.user_id
+user_id = LoginSignup.user_id
 user_pwd = ''
 historyLine = StringIO() # một dòng cần xem của history
 traceBackCount = 0
-user_money = int(LoginSignup1.user_money)
+user_money = int(LoginSignup.user_money)
 set_choice = 1
 choice = 0
+money_choice = 0
 bet_money = 0
 bua_money = 0
 
@@ -33,7 +34,7 @@ GROUP = []
 rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
-
+doesWin = 0
 class Money:
     global user_money, user_id
     global bet_money, bua_money
@@ -41,7 +42,7 @@ class Money:
     global traceBackCount
     global doesWin
 
-    def getMoney():
+    def writeMoney():
         with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
             lines = f.readlines()
         lines[1] = f"{user_money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
@@ -66,7 +67,7 @@ class Money:
         user_money -= bua_money
 
 
-class history:
+class History:
     global traceBackCount, user_id, historyLine
     def readHistorLineFromFile():
         with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
@@ -76,7 +77,9 @@ class history:
                 historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
                 historyLine.seek(0) #trỏ vào đầu chuỗi đấy
                 historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
-    #def moveHistoryLine():
+    #def buttonBack():
+    #def buttonNext():
+    #def traceBack():
 
 
 #Màn hình cài đặt âm lượng
@@ -179,7 +182,7 @@ CharsMap2 = [Char1Map2, Char2Map2, Char3Map2, Char4Map2, Char5Map2]
 CharsMap3 = [Char1Map3, Char2Map3, Char3Map3, Char4Map3, Char5Map3]
 CharsMap4 = [Char1Map4, Char2Map4, Char3Map4, Char4Map4, Char5Map4]
 CharsMap5 = [Char1Map5, Char2Map5, Char3Map5, Char4Map5, Char5Map5]
-RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
+RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
 Speed = []
 for x in range(5):
     Speed.append(random.choice(RandSpeed))
@@ -204,6 +207,7 @@ class Character():
         self.run = True
         self.count_run = 0
         self.image = pygame.image.load(image).convert_alpha()
+        self.original_image = pygame.image.load(image).convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.count_run = 0
         self.map = map
@@ -387,6 +391,7 @@ class Character():
                 self.Finish = True
         
     def update(self):
+        global choice
         self.animation()
         self.move()
         self.checkFinishLine()
@@ -416,11 +421,11 @@ class Character():
 
     def Bua(self):
         if self.PhanKhich:
-            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha() #Ảnh tạm
+            effectImage = pygame.image.load("assets/effects/hieuung_phankhich.png").convert_alpha() #Ảnh tạm
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
         if self.NhanhNhen:
-            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
+            effectImage = pygame.image.load("assets/effects/hieuung_nhanhnhen.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
@@ -429,7 +434,7 @@ class Character():
                     self.NhanhNhen = False
                     self.speed = self.tempSpeed
         if self.TroiHon:
-            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
+            effectImage = pygame.image.load("assets/effects/hieuung_troihon.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
@@ -465,12 +470,31 @@ class Character():
             self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.8
 
     def goback(self, activated):
-        if not activated:
+        if not activated and not self.isGoBack:
             self.speed *= -1
             self.isGoBack = True
 
+#Vị trí lucky box
+LuckyBox_Pos = []
+LuckyBox_Height = [0.55, 0.66, 0.76, 0.87, 0.98]
+for i in range(10):
+    if i < 5:
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
+    else:
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
+
 def init_character_luckybox():
     global set_choice
+    #khởi tạo tốc độ ngẫu nhiên
+    for x in range(5):
+        Speed.append(random.choice(RandSpeed))
+    #Khởi tại vị trí lucky box
+    for i in range(10):
+        if i < 5:
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
+        else:
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
+
     for i in range(5):
         new_character = Character(speed = Speed[i], 
                                   pos = Position[i], 
@@ -478,6 +502,7 @@ def init_character_luckybox():
                                   image = SCREEN_SIZE[SCREEN_SIZE_INDEX] + 'Char' + str(i + 1) + 'Map' + str(int(set_choice)) + '_1.png', 
                                   map = int(set_choice - 1))
         CHARACTERS.append(new_character)
+
     for i in range(10):
             if i < 5:
                 luckyBox = LuckyBox(pos = LuckyBox_Pos[i], character = CHARACTERS[i])
@@ -508,17 +533,6 @@ class IG_Objects():
 #Add object
 ChuChay = IG_Objects(name = 'ChuChay', pos = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
 
-#Vị trí lucky box
-LuckyBox_Pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
 class LuckyBox():
     def __init__(self, pos, character):
         self.x = pos[0]
@@ -583,7 +597,8 @@ class LuckyBox():
         elif self.active_effect == "accelerate":
             effectImage = pygame.image.load("assets/effects/hieuung_tangtoc.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(bottomright = character.rect.bottomleft)
-            screen.blit(effectImage, effectImage_rect)
+            if not character.isGoBack:
+                screen.blit(effectImage, effectImage_rect)
         elif self.active_effect == "teleport":
             effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(bottomleft = self.rect.midbottom)
@@ -602,7 +617,8 @@ class LuckyBox():
             if self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
                 if elapsed_time >= self.effect_duration:
                     self.active_effect = None
-                    character.speed = self.tempSpeed
+                    if not character.isGoBack:
+                        character.speed = self.tempSpeed
                     
             elif self.active_effect == "stun":
                 if elapsed_time >= self.effect_duration:
@@ -707,9 +723,14 @@ def count_down():
 class Congratulations:
     def __init__(self):
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
+        #Các biến của pháo hoa
+        self.last_time = pygame.time.get_ticks()
+        self.interval = 50
+        self.current_image = 0
+        
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global rank, rankSound,  WINDOW_SIZES
+        global rank, rankSound,  WINDOW_SIZES, winner
         BG = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
         BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(BG, (0, 0))
@@ -721,6 +742,24 @@ class Congratulations:
             pygame.mixer.music.play(loops = -1)
             rankSound = True
         
+        #Pháo hoa
+        firework_images = ["assets/background/phaoHoa_1.png", "assets/background/phaoHoa_2.png", "assets/background/phaoHoa_3.png", "assets/background/phaoHoa_4.png", "assets/background/phaoHoa_5.png", "assets/background/phaoHoa_6.png", "assets/background/phaoHoa_7.png"]
+        firework_surface = pygame.image.load(firework_images[self.current_image]).convert_alpha()
+
+        #Ảnh pháo hoa
+        current_time = pygame.time.get_ticks()
+        elapsed_time = current_time - self.last_time
+
+        if elapsed_time >= self.interval:
+            self.current_image = (self.current_image + 1) % len(firework_images)
+            firework_surface = pygame.image.load(firework_images[self.current_image]).convert_alpha()
+            self.last_time = current_time
+
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.4)))
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.4)))
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.9, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.25)))
+
+        #Bảng xếp hạng
         Congratulations_pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.78), 
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.6, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.5, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
@@ -728,8 +767,13 @@ class Congratulations:
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
-            rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
-            screen.blit(rank[i].image, rank[i].rect)
+            original_width, original_height = rank[i].original_image.get_size()
+            new_width, new_height = original_width * 2, original_height * 2
+            scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
+            scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
+            screen.blit(scaledImage, scaledImage_rect)
+
+
 
 
     # Cập nhật các trạng thái của thuộc tính
@@ -744,9 +788,20 @@ class Congratulations:
                 if Back_To_Menu:
                     InitGame = False
                     return MenuClass()
-            
+        # pos = pygame.mouse.get_pos()
+        # if self.CONTINUE_BUTTON.CheckClick(pos):
+        #     if event.type == pygame.MOUSEBUTTONDOWN:
+        #         pass
+        #     if event.type == pygame.MOUSEMOTION:
+        #         pass # Chuyen mau vang cho nut
         return self
-
+    '''def winOrLose(self):
+        global doesWin
+        if winner == :
+            doesWin = 1
+        else:
+            doesWin = 0
+        print(doesWin)'''
 #Biến được sử dụng
 InitGame = False
 rankSound = False
@@ -794,6 +849,7 @@ class Play:
         #Check xong game
         if FinishLine_Pass():
             self.CheckPass = True
+            
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
@@ -923,7 +979,6 @@ class MenuClass:
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
         global user_id
-        read_data(user_id)
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
@@ -1188,7 +1243,7 @@ class CharacterSelection:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, MAP_INDEX, set_choice, choice
+        global InitGame, choice
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -1266,7 +1321,7 @@ class MoneyBet:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money
+        global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_choice
         bet_values = {1: 200, 2: 500, 3: 1000}
         if event.type == pygame.QUIT:
                 pygame.quit()
@@ -1278,8 +1333,8 @@ class MoneyBet:
                     InitGame = False
                     return MenuClass()
             if event.key in [pygame.K_1, pygame.K_2, pygame.K_3]:
-                choice = event.key - pygame.K_0
-                bet_money = bet_values[choice]
+                money_choice = event.key - pygame.K_0
+                bet_money = bet_values[money_choice]
                 if user_money < bet_money:
                     self.show_insufficient_funds_message()
                 else:
@@ -1307,7 +1362,7 @@ class MoneyBet:
             text = font.render(message, True, '#F97C04')
             screen.blit(text, (10, 10))
 
-        pygame.display.flip()
+        #pygame.display.flip()
 
 # Đây là hàm reset game
 def reset_game():
@@ -1326,6 +1381,8 @@ def reset_game():
     LUCKYBOX = []
     GROUP = []
     rank = [] #List nhân vật khi thắng đc thêm vào
+    Speed = []
+    LuckyBox_Pos = []
     winner = 0
     last = 0
     Victory_sound_Play = True
@@ -1334,7 +1391,7 @@ def reset_game():
     countDownCheck = False
     gameSound = True
     countDownCheck = True
-    
+
 def show_fps(screen, clock):
     # Tạo font chữ
     font = pygame.font.Font(None, 30)

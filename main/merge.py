@@ -6,9 +6,7 @@ from LoginSignup1 import *
 from flappybird import minigame
 import re
 #Khởi tạo các thứ
-
 # Luôn đặt cửa sổ xuất hiện từ góc trái màn hình
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0, 0)
 pygame.init()
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
@@ -968,18 +966,19 @@ def DrawInfo():
     rect_width = screen_info.current_w // 8
     rect_height = screen_info.current_h // 8
     # Vẽ hình chữ nhật
-    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, rect_width, rect_height))
-
+    image = pygame.image.load('./assets/menu/nameAndMoney.png').convert_alpha()
+    image = pygame.transform.smoothscale(image,(image.get_width()*ratio, image.get_height()*ratio))
     # Tạo font chữ
     font = pygame.font.Font(None, 36)
 
     # Render thông tin user_id và user_money
-    text_id = font.render('User ID: ' + user_id, True, (0, 128, 0))
-    text_money = font.render('User Money: ' + str(user_money), True, (0, 128, 0))
+    text_id = font.render(user_id, True, '#F79604')
+    text_money = font.render(str(user_money), True, '#F79604')
 
     # Hiển thị thông tin lên hình chữ nhật
-    screen.blit(text_id, (10, 10))
-    screen.blit(text_money, (10, 50))
+    screen.blit(image,(0,0))
+    screen.blit(text_id, (20, 10))
+    screen.blit(text_money, (20, 50))
 
 
 # Lớp menu chính
@@ -1208,7 +1207,7 @@ class WindowModeSettingClass:
             elif event.type == pygame.VIDEORESIZE:
                 # Xử lý sự kiện resize màn hình
                 width, height = event.w, event.h
-                screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+                screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
         return self
         
 
@@ -1421,11 +1420,11 @@ def WinorLose():
     char_arrange = []
     for item in list_charImage:
         match = re.search(r'Char(\d)Map',item)
-        print(match)
         if match:
             char_arrange.append(int(match.group(1)))
-    print(char_arrange)
-WinorLose()
+        return char_arrange
+list_charImage =  WinorLose()
+
 # # # # # # # # # # # # # # # # # # # # # # # # # #
 def show_fps(screen, clock):
     # Tạo font chữ

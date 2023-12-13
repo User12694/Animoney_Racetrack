@@ -8,7 +8,7 @@ import string
 import os
 
 login_lock = False
-WINDOW_SIZES = [(1536,864),(768,432)]
+WINDOW_SIZES = [(1530,860),(768,432)]
 WINDOW_SIZES_INDEX = 0
 ratio = WINDOW_SIZES[WINDOW_SIZES_INDEX][0]/WINDOW_SIZES[0][0]
 email = None
@@ -30,12 +30,10 @@ def fileread(username):
         user_money = lines[1]
         return user_id, user_money
 class LoginMenu:
-    def __init__(self):
+    def __init__(self,root):
         # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
-        self.window = ctk.CTk()
-        self.window.geometry(f'{WINDOW_SIZES[WINDOW_SIZES_INDEX][0]}x{WINDOW_SIZES[WINDOW_SIZES_INDEX][1]}+0+0')
-        self.window.config(bg='white')
-
+        self.window = root
+        self.window.geometry('1536x864+0+0')
         # Tạo hình ảnh 
         self.background = Image.open("./main/image.png")
         self.photo_background = ImageTk.PhotoImage(self.background)
@@ -306,5 +304,7 @@ def check_first_line_in_files(file_list, target_string):
                 return True
     return False
 # Tạo một đối tượng LoginMenu và vẽ nó
-login_menu = LoginMenu()
-login_menu.draw()
+window = ctk.CTk()
+window.title("Login")
+app = LoginMenu(window)
+window.mainloop()
