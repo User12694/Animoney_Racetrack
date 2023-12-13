@@ -5,6 +5,9 @@ from io import StringIO
 from LoginSignup1 import *
 from flappybird import minigame
 #Khởi tạo các thứ
+
+# Luôn đặt cửa sổ xuất hiện từ góc trái màn hình
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0, 0)
 pygame.init()
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
@@ -21,7 +24,6 @@ user_pwd = ''
 historyLine = StringIO() # một dòng cần xem của history
 traceBackCount = 0
 user_money = int(LoginSignup1.user_money)
-print(user_money)
 set_choice = 1
 choice = 0
 money_choice = 0
@@ -543,7 +545,7 @@ class LuckyBox():
         self.active_effect = None #Kích hoạt hiệu ứng
         self.effect_duration = random.randint(1000, 3000) #Tính theo mili giây
         self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
-        self.effects = ["stun", "stun", "stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "accelerate", "accelerate", "teleport", "goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
+        self.effects = ["goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.tempSpeed = character.speed #Dùng để lưu tốc chạy của nhân vật tạm thời
@@ -776,8 +778,6 @@ class Congratulations:
             screen.blit(scaledImage, scaledImage_rect)
 
 
-
-
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
         global MenuSound, gameSound, InitGame
@@ -804,6 +804,7 @@ class Congratulations:
         else:
             doesWin = 0
         print(doesWin)'''
+
 #Biến được sử dụng
 InitGame = False
 rankSound = False
@@ -811,7 +812,6 @@ rankSound = False
 class Play:
     def __init__(self):
         # money_bet()
-        DrawInfo()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
@@ -852,6 +852,9 @@ class Play:
         #Check xong game
         if FinishLine_Pass():
             self.CheckPass = True
+        
+        # Vẽ trạng thái tiền vs user ID
+        DrawInfo()
             
 
     # Cập nhật các trạng thái của thuộc tính
@@ -971,7 +974,6 @@ def DrawInfo():
 class MenuClass: 
     #Khởi tạo các thuộc tính
     def __init__(self):
-        reset_game()
         global VOLUME_INDEX, present_volume
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.95), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
