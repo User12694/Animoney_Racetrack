@@ -602,6 +602,8 @@ class LuckyBox():
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
             elapsed_time = current_time - self.activation_time
             if self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
+                if character.isGoBack:
+                    self.active_effect = None
                 if elapsed_time >= self.effect_duration:
                     self.active_effect = None
                     character.speed = self.tempSpeed
@@ -709,6 +711,11 @@ def count_down():
 class Congratulations:
     def __init__(self):
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
+        #Các biến của pháo hoa
+        self.last_time = pygame.time.get_ticks()
+        self.interval = 50
+        self.current_image = 0
+        
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
         global rank, rankSound,  WINDOW_SIZES, winner
@@ -723,6 +730,24 @@ class Congratulations:
             pygame.mixer.music.play(loops = -1)
             rankSound = True
         
+        #Pháo hoa
+        firework_images = ["assets/background/phaoHoa_1.png", "assets/background/phaoHoa_2.png", "assets/background/phaoHoa_3.png", "assets/background/phaoHoa_4.png", "assets/background/phaoHoa_5.png", "assets/background/phaoHoa_6.png", "assets/background/phaoHoa_7.png"]
+        firework_surface = pygame.image.load(firework_images[self.current_image]).convert_alpha()
+
+        #Ảnh pháo hoa
+        current_time = pygame.time.get_ticks()
+        elapsed_time = current_time - self.last_time
+
+        if elapsed_time >= self.interval:
+            self.current_image = (self.current_image + 1) % len(firework_images)
+            firework_surface = pygame.image.load(firework_images[self.current_image]).convert_alpha()
+            self.last_time = current_time
+
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.4)))
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.4)))
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.9, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.25)))
+
+        #Bảng xếp hạng
         Congratulations_pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.78), 
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.6, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.5, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
@@ -733,6 +758,7 @@ class Congratulations:
             rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
 
             screen.blit(rank[i].image, rank[i].rect)
+
 
 
     # Cập nhật các trạng thái của thuộc tính
@@ -747,6 +773,7 @@ class Congratulations:
                 if Back_To_Menu:
                     InitGame = False
                     return MenuClass()
+        return self
     '''def winOrLose(self):
         global doesWin
         if winner == :
@@ -1371,6 +1398,7 @@ def main():
                 sys.exit()  # Thoát khỏi chương trình
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
         mouse_pos = pygame.mouse.get_pos()
+        print(current_class)
         current_class.draw(mouse_pos)  # Vẽ đối tượng hiện tại lên màn hình
         pygame.display.flip()  # Cập nhật toàn bộ cửa sổ
         show_fps(screen, clock)
