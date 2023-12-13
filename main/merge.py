@@ -531,7 +531,7 @@ class LuckyBox():
         self.active_effect = None #Kích hoạt hiệu ứng
         self.effect_duration = random.randint(1000, 3000) #Tính theo mili giây
         self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
-        self.effects = ["accelerate", "goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
+        self.effects = ["stun", "stun", "stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "accelerate", "accelerate", "teleport", "goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.tempSpeed = character.speed #Dùng để lưu tốc chạy của nhân vật tạm thời
@@ -587,7 +587,8 @@ class LuckyBox():
         elif self.active_effect == "accelerate":
             effectImage = pygame.image.load("assets/effects/hieuung_tangtoc.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(bottomright = character.rect.bottomleft)
-            screen.blit(effectImage, effectImage_rect)
+            if not character.isGoBack:
+                screen.blit(effectImage, effectImage_rect)
         elif self.active_effect == "teleport":
             effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(bottomleft = self.rect.midbottom)
@@ -606,7 +607,8 @@ class LuckyBox():
             if self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
                 if elapsed_time >= self.effect_duration:
                     self.active_effect = None
-                    character.speed = self.tempSpeed
+                    if not character.isGoBack:
+                        character.speed = self.tempSpeed
                     
             elif self.active_effect == "stun":
                 if elapsed_time >= self.effect_duration:
