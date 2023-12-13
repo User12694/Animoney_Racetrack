@@ -1,7 +1,6 @@
 import pygame
 import random
 import sys
-
 #quy định các màu
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
@@ -9,8 +8,8 @@ bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 #Lấy các biến từ file khác
-user_id = ''
-user_money = 0
+user_id = 'loc'
+user_money = 500
 
 #Mod lại subpath để có thể đưa menugame vào:
 subpath = './main/flappybird'
@@ -62,6 +61,16 @@ def update_account(usr_id, money):
         for line in data:
             new_file.write(line)
 
+def show_fps(screen, clock):
+    # Tạo font chữ
+    font = pygame.font.Font(None, 30)
+    # Tính toán FPS
+    fps = str(int(clock.get_fps()))
+    # Tạo text surface
+    text = font.render("FPS: " + fps, 1, pygame.Color("red"))
+    # Vẽ text surface lên màn hình
+    screen.blit(text, (0, 0))
+
 def flappy_bird():
     #Khai báo các thành phần toàn cục
     global screen_Width, screen_Height, screen, text_Font, menu_Font, font, tube1_height, tube2_height, tube3_height, tube4_height
@@ -108,9 +117,9 @@ def flappy_bird():
     while running:
         #pygame.mixer.music.pause()
         #clock.tick(60) đã được quy định. Có thể xóa dòng này
-        clock.tick(60)
+        clock.tick(120)
         #Khởi tạo và vẽ ảnh lên màn hình
-        background_image = pygame.image.load(f"{subpath}/flappybird/background.png")
+        background_image = pygame.image.load(f"{subpath}/flappybird/background.png").convert_alpha()
         background_image = pygame.transform.scale(background_image, (screen_Width, screen_Height))
         screen.blit(background_image, (0, 0))
         
@@ -123,24 +132,24 @@ def flappy_bird():
         screen.blit(user_info, (screen_Width - user_info.get_width() - money_info.get_width() - 40, 10))
         screen.blit(money_info,
                     (screen_Width - money_info.get_width() - screen_Width / (1500 / 20), screen_Height / (800 / 10)))
-        bird_image = pygame.image.load(f"{subpath}/flappybird/bird.png")
+        bird_image = pygame.image.load(f"{subpath}/flappybird/bird.png").convert_alpha()
         bird_image = pygame.transform.scale(bird_image, (BIRD_WIDTH, BIRD_HEIGHT))
-        base_image = pygame.image.load(f"{subpath}/flappybird/base.png")
+        base_image = pygame.image.load(f"{subpath}/flappybird/base.png").convert_alpha()
         base_image = pygame.transform.scale(base_image, (screen_Width, screen_Height // 4))
 
-        tube_image1 = pygame.image.load(f"{subpath}/flappybird/pipe1.png")
+        tube_image1 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
         tube_image1 = pygame.transform.scale(tube_image1, (TUBE_WIDTH, tube1_height))
-        tube_inv_image1 = pygame.image.load(f"{subpath}/flappybird/pipe2.png")
+        tube_inv_image1 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
         tube_inv_image1 = pygame.transform.scale(tube_inv_image1, (TUBE_WIDTH, screen_Height - tube1_height - TUBE_GAP))
 
-        tube_image2 = pygame.image.load(f"{subpath}/flappybird/pipe1.png")
+        tube_image2 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
         tube_image2 = pygame.transform.scale(tube_image2, (TUBE_WIDTH, tube2_height))
-        tube_inv_image2 = pygame.image.load(f"{subpath}/flappybird/pipe2.png")
+        tube_inv_image2 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
         tube_inv_image2 = pygame.transform.scale(tube_inv_image2, (TUBE_WIDTH, screen_Height - tube2_height - TUBE_GAP))
 
-        tube_image3 = pygame.image.load(f"{subpath}/flappybird/pipe1.png")
+        tube_image3 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
         tube_image3 = pygame.transform.scale(tube_image3, (TUBE_WIDTH, tube3_height))
-        tube_inv_image3 = pygame.image.load(f"{subpath}/flappybird/pipe2.png")
+        tube_inv_image3 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
         tube_inv_image3 = pygame.transform.scale(tube_inv_image3, (TUBE_WIDTH, screen_Height - tube3_height - TUBE_GAP))
 
         # Draw tube
@@ -276,6 +285,8 @@ def flappy_bird():
                     1] > y_back_button:
                     print('end game')
                     return 2
+
+        show_fps(screen, clock)
         pygame.display.flip()
         pygame.mixer.init()
         pygame.mixer.music.load(f'{subpath}/Sounds/nhac2.wav')

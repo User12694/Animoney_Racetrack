@@ -1,24 +1,31 @@
-import pygame_menu, pygame, random, sys, time
-
+import pygame, random, sys, time
+import LoginSignup
 from datetime import datetime
+from io import StringIO 
 from LoginSignup import *
 from flappybird import minigame
 #Khởi tạo các thứ
 pygame.init()
-from money_bet import *
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
+#Ngôn ngữ
+LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
+LANGUAGE_INDEX = 0
 
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
-user_id = ''
+user_id = LoginSignup.user_id
 user_pwd = ''
-user_money = 0
+historyLine = StringIO() # một dòng cần xem của history
+traceBackCount = 0
+user_money = int(LoginSignup.user_money)
 set_choice = 1
 choice = 0
+money_choice = 0
 bet_money = 0
+bua_money = 0
 
 # store 5 characters
 CHARACTERS = []
@@ -27,6 +34,50 @@ GROUP = []
 rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
+doesWin = 0
+class Money:
+    global user_money, user_id
+    global bet_money, bua_money
+    global historyLine
+    global traceBackCount
+    global doesWin
+
+    def getMoney():
+        with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
+            lines = f.readlines()
+        lines[1] = f"{user_money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
+        with open(f'./assets/player/{user_id}/{user_id}.txt','w') as f:
+            f.writelines(lines) # Ghi lại tien
+    
+    def updateMoneyAndWriteHistory():
+        if doesWin:
+            user_money += bet_money * 3 
+            result = f"win +{bet_money * 3}"
+        else:
+            user_money -= bet_money
+            result = f'lose -{bet_money}'
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        result_to_write = f"{current_time}: {user_id} {result}, balance: {user_money}"
+
+        with open(f'./assets/player/{user_id}/{user_id}.txt', 'a') as file:
+            file.write('\n'+ result_to_write)
+        traceBackCount = 0
+
+    def updateMuaBuaMoney():
+        user_money -= bua_money
+
+
+class history:
+    global traceBackCount, user_id, historyLine
+    def readHistorLineFromFile():
+        with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
+            lines = file.readlines()
+            line_number = len(lines) - 1 - traceBackCount
+            if line_number < len(lines) and line_number >= 2:
+                historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
+                historyLine.seek(0) #trỏ vào đầu chuỗi đấy
+                historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
+    #def moveHistoryLine():
 
 
 #Màn hình cài đặt âm lượng
@@ -56,16 +107,15 @@ scoreBoard_Box = scoreBoard.get_rect(center = (screen.get_width() * 0.13, screen
 map1 = pygame.image.load('assets/background/map1.png').convert_alpha()
 map1 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map2 = pygame.image.load('assets/background/map2.png').convert_alpha()
-map2 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map2 = pygame.transform.smoothscale(map2, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map3 = pygame.image.load('assets/background/map3.png').convert_alpha()
-map3 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map3 = pygame.transform.smoothscale(map3, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map4 = pygame.image.load('assets/background/map4.png').convert_alpha()
-map4 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map4 = pygame.transform.smoothscale(map4, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map5 = pygame.image.load('assets/background/map5.png').convert_alpha()
-map5 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+map5 = pygame.transform.smoothscale(map5, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 MAPS = [map1, map2, map3, map4, map5]
 MAP_INDEX = 0
-
 #Các ảnh cần dùng đến
 #1. Nhân vật (Đặt tên theo dạng Char#Map#_#)
 Char1Map1 = ['assets/characters/Char1Map1_1.png', 'assets/characters/Char1Map1_2.png',
@@ -86,7 +136,7 @@ Char2Map2 = ['assets/characters/Char2Map2_1.png', 'assets/characters/Char2Map2_2
 Char3Map2 = ['assets/characters/Char3Map2_1.png', 'assets/characters/Char3Map2_2.png',
             'assets/characters/Char3Map2_3.png', 'assets/characters/Char3Map2_4.png']
 Char4Map2 = ['assets/characters/Char4Map2_1.png', 'assets/characters/Char4Map2_2.png',
-            'assets/characters/Char4Map1_3.png', 'assets/characters/Char4Map2_4.png']
+            'assets/characters/Char4Map2_3.png', 'assets/characters/Char4Map2_4.png']
 Char5Map2 = ['assets/characters/Char5Map2_1.png', 'assets/characters/Char5Map2_2.png',
             'assets/characters/Char5Map2_3.png', 'assets/characters/Char5Map2_4.png']
 
@@ -337,7 +387,6 @@ class Character():
                 self.run = False
                 self.Finish = True
         
-
     def update(self):
         global choice
         self.animation()
@@ -393,7 +442,6 @@ class Character():
                         if(i != (choice - 1)):
                             CHARACTERS[i].run = True
                     
-
     def stop(self, activated):
         if not activated:
             self.run = False
@@ -663,7 +711,7 @@ class Congratulations:
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global rank, rankSound,  WINDOW_SIZES
+        global rank, rankSound,  WINDOW_SIZES, winner
         BG = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
         BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(BG, (0, 0))
@@ -683,9 +731,9 @@ class Congratulations:
 
         for i in range(5):
             rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
+
             screen.blit(rank[i].image, rank[i].rect)
 
-        
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
@@ -699,34 +747,31 @@ class Congratulations:
                 if Back_To_Menu:
                     InitGame = False
                     return MenuClass()
-            
-        return self
-
+    '''def winOrLose(self):
+        global doesWin
+        if winner == :
+            doesWin = 1
+        else:
+            doesWin = 0
+        print(doesWin)'''
 #Biến được sử dụng
 InitGame = False
 rankSound = False
 
 class Play:
     def __init__(self):
-        money_bet()
+        # money_bet()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
         self.CheckPass = False #Check xem 5 nv có về đích chưa
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global VOLUME_INDEX, present_volume, countDownCheck, gameSound
+        global VOLUME_INDEX, present_volume, countDownCheck, gameSound, set_choice, MAP_INDEX
         #Ảnh nền
-        if MAP_INDEX == 0:
-             screen.blit(MAPS[0],(0,0))
-        if MAP_INDEX == 1:
-             screen.blit(MAPS[1],(0,0))
-        if MAP_INDEX == 2:
-             screen.blit(MAPS[2],(0,0))
-        if MAP_INDEX == 3:
-             screen.blit(MAPS[3],(0,0))
-        if MAP_INDEX == 4:
-             screen.blit(MAPS[4],(0,0))
+        MAP_INDEX = set_choice - 1
+        if MAP_INDEX == set_choice - 1 :
+            screen.blit(MAPS[MAP_INDEX],(0,0))
         
         #Đếm ngược trước khi vào game
         if countDownCheck:
@@ -756,6 +801,7 @@ class Play:
         #Check xong game
         if FinishLine_Pass():
             self.CheckPass = True
+            
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
@@ -841,11 +887,41 @@ def QuitConfirm():
         pygame.display.update()
         clock.tick(60)
 
+#Hàm read_data để đọc dữ liệu
+def read_data(filename):
+    # Đọc dữ liệu từ file
+    with open(f'./assets/player/{filename}/{filename}.txt', 'r') as f:
+        lines = f.readlines()
+        user_id = filename
+        user_money = lines[1]
+        
+    # Lấy kích thước màn hình
+    screen_info = pygame.display.Info()
+
+    # Tính toán kích thước của hình chữ nhật
+    rect_width = screen_info.current_w // 10
+    rect_height = screen_info.current_h // 8
+    # Vẽ hình chữ nhật
+    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, rect_width, rect_height))
+
+    # Tạo font chữ
+    font = pygame.font.Font(None, 36)
+
+    # Render thông tin user_id và user_money
+    text_id = font.render('User ID: ' + user_id, True, (0, 128, 0))
+    text_money = font.render('User Money: ' + user_money, True, (0, 128, 0))
+
+    # Hiển thị thông tin lên hình chữ nhật
+    screen.blit(text_id, (10, 10))
+    screen.blit(text_money, (10, 50))
+
+
 
 # Lớp menu chính
 class MenuClass: 
     #Khởi tạo các thuộc tính
     def __init__(self):
+        reset_game()
         global VOLUME_INDEX, present_volume
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.95), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
@@ -854,6 +930,11 @@ class MenuClass:
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
+<<<<<<< HEAD
+=======
+        global user_id
+        read_data(user_id)
+>>>>>>> d8e0d8dc155edd8214c642cb99d08fcb4ee4fe96
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
@@ -911,6 +992,7 @@ class SettingClass: #Khởi tạo các nút, label và Button.
         self.changeLanguageButton.update(mouse_pos)
     #Cập nhật trạng thái của class
     def update(self, event):
+        global LANGUAGE_INDEX
         mouse_pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Kiểm tra các đối tượng như nút chọn Âm lượng, chọn tùy chọn Màn hình, nút thoát; có được nhấn hay không. 
@@ -1076,7 +1158,7 @@ class MapSelection:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, MAP_INDEX
+        global InitGame, MAP_INDEX, set_choice
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -1110,13 +1192,18 @@ class MapSelection:
         return self
     
 class CharacterSelection: 
+    global InitGame, MAP_INDEX, set_choice, choice
     def draw(self, mouse_pos):
-        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'choose.png').convert_alpha()
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+f'choose_char{set_choice}.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
+<<<<<<< HEAD
         global InitGame, choice
+=======
+        global InitGame, MAP_INDEX, set_choice, choice
+>>>>>>> d8e0d8dc155edd8214c642cb99d08fcb4ee4fe96
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -1152,7 +1239,7 @@ class Shop:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame
+        global InitGame, choice, bua_money, user_money
         if not InitGame:
             init_character_luckybox()
             InitGame = True
@@ -1167,15 +1254,112 @@ class Shop:
                     return MenuClass()
             if event.key == pygame.K_1:
                 CHARACTERS[choice - 1].NhanhNhen = True
-                return Play()
+                bua_money = 300 # Gán giá tiền cho bùa
+                user_money -= bua_money
+                return MoneyBet()
             if event.key == pygame.K_2:
                 CHARACTERS[choice - 1].TroiHon = True
-                return Play()
+                bua_money = 400 # Gán giá tiền cho bùa
+                user_money -= bua_money
+                return MoneyBet()
             if event.key == pygame.K_3:
                 CHARACTERS[choice - 1].PhanKhich = True
-                return Play()
-                
+                bua_money = 500 # Gán giá tiền cho bùa
+                user_money -= bua_money
+                return MoneyBet()
+            if event.key == pygame.K_RETURN:
+                bua_money = 0
+                user_money -= bua_money
+                return MoneyBet()
         return self
+
+class MoneyBet: 
+    global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_bet
+    def draw(self, mouse_pos):
+        Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'moneyshop.png').convert_alpha()
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        screen.blit(Background, (0, 0))
+    #Cập nhật trạng thái cho các thuộc tính
+    def update(self, event):
+        global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_choice
+        bet_values = {1: 200, 2: 500, 3: 1000}
+        if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                Back_To_Menu = Pause_Game()
+                if Back_To_Menu:
+                    InitGame = False
+                    return MenuClass()
+            if event.key in [pygame.K_1, pygame.K_2, pygame.K_3]:
+                money_choice = event.key - pygame.K_0
+                bet_money = bet_values[money_choice]
+                if user_money < bet_money:
+                    self.show_insufficient_funds_message()
+                else:
+                    user_money -= bet_money
+                    return Play()
+        return self
+
+    def show_insufficient_funds_message(self):
+        messages = {
+            'ENG': "You don't have enough money. You can play Minigame to earn",
+            'VIE': "Bạn không đủ tiền để chơi. Bạn có thể chơi minigame để lấy thêm tiền"
+        }
+        spilt_text = []
+        for item in LANGUAGE:
+            parts = item.split('/')
+            spilt_text.append(parts[-3])
+        if LANGUAGE_INDEX == 0:
+            message = messages['ENG']
+            font = pygame.font.Font(None, 36)
+            text = font.render(message, True, (255, 255, 255))
+            screen.blit(text, (10,10))
+        elif LANGUAGE_INDEX == 1:
+            message = messages[LANGUAGE_INDEX]
+            font = pygame.font.Font(None, 36)
+            text = font.render(message, True, '#F97C04')
+            screen.blit(text, (10, 10))
+
+        pygame.display.flip()
+
+# Đây là hàm reset game
+def reset_game():
+    global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
+    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos
+    file = './assets/sounds/mainmenu.mp3'
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(file)
+    pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
+    pygame.mixer.music.play()
+    set_choice = 1
+    choice = 0
+    bet_money = 0
+    CHARACTERS = []
+    LUCKYBOX = []
+    GROUP = []
+    rank = [] #List nhân vật khi thắng đc thêm vào
+    winner = 0
+    last = 0
+    Victory_sound_Play = True
+    rankSound = True
+    InitGame = False
+    countDownCheck = False
+    gameSound = True
+    countDownCheck = True
+
+def show_fps(screen, clock):
+    # Tạo font chữ
+    font = pygame.font.Font(None, 30)
+    # Tính toán FPS
+    fps = str(int(clock.get_fps()))
+    # Tạo text surface
+    text = font.render("FPS: " + fps, 1, pygame.Color("red"))
+    # Vẽ text surface lên màn hình
+    screen.blit(text, (0, 0))
+
 
 #Đây là main loop
 def main():
@@ -1195,7 +1379,7 @@ def main():
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
         mouse_pos = pygame.mouse.get_pos()
         current_class.draw(mouse_pos)  # Vẽ đối tượng hiện tại lên màn hình
-
         pygame.display.flip()  # Cập nhật toàn bộ cửa sổ
+        show_fps(screen, clock)
         clock.tick(60)  # Đảm bảo chương trình chạy không quá 60 khung hình/giây
 main()

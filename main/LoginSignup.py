@@ -25,6 +25,7 @@ def fileread(username):
         lines = f.readlines()
         user_id = username
         user_money = lines[1]
+        return user_id, user_money
 
 def filePath():
     anh = "captured_image.png"
@@ -140,6 +141,7 @@ class LoginRegisterMenu:
         # self.image_label.pack()
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
+        global user_id, user_money
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
         if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
@@ -148,7 +150,7 @@ class LoginRegisterMenu:
                     tk.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
                     global login_lock
                     login_lock = True
-                    fileread(username)
+                    user_id, user_money = fileread(username)
                     self.root.quit()  # Thoát chương trình
                 else:
                     tk.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
