@@ -42,7 +42,7 @@ class Money:
     global traceBackCount
     global doesWin
 
-    def getMoney():
+    def writeMoney():
         with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
             lines = f.readlines()
         lines[1] = f"{user_money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
@@ -67,7 +67,7 @@ class Money:
         user_money -= bua_money
 
 
-class history:
+class History:
     global traceBackCount, user_id, historyLine
     def readHistorLineFromFile():
         with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
@@ -77,7 +77,9 @@ class history:
                 historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
                 historyLine.seek(0) #trỏ vào đầu chuỗi đấy
                 historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
-    #def moveHistoryLine():
+    #def buttonBack():
+    #def buttonNext():
+    #def traceBack():
 
 
 #Màn hình cài đặt âm lượng
@@ -418,11 +420,11 @@ class Character():
 
     def Bua(self):
         if self.PhanKhich:
-            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha() #Ảnh tạm
+            effectImage = pygame.image.load("assets/effects/hieuung_phankhich.png").convert_alpha() #Ảnh tạm
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
         if self.NhanhNhen:
-            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
+            effectImage = pygame.image.load("assets/effects/hieuung_nhanhnhen.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
@@ -431,7 +433,7 @@ class Character():
                     self.NhanhNhen = False
                     self.speed = self.tempSpeed
         if self.TroiHon:
-            effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
+            effectImage = pygame.image.load("assets/effects/hieuung_troihon.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
             screen.blit(effectImage, effectImage_rect)
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
@@ -772,6 +774,12 @@ class Congratulations:
                 if Back_To_Menu:
                     InitGame = False
                     return MenuClass()
+        # pos = pygame.mouse.get_pos()
+        # if self.CONTINUE_BUTTON.CheckClick(pos):
+        #     if event.type == pygame.MOUSEBUTTONDOWN:
+        #         pass
+        #     if event.type == pygame.MOUSEMOTION:
+        #         pass # Chuyen mau vang cho nut
         return self
     '''def winOrLose(self):
         global doesWin
@@ -1340,7 +1348,7 @@ class MoneyBet:
             text = font.render(message, True, '#F97C04')
             screen.blit(text, (10, 10))
 
-        pygame.display.flip()
+        #pygame.display.flip()
 
 # Đây là hàm reset game
 def reset_game():
@@ -1396,7 +1404,6 @@ def main():
                 sys.exit()  # Thoát khỏi chương trình
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
         mouse_pos = pygame.mouse.get_pos()
-        print(current_class)
         current_class.draw(mouse_pos)  # Vẽ đối tượng hiện tại lên màn hình
         pygame.display.flip()  # Cập nhật toàn bộ cửa sổ
         show_fps(screen, clock)
