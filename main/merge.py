@@ -469,7 +469,8 @@ class Character():
             self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.8
 
     def goback(self, activated):
-        if not activated and self.isGoBack == False:
+        if not activated and not self.isGoBack:
+            self.speed *= -1
             self.isGoBack = True
 
 def init_character_luckybox():
@@ -530,7 +531,7 @@ class LuckyBox():
         self.active_effect = None #Kích hoạt hiệu ứng
         self.effect_duration = random.randint(1000, 3000) #Tính theo mili giây
         self.activation_time = None #Check lúc nào kích hoạt hiệu ứng
-        self.effects = ["stun", "stun", "stun", "stun", "stun", "stun", "slow", "slow", "slow", "slow", "slow", "slow", "slow", "accelerate", "accelerate", "accelerate", "accelerate", "accelerate", "teleport", "goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
+        self.effects = ["accelerate", "goback"] #Các hiệu ứng, nếu muốn hiệu ứng nào xuất hiện nhiều chỉ cần spam
         self.image = pygame.image.load('assets/item/luckyBox.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.tempSpeed = character.speed #Dùng để lưu tốc chạy của nhân vật tạm thời
