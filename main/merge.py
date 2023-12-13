@@ -1,15 +1,17 @@
 import pygame, random, sys, time
-
+import LoginSignup
 from datetime import datetime
 from LoginSignup import *
 from flappybird import minigame
 #Khởi tạo các thứ
 pygame.init()
-from money_bet import *
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
+#Ngôn ngữ
+LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
+LANGUAGE_INDEX = 0
 
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
@@ -931,6 +933,7 @@ class SettingClass: #Khởi tạo các nút, label và Button.
         self.changeLanguageButton.update(mouse_pos)
     #Cập nhật trạng thái của class
     def update(self, event):
+        global LANGUAGE_INDEX
         mouse_pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Kiểm tra các đối tượng như nút chọn Âm lượng, chọn tùy chọn Màn hình, nút thoát; có được nhấn hay không. 
@@ -1195,6 +1198,8 @@ class Shop:
             if event.key == pygame.K_3:
                 CHARACTERS[choice - 1].PhanKhich = True
                 return MoneyBet()
+            if event.key == pygame.K_RETURN:
+                return MoneyBet()
         return self
 
 class MoneyBet: 
@@ -1223,7 +1228,6 @@ class MoneyBet:
                     self.show_insufficient_funds_message()
                 else:
                     user_money -= bet_money
-                    money_bet = bet_money
                     return Play()
         return self
 
@@ -1249,6 +1253,7 @@ class MoneyBet:
 
         pygame.display.flip()
 
+# Đây là hàm reset game
 def reset_game():
     global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
     global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos
@@ -1256,7 +1261,7 @@ def reset_game():
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load(file)
-    pygame.mixer.music.set_volume(volume)
+    pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX])
     pygame.mixer.music.play()
     set_choice = 1
     choice = 0
@@ -1278,8 +1283,17 @@ def reset_game():
             (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
             (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), 
             (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
+def show_fps(screen, clock):
+    # Tạo font chữ
+    font = pygame.font.Font(None, 30)
+    # Tính toán FPS
+    fps = str(int(clock.get_fps()))
+    # Tạo text surface
+    text = font.render("FPS: " + fps, 1, pygame.Color("red"))
+    # Vẽ text surface lên màn hình
+    screen.blit(text, (0, 0))
 
-    
+
 #Đây là main loop
 def main():
     global login_lock
@@ -1298,7 +1312,7 @@ def main():
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
         mouse_pos = pygame.mouse.get_pos()
         current_class.draw(mouse_pos)  # Vẽ đối tượng hiện tại lên màn hình
-
         pygame.display.flip()  # Cập nhật toàn bộ cửa sổ
+        show_fps(screen, clock)
         clock.tick(60)  # Đảm bảo chương trình chạy không quá 60 khung hình/giây
 main()
