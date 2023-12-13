@@ -19,10 +19,13 @@ money_bet_list = [200,500,1000]
 user_id = LoginSignup.user_id
 user_pwd = ''
 historyLine = StringIO() # một dòng cần xem của history
+traceBackCount = 0
 user_money = int(LoginSignup.user_money)
 set_choice = 1
 choice = 0
 bet_money = 0
+bua_money = 0
+doesWin = 0
 
 # store 5 characters
 CHARACTERS = []
@@ -33,20 +36,21 @@ winner = 0
 last = 0
 
 class Money:
-    global user_money
-    global user_id
-    global bet_money
+    global user_money, user_id
+    global bet_money, bua_money
     global historyLine
     global traceBackCount
+    global doesWin
+
     def getMoney():
         with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
             lines = f.readlines()
-            user_money.truncate(0)
-            user_money.seek(0)
-            user_money.write(lines[1])
+        lines[1] = f"{user_money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
+        with open(f'./assets/player/{user_id}/{user_id}.txt','w') as f:
+            f.writelines(lines) # Ghi lại tien
     
-    def updateMoneyAndWriteHistory(user_id, winOrLose):
-        if winOrLose == 'win':
+    def updateMoneyAndWriteHistory():
+        if doesWin:
             user_money += bet_money * 3 
             result = f"win +{bet_money * 3}"
         else:
@@ -57,8 +61,15 @@ class Money:
 
         with open(f'./assets/player/{user_id}/{user_id}.txt', 'a') as file:
             file.write('\n'+ result_to_write)
+        traceBackCount = 0
 
-    def readHistorLineFromFile(user_id, historyLine, traceBackCount):
+    def updateMuaBuaMoney():
+        user_money -= bua_money
+
+
+class history:
+    global traceBackCount, user_id, historyLine
+    def readHistorLineFromFile():
         with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
             lines = file.readlines()
             line_number = len(lines) - 1 - traceBackCount
@@ -66,7 +77,7 @@ class Money:
                 historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
                 historyLine.seek(0) #trỏ vào đầu chuỗi đấy
                 historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
-
+    #def moveHistoryLine():
 
 
 #Màn hình cài đặt âm lượng
