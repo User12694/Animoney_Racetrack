@@ -208,6 +208,7 @@ class Character():
         self.run = True
         self.count_run = 0
         self.image = pygame.image.load(image).convert_alpha()
+        self.original_image = pygame.image.load(image).convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.count_run = 0
         self.map = map
@@ -432,7 +433,8 @@ class Character():
             elapsed_time = current_time - self.active_time
             if elapsed_time >= 2000:
                     self.NhanhNhen = False
-                    self.speed = self.tempSpeed
+                    if not self.isGoBack:
+                        self.speed = self.tempSpeed
         if self.TroiHon:
             effectImage = pygame.image.load("assets/effects/hieuung_troihon.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
@@ -474,8 +476,27 @@ class Character():
             self.speed *= -1
             self.isGoBack = True
 
+#Vị trí lucky box
+LuckyBox_Pos = []
+LuckyBox_Height = [0.55, 0.66, 0.76, 0.87, 0.98]
+for i in range(10):
+    if i < 5:
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
+    else:
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
+
 def init_character_luckybox():
     global set_choice
+    #khởi tạo tốc độ ngẫu nhiên
+    for x in range(5):
+        Speed.append(random.choice(RandSpeed))
+    #Khởi tại vị trí lucky box
+    for i in range(10):
+        if i < 5:
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
+        else:
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
+
     for i in range(5):
         new_character = Character(speed = Speed[i], 
                                   pos = Position[i], 
@@ -483,6 +504,7 @@ def init_character_luckybox():
                                   image = SCREEN_SIZE[SCREEN_SIZE_INDEX] + 'Char' + str(i + 1) + 'Map' + str(int(set_choice)) + '_1.png', 
                                   map = int(set_choice - 1))
         CHARACTERS.append(new_character)
+
     for i in range(10):
             if i < 5:
                 luckyBox = LuckyBox(pos = LuckyBox_Pos[i], character = CHARACTERS[i])
@@ -513,17 +535,6 @@ class IG_Objects():
 #Add object
 ChuChay = IG_Objects(name = 'ChuChay', pos = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
 
-#Vị trí lucky box
-LuckyBox_Pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
 class LuckyBox():
     def __init__(self, pos, character):
         self.x = pos[0]
@@ -758,8 +769,12 @@ class Congratulations:
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
-            rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
-            screen.blit(rank[i].image, rank[i].rect)
+            original_width, original_height = rank[i].original_image.get_size()
+            new_width, new_height = original_width * 2, original_height * 2
+            scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
+            scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
+            screen.blit(scaledImage, scaledImage_rect)
+
 
 
 
@@ -1371,6 +1386,8 @@ def reset_game():
     LUCKYBOX = []
     GROUP = []
     rank = [] #List nhân vật khi thắng đc thêm vào
+    Speed = []
+    LuckyBox_Pos = []
     winner = 0
     last = 0
     Victory_sound_Play = True
