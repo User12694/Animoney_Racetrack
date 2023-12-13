@@ -1,8 +1,8 @@
 import pygame, random, sys, time
-import LoginSignup
+import LoginSignup1
 from datetime import datetime
 from io import StringIO 
-from LoginSignup import *
+from LoginSignup1 import *
 from flappybird import minigame
 #Khởi tạo các thứ
 pygame.init()
@@ -16,11 +16,12 @@ LANGUAGE_INDEX = 0
 
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
-user_id = LoginSignup.user_id
+user_id = LoginSignup1.user_id
 user_pwd = ''
 historyLine = StringIO() # một dòng cần xem của history
 traceBackCount = 0
-user_money = int(LoginSignup.user_money)
+user_money = int(LoginSignup1.user_money)
+print(user_money)
 set_choice = 1
 choice = 0
 money_choice = 0
@@ -795,6 +796,7 @@ rankSound = False
 class Play:
     def __init__(self):
         # money_bet()
+        DrawInfo()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
@@ -929,11 +931,11 @@ def read_data(filename):
         user_id = filename
         user_money = lines[1]
         
-    # Lấy kích thước màn hình
+def DrawInfo():
+    # Lấy kích thước màn hình hiện tại
     screen_info = pygame.display.Info()
-
     # Tính toán kích thước của hình chữ nhật
-    rect_width = screen_info.current_w // 10
+    rect_width = screen_info.current_w // 8
     rect_height = screen_info.current_h // 8
     # Vẽ hình chữ nhật
     pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, rect_width, rect_height))
@@ -943,12 +945,11 @@ def read_data(filename):
 
     # Render thông tin user_id và user_money
     text_id = font.render('User ID: ' + user_id, True, (0, 128, 0))
-    text_money = font.render('User Money: ' + user_money, True, (0, 128, 0))
+    text_money = font.render('User Money: ' + str(user_money), True, (0, 128, 0))
 
     # Hiển thị thông tin lên hình chữ nhật
     screen.blit(text_id, (10, 10))
     screen.blit(text_money, (10, 50))
-
 
 
 # Lớp menu chính
@@ -964,10 +965,11 @@ class MenuClass:
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global user_id
+        global user_id, screen_info
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
+        DrawInfo()
         self.playButton.update(mouse_pos)
         self.settingsButton.update(mouse_pos)
         self.quitButton.update(mouse_pos)
@@ -1263,6 +1265,7 @@ class Shop:
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'shopee.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
+        DrawInfo()
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
         global InitGame, choice, bua_money, user_money
@@ -1305,6 +1308,7 @@ class MoneyBet:
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'moneyshop.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
+        DrawInfo()
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
         global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_choice
