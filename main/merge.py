@@ -21,6 +21,7 @@ user_money = int(LoginSignup.user_money)
 set_choice = 1
 choice = 0
 bet_money = 0
+bua_money = 0
 
 # store 5 characters
 CHARACTERS = []
@@ -1176,7 +1177,7 @@ class Shop:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, choice
+        global InitGame, choice, bua_money
         if not InitGame:
             init_character_luckybox()
             InitGame = True
@@ -1191,12 +1192,15 @@ class Shop:
                     return MenuClass()
             if event.key == pygame.K_1:
                 CHARACTERS[choice - 1].NhanhNhen = True
+                bua_money = 200 # Gán giá tiền cho bùa
                 return MoneyBet()
             if event.key == pygame.K_2:
                 CHARACTERS[choice - 1].TroiHon = True
+                bua_money = 500 # Gán giá tiền cho bùa
                 return MoneyBet()
             if event.key == pygame.K_3:
                 CHARACTERS[choice - 1].PhanKhich = True
+                bua_money = 1000 # Gán giá tiền cho bùa
                 return MoneyBet()
             if event.key == pygame.K_RETURN:
                 return MoneyBet()
