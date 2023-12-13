@@ -469,7 +469,7 @@ class Character():
             self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.8
 
     def goback(self, activated):
-        if not activated:
+        if not activated and not self.isGoBack:
             self.speed *= -1
             self.isGoBack = True
 
@@ -587,7 +587,8 @@ class LuckyBox():
         elif self.active_effect == "accelerate":
             effectImage = pygame.image.load("assets/effects/hieuung_tangtoc.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(bottomright = character.rect.bottomleft)
-            screen.blit(effectImage, effectImage_rect)
+            if not character.isGoBack:
+                screen.blit(effectImage, effectImage_rect)
         elif self.active_effect == "teleport":
             effectImage = pygame.image.load("assets/effects/hieuung_dichchuyen.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(bottomleft = self.rect.midbottom)
@@ -604,11 +605,10 @@ class LuckyBox():
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
             elapsed_time = current_time - self.activation_time
             if self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
-                if character.isGoBack:
-                    self.active_effect = None
                 if elapsed_time >= self.effect_duration:
                     self.active_effect = None
-                    character.speed = self.tempSpeed
+                    if not character.isGoBack:
+                        character.speed = self.tempSpeed
                     
             elif self.active_effect == "stun":
                 if elapsed_time >= self.effect_duration:
@@ -1404,7 +1404,6 @@ def main():
                 sys.exit()  # Thoát khỏi chương trình
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
         mouse_pos = pygame.mouse.get_pos()
-        print(current_class)
         current_class.draw(mouse_pos)  # Vẽ đối tượng hiện tại lên màn hình
         pygame.display.flip()  # Cập nhật toàn bộ cửa sổ
         show_fps(screen, clock)
