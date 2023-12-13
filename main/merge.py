@@ -432,7 +432,8 @@ class Character():
             elapsed_time = current_time - self.active_time
             if elapsed_time >= 2000:
                     self.NhanhNhen = False
-                    self.speed = self.tempSpeed
+                    if not self.isGoBack:
+                        self.speed = self.tempSpeed
         if self.TroiHon:
             effectImage = pygame.image.load("assets/effects/hieuung_troihon.png").convert_alpha()
             effectImage_rect = effectImage.get_rect(midbottom = self.rect.midleft)
