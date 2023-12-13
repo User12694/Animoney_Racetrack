@@ -930,11 +930,8 @@ class MenuClass:
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-<<<<<<< HEAD
-=======
         global user_id
         read_data(user_id)
->>>>>>> d8e0d8dc155edd8214c642cb99d08fcb4ee4fe96
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
@@ -1199,11 +1196,7 @@ class CharacterSelection:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-<<<<<<< HEAD
         global InitGame, choice
-=======
-        global InitGame, MAP_INDEX, set_choice, choice
->>>>>>> d8e0d8dc155edd8214c642cb99d08fcb4ee4fe96
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
