@@ -1,6 +1,7 @@
 import pygame, random, sys, time
 
 from datetime import datetime
+from io import StringIO 
 from LoginSignup import *
 from flappybird import minigame
 #Khởi tạo các thứ
@@ -16,6 +17,7 @@ money_bet_list = [200,500,1000]
 user_id = ''
 user_pwd = ''
 user_money = 0
+historyLine = StringIO() # một dòng cần xem của history
 set_choice = 1
 choice = 0
 bet_money = 0
@@ -27,6 +29,42 @@ GROUP = []
 rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
+
+class Money:
+    global user_money
+    global user_id
+    global bet_money
+    global historyLine
+    global traceBackCount
+    def getMoney():
+        with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
+            lines = f.readlines()
+            user_money.truncate(0)
+            user_money.seek(0)
+            user_money.write(lines[1])
+    
+    def updateMoneyAndWriteHistory(user_id, winOrLose):
+        if winOrLose == 'win':
+            user_money += bet_money * 3 
+            result = f"win +{bet_money * 3}"
+        else:
+            user_money -= bet_money
+            result = f'lose -{bet_money}'
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        result_to_write = f"{current_time}: {user_id} {result}, balance: {user_money}"
+
+        with open(f'./assets/player/{user_id}/{user_id}.txt', 'a') as file:
+            file.write('\n'+ result_to_write)
+
+    def readHistorLineFromFile(user_id, historyLine, traceBackCount):
+        with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
+            lines = file.readlines()
+            line_number = len(lines) - 1 - traceBackCount
+            if line_number < len(lines) and line_number >= 2:
+                historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
+                historyLine.seek(0) #trỏ vào đầu chuỗi đấy
+                historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
+
 
 
 #Màn hình cài đặt âm lượng
