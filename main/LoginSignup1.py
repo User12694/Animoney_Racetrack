@@ -7,12 +7,28 @@ import random
 import string
 import os
 
-code = None
 login_lock = False
 WINDOW_SIZES = [(1536,864),(768,432)]
 WINDOW_SIZES_INDEX = 0
 ratio = WINDOW_SIZES[WINDOW_SIZES_INDEX][0]/WINDOW_SIZES[0][0]
 email = None
+code = None
+# Các khai báo cho biến toàn cục
+login_lock = False
+# img = fp.find_images('assets/player') # Kiểm tra file được tìm thấy không
+img_label = None
+# confirm_button = None Nút xác nhận được gắn hàm kiểm tra trong FindPicture.py (hiện bị disable)
+bg_color = "#2b95d1"
+image_load_path = None
+user_id, user_money = None, None
+
+def fileread(username):
+    global user_id, user_money
+    with open(f"assets/player/{username}/{username}.txt") as f:
+        lines = f.readlines()
+        user_id = username
+        user_money = lines[1]
+        return user_id, user_money
 class LoginMenu:
     def __init__(self):
         # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
@@ -178,7 +194,7 @@ class LoginMenu:
 
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
-        global email, login_lock
+        global email, login_lock, user_id, user_money
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
         emails = find_file_in_subdirectories('./assets/player',f'{username}.txt')
@@ -187,8 +203,11 @@ class LoginMenu:
                     with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
                         if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
                             tkinter.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
+                            global login_lock
                             login_lock = True
+                            user_id, user_money = fileread(username)
                             self.window.quit()  # Thoát chương trình
+                            self.window.destroy()
                         else:
                             tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
                 else:
