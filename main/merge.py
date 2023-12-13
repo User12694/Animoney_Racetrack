@@ -207,6 +207,7 @@ class Character():
         self.run = True
         self.count_run = 0
         self.image = pygame.image.load(image).convert_alpha()
+        self.original_image = pygame.image.load(image).convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.count_run = 0
         self.map = map
@@ -757,8 +758,12 @@ class Congratulations:
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
-            rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
-            screen.blit(rank[i].image, rank[i].rect)
+            original_width, original_height = rank[i].original_image.get_size()
+            new_width, new_height = original_width * 2, original_height * 2
+            scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
+            scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
+            screen.blit(scaledImage, scaledImage_rect)
+
 
 
 
