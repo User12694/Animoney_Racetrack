@@ -602,7 +602,7 @@ class LuckyBox():
             current_time = pygame.time.get_ticks() #Lấy thời gian hiện tại
             elapsed_time = current_time - self.activation_time
             if self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport":
-                if character.isGoBack:
+                if character.isGoBack and (self.active_effect == "slow" or self.active_effect == "accelerate" or self.active_effect == "teleport"):
                     self.active_effect = None
                 if elapsed_time >= self.effect_duration:
                     self.active_effect = None
