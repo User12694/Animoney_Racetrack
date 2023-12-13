@@ -23,6 +23,7 @@ traceBackCount = 0
 user_money = int(LoginSignup.user_money)
 set_choice = 1
 choice = 0
+money_choice = 0
 bet_money = 0
 bua_money = 0
 
@@ -1272,7 +1273,7 @@ class MoneyBet:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money
+        global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_choice
         bet_values = {1: 200, 2: 500, 3: 1000}
         if event.type == pygame.QUIT:
                 pygame.quit()
@@ -1284,8 +1285,8 @@ class MoneyBet:
                     InitGame = False
                     return MenuClass()
             if event.key in [pygame.K_1, pygame.K_2, pygame.K_3]:
-                choice = event.key - pygame.K_0
-                bet_money = bet_values[choice]
+                money_choice = event.key - pygame.K_0
+                bet_money = bet_values[money_choice]
                 if user_money < bet_money:
                     self.show_insufficient_funds_message()
                 else:
