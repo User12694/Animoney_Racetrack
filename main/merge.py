@@ -25,7 +25,6 @@ set_choice = 1
 choice = 0
 bet_money = 0
 bua_money = 0
-doesWin = 0
 
 # store 5 characters
 CHARACTERS = []
@@ -1225,7 +1224,7 @@ class Shop:
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, choice
+        global InitGame, choice, bua_money, user_money
         if not InitGame:
             init_character_luckybox()
             InitGame = True
@@ -1240,14 +1239,22 @@ class Shop:
                     return MenuClass()
             if event.key == pygame.K_1:
                 CHARACTERS[choice - 1].NhanhNhen = True
+                bua_money = 300 # Gán giá tiền cho bùa
+                user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_2:
                 CHARACTERS[choice - 1].TroiHon = True
+                bua_money = 400 # Gán giá tiền cho bùa
+                user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_3:
                 CHARACTERS[choice - 1].PhanKhich = True
+                bua_money = 500 # Gán giá tiền cho bùa
+                user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_RETURN:
+                bua_money = 0
+                user_money -= bua_money
                 return MoneyBet()
         return self
 
@@ -1290,14 +1297,14 @@ class MoneyBet:
             parts = item.split('/')
             spilt_text.append(parts[-3])
         if LANGUAGE_INDEX == 0:
-            message = spilt_text[LANGUAGE_INDEX]
+            message = messages['ENG']
             font = pygame.font.Font(None, 36)
             text = font.render(message, True, (255, 255, 255))
-            screen.blit(text, (10, 10))
+            screen.blit(text, (10,10))
         elif LANGUAGE_INDEX == 1:
-            message = spilt_text[LANGUAGE_INDEX]
+            message = messages[LANGUAGE_INDEX]
             font = pygame.font.Font(None, 36)
-            text = font.render(message, True, (255, 255, 255))
+            text = font.render(message, True, '#F97C04')
             screen.blit(text, (10, 10))
 
         pygame.display.flip()
@@ -1327,11 +1334,7 @@ def reset_game():
     countDownCheck = False
     gameSound = True
     countDownCheck = True
-    Position = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), 
-            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
+    
 def show_fps(screen, clock):
     # Tạo font chữ
     font = pygame.font.Font(None, 30)
