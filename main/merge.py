@@ -30,7 +30,7 @@ GROUP = []
 rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
-
+doesWin = 0
 
 #Màn hình cài đặt âm lượng
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
@@ -662,7 +662,7 @@ class Congratulations:
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global rank, rankSound,  WINDOW_SIZES
+        global rank, rankSound,  WINDOW_SIZES, winner
         BG = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
         BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(BG, (0, 0))
@@ -682,6 +682,7 @@ class Congratulations:
 
         for i in range(5):
             rank[i].rect = rank[i].image.get_rect(midbottom = Congratulations_pos[i])
+
             screen.blit(rank[i].image, rank[i].rect)
 
 
@@ -697,9 +698,13 @@ class Congratulations:
                 if Back_To_Menu:
                     InitGame = False
                     return MenuClass()
-            
-        return self
-
+    '''def winOrLose(self):
+        global doesWin
+        if winner == :
+            doesWin = 1
+        else:
+            doesWin = 0
+        print(doesWin)'''
 #Biến được sử dụng
 InitGame = False
 rankSound = False
@@ -747,6 +752,7 @@ class Play:
         #Check xong game
         if FinishLine_Pass():
             self.CheckPass = True
+            
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
@@ -1287,7 +1293,7 @@ def reset_game():
     countDownCheck = False
     gameSound = True
     countDownCheck = True
-    
+
 def show_fps(screen, clock):
     # Tạo font chữ
     font = pygame.font.Font(None, 30)
