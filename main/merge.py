@@ -474,8 +474,27 @@ class Character():
             self.speed *= -1
             self.isGoBack = True
 
+#Vị trí lucky box
+LuckyBox_Pos = []
+LuckyBox_Height = [0.55, 0.66, 0.76, 0.87, 0.98]
+for i in range(10):
+    if i < 5:
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
+    else:
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
+
 def init_character_luckybox():
     global set_choice
+    #khởi tạo tốc độ ngẫu nhiên
+    for x in range(5):
+        Speed.append(random.choice(RandSpeed))
+    #Khởi tại vị trí lucky box
+    for i in range(10):
+        if i < 5:
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
+        else:
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
+
     for i in range(5):
         new_character = Character(speed = Speed[i], 
                                   pos = Position[i], 
@@ -483,6 +502,7 @@ def init_character_luckybox():
                                   image = SCREEN_SIZE[SCREEN_SIZE_INDEX] + 'Char' + str(i + 1) + 'Map' + str(int(set_choice)) + '_1.png', 
                                   map = int(set_choice - 1))
         CHARACTERS.append(new_character)
+
     for i in range(10):
             if i < 5:
                 luckyBox = LuckyBox(pos = LuckyBox_Pos[i], character = CHARACTERS[i])
@@ -513,17 +533,6 @@ class IG_Objects():
 #Add object
 ChuChay = IG_Objects(name = 'ChuChay', pos = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
 
-#Vị trí lucky box
-LuckyBox_Pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87),
-                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
 class LuckyBox():
     def __init__(self, pos, character):
         self.x = pos[0]
@@ -1372,6 +1381,8 @@ def reset_game():
     LUCKYBOX = []
     GROUP = []
     rank = [] #List nhân vật khi thắng đc thêm vào
+    Speed = []
+    LuckyBox_Pos = []
     winner = 0
     last = 0
     Victory_sound_Play = True
