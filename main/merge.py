@@ -329,27 +329,12 @@ def flappy_bird():
         pygame.mixer.music.play()
 ##############################################################
 
-class Money:
-    global user_money, user_id
-    global bet_money, bua_money
-    global historyLine
-    global traceBackCount
-    global doesWin
 
-    def writeMoney():
-        with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
-            lines = f.readlines()
-        lines[1] = f"{user_money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
-        with open(f'./assets/player/{user_id}/{user_id}.txt','w') as f:
-            f.writelines(lines) # Ghi lại tien
-    
-    def updateMoneyAndWriteHistory():
-        global traceBackCount
+def WriteHistory():
+        global traceBackCount, bet_money, user_id, historyLine, doesWin
         if doesWin:
-            user_money += bet_money * 3 
-            result = f"win +{bet_money * 3}"
+            result = f'win +{bet_money * 3}'
         else:
-            user_money -= bet_money
             result = f'lose -{bet_money}'
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         result_to_write = f"{current_time}: {user_id} {result}, balance: {user_money}"
@@ -358,21 +343,43 @@ class Money:
             file.write('\n'+ result_to_write)
         traceBackCount = 0
 
-    def updateMuaBuaMoney():
-        user_money -= bua_money
+def readHistorLineFromFile():
+    global traceBackCount, historyLine, user_id
+    with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
+        lines = file.readlines()
+        line_number = len(lines) - 1 - traceBackCount
+        if line_number < len(lines) and line_number >= 2:
+            historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
+            historyLine.seek(0) #trỏ vào đầu chuỗi đấy
+            historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
 
 class History:
-    global traceBackCount, user_id, historyLine
-    def readHistorLineFromFile():
-        with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
-            lines = file.readlines()
-            line_number = len(lines) - 1 - traceBackCount
-            if line_number < len(lines) and line_number >= 2:
-                historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
-                historyLine.seek(0) #trỏ vào đầu chuỗi đấy
-                historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
-    #def buttonBack():
-    #def buttonNext():
+    def __init__(self):
+        self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha
+        self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        self.histoyText = font.render(historyLine.getvalue(), True, '#2B95D1')
+        self.leftButton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToLeft.png')
+        self.LEFT_BUTTON = Button(pos=(screen.get_width() / 4, screen.get_height() / 4 * 3), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
+        self.rightButton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToRight.png')
+        self.RIGHT_BUTTON = Button(pos=(screen.get_width() / 4 * 3, screen.get_height() / 4 * 3), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
+        self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
+    
+    def draw(self, mouse_pos):
+        screen.blit(self.image, (0, 0))
+        self.LEFT_BUTTON.update(mouse_pos)
+        self.RIGHT_BUTTON.update(mouse_pos)
+    
+    def update(self, event):
+        global traceBackCount
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.LEFT_BUTTON.CheckClick(pos):
+                traceBackCount += 1
+                readHistorLineFromFile()
+            if self.RIGHT_BUTTON.CheckClick(pos) and traceBackCount > 0:
+                traceBackCount -= 1
+                readHistorLineFromFile()
+
     #def traceBack():
 
 
