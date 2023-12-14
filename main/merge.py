@@ -266,22 +266,17 @@ def flappy_bird():
                 screen.blit(money_receiver, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 270)))
                 press_space_txt = fontend.render("Press Space to Play again", True, BLACK)
                 screen.blit(press_space_txt, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 370)))
-                
                 if check == 0:
                     user_money += (score * 10)
                     update_account(user_id, user_money)
                     check = 1
-                    if user_money >= 300 and outOfMoney == True:
-                        outOfMoney == False
-                        update_account(user_id, user_money)
-                        return Nuff_man_GoBackandBetMTF()
                 if x_back_button + width > mouse[0] > x_back_button and y_back_button + height > mouse[
                     1] > y_back_button:  # tạo hiệu ứng khi click  vào logo
                     pygame.draw.rect(screen, bright_red,
-                                     (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
+                                    (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
                 else:
                     pygame.draw.rect(screen, old_red,
-                                     (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
+                                    (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
                 screen.blit(back_button, (x_back_button + 10, y_back_button))
         # Nền hoạt động chính của game. Chú ý cái video resize
         for event in pygame.event.get():
@@ -1674,6 +1669,10 @@ class Shop:
                 Back_To_Menu = Pause_Game()
                 if Back_To_Menu:
                     InitGame = False
+                    user_money =user_money + bua_money + bet_money
+                    update_account(user_id, user_money)
+                    bua_money = 0
+                    bet_money = 0
                     return MenuClass()
             if event.key == pygame.K_1:
                 if user_money < 300:
@@ -1832,6 +1831,10 @@ class MoneyBet:
                 Back_To_Menu = Pause_Game()
                 if Back_To_Menu:
                     InitGame = False
+                    user_money =user_money + bua_money + bet_money
+                    update_account(user_id, user_money)
+                    bua_money = 0
+                    bet_money = 0
                     return MenuClass()
             if event.key in [pygame.K_1, pygame.K_2, pygame.K_3]:
                 money_choice = event.key - pygame.K_0
