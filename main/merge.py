@@ -14,13 +14,10 @@ clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 
 # Đường dẫn đén file thông tin người chơi
-
 account_sub_path = './assets/player/'
-
 #Ngôn ngữ
 LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
 LANGUAGE_INDEX = 0
-
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
 user_id = LoginSignup1.user_id
@@ -35,7 +32,6 @@ list_charImage = [] # Lưu trữ lại giá trị của list_image_load
 money_choice = 0
 bet_money = 0
 bua_money = 0
-
 # store 5 characters
 CHARACTERS = []
 LUCKYBOX = []
@@ -43,26 +39,19 @@ GROUP = []
 rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
-doesWin = 0
-
+doesWin = 1
 #################Khu vực để Minigame####################
-
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
 bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 #Lấy các biến từ file khác
-user_id = LoginSignup1.user_id
-user_money = int(LoginSignup1.user_money)
 
 #Mod lại subpath để có thể đưa menugame vào:
 subpath = './main/flappybird'
 account_sub_path = './assets/player/'
 pygame.init()
-
-volume = 0.2
-
 clock = pygame.time.Clock()
 WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
@@ -71,13 +60,6 @@ screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 pygame.display.set_caption('Flappy Bird')
 running = True
-
-black = pygame.Color(0, 0, 0)
-white = pygame.Color(255, 255, 255)
-bright_red = pygame.Color(255, 0, 0)
-old_red = pygame.Color(200, 0, 0)
-color = pygame.Color('lightskyblue3')
-
 # Phông chữ :
 font = pygame.font.SysFont("comicsansms", int(screen_Width / screen_Width * 32))
 text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
@@ -321,7 +303,7 @@ def flappy_bird():
                         begin = True
                         dem = 0
                     pygame.mixer.Sound(f'{subpath}/flappybird/sounds/wing.wav').play()
-                    pygame.mixer.music.set_volume(volume)
+                    pygame.mixer.music.set_volume(present_volume)
                     bird_drop_velocity = 0
                     bird_drop_velocity -= screen_Height/80
             if event.type == pygame.MOUSEBUTTONUP:
@@ -329,13 +311,16 @@ def flappy_bird():
                     1] > y_back_button:
                     print('end game')
                     update_account(user_id, user_money)
+                    pygame.mixer.music.load(f'./assets/sounds/mainmenu.mp3')
+                    pygame.mixer.music.set_volume(present_volume)
+                    pygame.mixer.music.play()
                     return 2
 
         show_fps(screen, clock)
         pygame.display.flip()
         pygame.mixer.init()
         pygame.mixer.music.load(f'{subpath}/Sounds/nhac2.wav')
-        pygame.mixer.music.set_volume(volume)
+        pygame.mixer.music.set_volume(present_volume)
         pygame.mixer.music.play()
 ##############################################################
 
@@ -371,9 +356,6 @@ class Money:
     def updateMuaBuaMoney():
         user_money -= bua_money
 
-'''class Result:
-    def __init__(self):
-        global winner, '''
 class History:
     global traceBackCount, user_id, historyLine
     def readHistorLineFromFile():
@@ -396,8 +378,6 @@ present_volume = VOLUME[VOLUME_INDEX]
 MenuSound = False
 gameSound = False
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
-WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
-WINDOW_SIZE_INDEX = 0
 SCREEN_SIZE = ['assets/characters/']
 SCREEN_SIZE_INDEX = 0
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
@@ -693,13 +673,20 @@ class Character():
             self.rect.x += self.speed
     #Check điều kiện thắng
     def checkFinishLine(self):
-        global list_image_load
+        global list_image_load, doesWin
         if self.rect.x > WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.95:
             if not self.Finish:
                 rank.append(self)
                 list_image_load.append(self.number)
                 self.run = False
                 self.Finish = True
+        # Kiểm tra xem có chiến thắng hay không
+            if list_image_load[0] == choice - 1:
+                doesWin = 1
+                
+            else:
+                doesWin = 0
+            
 
     def update(self):
         global choice
@@ -1102,10 +1089,12 @@ class Congratulations:
         if event.type == pygame.MOUSEBUTTONDOWN:
         #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.CONTINUE_BUTTON.CheckClick(pos):
-                if QuitConfirm():
+                return Result()
+                '''if QuitConfirm():
                     InitGame = False
                     reset_game()
-                    return MenuClass()
+                    return MenuClass()'''
+                
         # pos = pygame.mouse.get_pos()
         # if self.CONTINUE_BUTTON.CheckClick(pos):
         #     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -1113,13 +1102,27 @@ class Congratulations:
         #     if event.type == pygame.MOUSEMOTION:
         #         pass # Chuyen mau vang cho nut
         return self
-    '''def winOrLose(self):
-        global doesWin
-        if winner == :
-            doesWin = 1
+
+class Result:
+    def __init__(self):
+        global doesWin, bet_money
+        if doesWin:
+            self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/win{bet_money*3}.png').convert_alpha()
+            self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         else:
-            doesWin = 0
-        print(doesWin)'''
+            self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/lose{bet_money}.png').convert_alpha()
+            self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.1), imageNormal = "continue.png", imageChanged = "continue2.png")
+    def draw(self, mouse_pos):
+        screen.blit(self.image,(0,0))
+        self.CONTINUE_BUTTON.update(mouse_pos)
+        screen.blit(self.CONTINUE_BUTTON, (SCREEN_SIZE[SCREEN_SIZE_INDEX][0] // 2 - self.CONTINUE_BUTTON.x / 2, SCREEN_SIZE[SCREEN_SIZE_INDEX] // 16 * 12))
+    def update(self, event):
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.CONTINUE_BUTTON.CheckClick(pos):
+                return MenuClass()
+
 
 #Biến được sử dụng
 InitGame = False
@@ -1699,7 +1702,7 @@ class MoneyBet:
 # Đây là hàm reset game
 def reset_game():
     global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
-    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos
+    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos, doesWin
     file = './assets/sounds/mainmenu.mp3'
     pygame.init()
     pygame.mixer.init()
@@ -1709,6 +1712,7 @@ def reset_game():
     set_choice = 1
     choice = 0
     bet_money = 0
+    doesWin = 1
     CHARACTERS = []
     LUCKYBOX = []
     GROUP = []
@@ -1737,7 +1741,6 @@ def show_fps(screen, clock):
 #Đây là main loop
 def main():
     global login_lock, list_image_load
-    
     if not login_lock:
         pygame.quit()
         sys.exit()
@@ -1747,7 +1750,6 @@ def main():
     while True:  # Vòng lặp vô hạn, chương trình sẽ chạy cho đến khi có sự kiện thoát
         for event in pygame.event.get():  # Duyệt qua tất cả sự kiện đang chờ xử lý trong hàng đợi sự kiện của Pygame
             if event.type == pygame.QUIT:  # Nếu sự kiện là loại thoát (như nhấn nút đóng cửa sổ)
-                print(list_image_load)
                 pygame.quit()  # Thoát khỏi Pygame
                 sys.exit()  # Thoát khỏi chương trình
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
