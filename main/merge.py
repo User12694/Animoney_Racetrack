@@ -1151,17 +1151,26 @@ class Result:
             self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/lose{bet_money}.png').convert_alpha()
             self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
-
+        self.screenshot_button = Button(pos=(screen_Width / 2 - screen_Width / 10, screen_Height - screen_Height / 4*3), imageNormal="screenshot.png", imageChanged="screenshot2.png")
     def draw(self, mouse_pos):
         screen.blit(self.image,(0,0))
         self.CONTINUE_BUTTON.update(mouse_pos)
+        self.screenshot_button.update(mouse_pos)
     def update(self, event):
         pos = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.CONTINUE_BUTTON.CheckClick(pos):
                 return MenuClass()
-        return self
+            if self.screenshot_button.CheckClick(pos):
+                take_screenshot()
 
+        return self
+def take_screenshot():
+    now = datetime.now()
+    now = now.replace(microsecond=0)
+    now = now.strftime('%d/%m/%y %H:%M:%S')
+    screenshot_title = "Screenshot " + now
+    pygame.image.save(screen, f"./assets/screenshots/{screenshot_title}.png")
 #Biến được sử dụng
 InitGame = False
 rankSound = False
