@@ -6,6 +6,7 @@ from LoginSignup1 import *
 from flappybird import minigame
 import re
 #Khởi tạo các thứ
+
 # Luôn đặt cửa sổ xuất hiện từ góc trái màn hình
 pygame.init()
 pygame.display.set_caption("Race game")
@@ -101,7 +102,7 @@ WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 SCREEN_SIZE = ['assets/characters/']
 SCREEN_SIZE_INDEX = 0
-screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.FULLSCREEN)
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 halfScreen_active = False
 
 #Kiểu chữ
@@ -963,20 +964,21 @@ def DrawInfo():
     # Lấy kích thước màn hình hiện tại
     screen_info = pygame.display.Info()
     # Tính toán kích thước của hình chữ nhật
+    rect_width = screen_info.current_w // 8
+    rect_height = screen_info.current_h // 8
     # Vẽ hình chữ nhật
-    image = pygame.image.load('./assets/menu/nameAndMoney.png').convert_alpha()
-    image = pygame.transform.smoothscale(image,(image.get_width()*ratio, image.get_height()*ratio))
+    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, rect_width, rect_height))
+
     # Tạo font chữ
-    font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+    font = pygame.font.Font(None, 36)
 
     # Render thông tin user_id và user_money
-    text_id = font.render(user_id, True, '#2B95D1')
-    text_money = font.render(str(user_money), True, '#2B95D1')
+    text_id = font.render('User ID: ' + user_id, True, (0, 128, 0))
+    text_money = font.render('User Money: ' + str(user_money), True, (0, 128, 0))
 
     # Hiển thị thông tin lên hình chữ nhật
-    screen.blit(image,(0,0))
-    screen.blit(text_id, (30, 10))
-    screen.blit(text_money, (30, 50))
+    screen.blit(text_id, (10, 10))
+    screen.blit(text_money, (10, 50))
 
 
 # Lớp menu chính
@@ -1205,7 +1207,7 @@ class WindowModeSettingClass:
             elif event.type == pygame.VIDEORESIZE:
                 # Xử lý sự kiện resize màn hình
                 width, height = event.w, event.h
-                screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+                screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         return self
         
 
