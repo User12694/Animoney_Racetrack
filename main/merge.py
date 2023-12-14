@@ -330,21 +330,12 @@ class Money:
     global historyLine
     global traceBackCount
     global doesWin
-
-    def writeMoney():
-        with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
-            lines = f.readlines()
-        lines[1] = f"{user_money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
-        with open(f'./assets/player/{user_id}/{user_id}.txt','w') as f:
-            f.writelines(lines) # Ghi lại tien
     
-    def updateMoneyAndWriteHistory():
+    def WriteHistory():
         global traceBackCount
         if doesWin:
-            user_money += bet_money * 3 
-            result = f"win +{bet_money * 3}"
+            result = f'win +{bet_money * 3}'
         else:
-            user_money -= bet_money
             result = f'lose -{bet_money}'
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         result_to_write = f"{current_time}: {user_id} {result}, balance: {user_money}"
@@ -353,11 +344,16 @@ class Money:
             file.write('\n'+ result_to_write)
         traceBackCount = 0
 
-    def updateMuaBuaMoney():
-        user_money -= bua_money
 
 class History:
-    global traceBackCount, user_id, historyLine
+    def __init__(self):
+        global traceBackCount, user_id, historyLine
+        self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha
+        self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        self.histoyText = font.render(historyLine.getvalue(), True, '#2B95D1')
+        self.leftButton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToLeft.png')
+        self.rightBtton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToRight.png')
+
     def readHistorLineFromFile():
         with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
             lines = file.readlines()
