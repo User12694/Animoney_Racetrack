@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import LoginSignup1
 #quy định các màu
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
@@ -8,20 +9,22 @@ bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 #Lấy các biến từ file khác
-user_id = 'loc'
-user_money = 500
+user_id = LoginSignup1.user_id
+user_money = int(LoginSignup1.user_money)
 
 #Mod lại subpath để có thể đưa menugame vào:
 subpath = './main/flappybird'
-
+account_sub_path = './assets/player/'
 pygame.init()
 
 volume = 0.2
 
 clock = pygame.time.Clock()
-screen_Width = 1536
-screen_Height = 864
-screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
+WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
+WINDOW_SIZE_INDEX = 0
+screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 pygame.display.set_caption('Flappy Bird')
 running = True
 
@@ -32,13 +35,13 @@ old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 
 # Phông chữ :
-font = pygame.font.SysFont("comicsansms", int(screen_Width / 1500 * 32))
-text_Font = pygame.font.Font(None, int(screen_Width / 1500 * 38))
-menu_Font = pygame.font.Font(None, int(screen_Width / 1500 * 45))
+font = pygame.font.SysFont("comicsansms", int(screen_Width / screen_Width * 32))
+text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
+menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
 
 # vẽ hình chữ nhật chứa text
-rect_text = pygame.Rect(screen_Width / (1500 / 568), screen_Height / (800 / 440), screen_Width / (1500 / 350),
-                        screen_Height / (800 / 40))
+rect_text = pygame.Rect(screen_Width / (screen_Width / 568), screen_Height / (screen_Height / 440), screen_Width / (screen_Width / 350),
+                        screen_Height / (screen_Height / 40))
 
 # Nút bấm
 
@@ -50,16 +53,12 @@ y_back_button = screen_Height / (8 / 6)
 
 #Cập nhật trạng thái account. Cần sửa file này
 def update_account(usr_id, money):
-    data = []
-    with open(f'{subpath}/account.txt', 'r') as old_file:
-        for line in old_file:
-            if line.split(',')[0] == usr_id:
-                pos = line.rfind(',')
-                line = line[:pos + 1] + str(money) + '\n'
-            data.append(line)
-    with open('account.txt', 'w') as new_file:
-        for line in data:
-            new_file.write(line)
+    with open(f'{account_sub_path}/{user_id}/{user_id}.txt', 'r') as old_file:
+        lines = old_file.readlines()
+        lines[1] = str(money) + '\n'
+    with open(f'{account_sub_path}/{user_id}/{user_id}.txt', 'w') as new_file:
+        new_file.writelines(lines)
+
 
 def show_fps(screen, clock):
     # Tạo font chữ
@@ -115,6 +114,7 @@ def flappy_bird():
     check = 0
     
     while running:
+        global user_id, user_money
         #pygame.mixer.music.pause()
         #clock.tick(60) đã được quy định. Có thể xóa dòng này
         clock.tick(120)
@@ -131,7 +131,7 @@ def flappy_bird():
         #Viết thông tin ID và số tiền. Hiện tại k lấy đc
         screen.blit(user_info, (screen_Width - user_info.get_width() - money_info.get_width() - 40, 10))
         screen.blit(money_info,
-                    (screen_Width - money_info.get_width() - screen_Width / (1500 / 20), screen_Height / (800 / 10)))
+                    (screen_Width - money_info.get_width() - screen_Width / (screen_Width / 20), screen_Height / (screen_Height / 10)))
         bird_image = pygame.image.load(f"{subpath}/flappybird/bird.png").convert_alpha()
         bird_image = pygame.transform.scale(bird_image, (BIRD_WIDTH, BIRD_HEIGHT))
         base_image = pygame.image.load(f"{subpath}/flappybird/base.png").convert_alpha()
@@ -182,16 +182,16 @@ def flappy_bird():
             bird_drop_velocity += GRAVITY
             # generate new tubes
             if tube1_x < -TUBE_WIDTH:
-                tube1_x = screen_Width / (1500 / 550)
-                tube1_height = random.randint(screen_Height // (1500 // 100), screen_Height // (1500 // 250))
+                tube1_x = screen_Width / (screen_Width / 550)
+                tube1_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
                 tube1_pass = False
             if tube2_x < -TUBE_WIDTH:
-                tube2_x = screen_Width / (1500 / 550)
-                tube2_height = random.randint(screen_Height // (1500 // 100), screen_Height // (1500 // 250))
+                tube2_x = screen_Width / (screen_Width / 550)
+                tube2_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
                 tube2_pass = False
             if tube3_x < -TUBE_WIDTH:
-                tube3_x = screen_Width / (1500 / 550)
-                tube3_height = random.randint(screen_Height // (1500 // 100), screen_Height // (1500 // 250))
+                tube3_x = screen_Width / (screen_Width / 550)
+                tube3_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
                 tube3_pass = False
 
             score_txt = fontend.render("Score: " + str(score) + ", max score = 20", True, BLACK)
@@ -222,11 +222,11 @@ def flappy_bird():
                     pygame.mixer.Sound(f'{subpath}/flappybird/sounds/hit.wav').play()
                     dem = 1
                 game_over_txt = fontend.render("Game over, score: " + str(score), True, BLACK)
-                screen.blit(game_over_txt, (screen_Width / (1500 / 750), screen_Height / (800 / 170)))
+                screen.blit(game_over_txt, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 170)))
                 money_receiver = fontend.render("the money you get: " + str(score * 10), True, BLACK)
-                screen.blit(money_receiver, (screen_Width / (1500 / 750), screen_Height / (800 / 270)))
+                screen.blit(money_receiver, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 270)))
                 press_space_txt = fontend.render("Press Space to Play again", True, BLACK)
-                screen.blit(press_space_txt, (screen_Width / (1500 / 750), screen_Height / (800 / 370)))
+                screen.blit(press_space_txt, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 370)))
                 
                 if check == 0:
                     user_money += (score * 10)
@@ -250,18 +250,18 @@ def flappy_bird():
                 screen_Width, screen_Height = event.size
                 screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
                 #Sửa vị trí
-                text_Font = pygame.font.Font(None, int(screen_Width / 1500 * 28)) # Thay thế bằng font của ta
-                menu_Font = pygame.font.Font(None, int(screen_Width / 1500 * 45))
-                font = pygame.font.SysFont("comicsansms", int(screen_Width / 1500 * 32))
+                text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 28)) # Thay thế bằng font của ta
+                menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
+                font = pygame.font.SysFont("comicsansms", int(screen_Width / screen_Width * 32))
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     # reset 
                     if pausing:
                         bird_y = screen_Height / (2)
                         TUBE_VELOCITY = 8
-                        tube1_x = screen_Width / (1500 / 600)
-                        tube2_x = screen_Width / (1500 / 800)
-                        tube3_x = screen_Width / (1500 / 1000)
+                        tube1_x = screen_Width / (screen_Width / 600)
+                        tube2_x = screen_Width / (screen_Width / 800)
+                        tube3_x = screen_Width / (screen_Width / 1000)
 
 
                         tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
@@ -284,6 +284,7 @@ def flappy_bird():
                 if x_back_button + width > mouse[0] > x_back_button and y_back_button + height > mouse[
                     1] > y_back_button:
                     print('end game')
+                    update_account(user_id, user_money)
                     return 2
 
         show_fps(screen, clock)
