@@ -360,10 +360,11 @@ class History:
         self.histoyText = font.render(historyLine.getvalue(), True, '#2B95D1')
         self.LEFT_BUTTON = Button(pos=(screen.get_width() / 4, screen.get_height() / 4 * 3), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
         self.RIGHT_BUTTON = Button(pos=(screen.get_width() / 4 * 3, screen.get_height() / 4 * 3), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
-        self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
+
     
     def draw(self, mouse_pos):
         screen.blit(self.image, (0, 0))
+        screen.blit(self.histoyText, (screen.get_width() * 0.45, screen.get_height() * 0.7))
         self.LEFT_BUTTON.update(mouse_pos)
         self.RIGHT_BUTTON.update(mouse_pos)
     
