@@ -207,6 +207,7 @@ Victory_sound_Play = True
 #Các nhân vật trong game
 class Character():
     def __init__(self, speed, pos, number, image, map):
+        global set_choice, SCREEN_SIZE_INDEX
         self.speed = speed
         self.tempSpeed = speed
         self.pos = pos
@@ -217,7 +218,7 @@ class Character():
         self.count_run = 0
         self.image_path = image
         self.image = pygame.image.load(image).convert_alpha()
-        self.original_image = pygame.image.load(image).convert_alpha()
+        self.original_image = pygame.image.load(SCREEN_SIZE[SCREEN_SIZE_INDEX] + 'Char' + str(self.number + 1) + 'Map' + str(int(set_choice)) + '_4.png').convert_alpha()
         self.rect= self.image.get_rect(midbottom = (self.x, self.y))
         self.count_run = 0
         self.map = map
@@ -497,7 +498,7 @@ for i in range(10):
         LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
 
 def init_character_luckybox():
-    global set_choice
+    global set_choice, SCREEN_SIZE_INDEX
     #khởi tạo tốc độ ngẫu nhiên
     for x in range(5):
         Speed.append(random.choice(RandSpeed))
@@ -790,6 +791,7 @@ class Congratulations:
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
         global MenuSound, gameSound, InitGame
+        pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -798,6 +800,13 @@ class Congratulations:
                 Back_To_Menu = Pause_Game()
                 if Back_To_Menu:
                     InitGame = False
+                    return MenuClass()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+        #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
+            if self.CONTINUE_BUTTON.CheckClick(pos):
+                if QuitConfirm():
+                    InitGame = False
+                    reset_game()
                     return MenuClass()
         # pos = pygame.mouse.get_pos()
         # if self.CONTINUE_BUTTON.CheckClick(pos):
@@ -985,6 +994,7 @@ def DrawInfo():
 class MenuClass: 
     #Khởi tạo các thuộc tính
     def __init__(self):
+        reset_game()
         global VOLUME_INDEX, present_volume
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.95), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
