@@ -267,7 +267,6 @@ def flappy_bird():
                     pygame.draw.rect(screen, old_red,
                                      (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
                 screen.blit(back_button, (x_back_button + 10, y_back_button))
-        global user_money
         # Nền hoạt động chính của game. Chú ý cái video resize
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
