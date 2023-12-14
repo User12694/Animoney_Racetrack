@@ -976,18 +976,19 @@ def DrawInfo():
     rect_width = screen_info.current_w // 8
     rect_height = screen_info.current_h // 8
     # Vẽ hình chữ nhật
-    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, rect_width, rect_height))
-
+    image = pygame.image.load('./assets/menu/nameAndMoney.png').convert_alpha()
+    image = pygame.transform.smoothscale(image,(image.get_width(), image.get_height()))
     # Tạo font chữ
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
 
     # Render thông tin user_id và user_money
-    text_id = font.render('User ID: ' + user_id, True, (0, 128, 0))
-    text_money = font.render('User Money: ' + str(user_money), True, (0, 128, 0))
+    text_id = font.render(user_id, True, '#2B95D1')
+    text_money = font.render(str(user_money), True, '#2B95D1')
 
     # Hiển thị thông tin lên hình chữ nhật
-    screen.blit(text_id, (10, 10))
-    screen.blit(text_money, (10, 50))
+    screen.blit(image,(0,0))
+    screen.blit(text_id, (40, 0))
+    screen.blit(text_money, (40, 60))
 
 
 # Lớp menu chính
