@@ -673,7 +673,7 @@ class Character():
             self.rect.x += self.speed
     #Check điều kiện thắng
     def checkFinishLine(self):
-        global list_image_load, doesWin
+        global list_image_load, doesWin, user_money, bet_money
         if self.rect.x > WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.95:
             if not self.Finish:
                 rank.append(self)
@@ -683,10 +683,15 @@ class Character():
         # Kiểm tra xem có chiến thắng hay không
             if list_image_load[0] == choice - 1:
                 doesWin = 1
-                
+                user_money += 3* bet_money
+                if user_money < 0:
+                    user_money = 0
+                update_account(user_id, user_money)
             else:
                 doesWin = 0
-            
+                if user_money < 0:
+                    user_money = 0
+                update_account(user_id, user_money)
 
     def update(self):
         global choice
@@ -1123,7 +1128,8 @@ class Result:
             if self.CONTINUE_BUTTON.CheckClick(pos):
                 return MenuClass()
         return self
-
+def update_money(user_info, user_money):
+    pass
 
 #Biến được sử dụng
 InitGame = False
@@ -1627,25 +1633,54 @@ class Shop:
                     InitGame = False
                     return MenuClass()
             if event.key == pygame.K_1:
-                CHARACTERS[choice - 1].NhanhNhen = True
-                bua_money = 300 # Gán giá tiền cho bùa
-                user_money -= bua_money
+                if user_money < 300:
+                    self.show_insufficient_funds_message()
+                else:
+                    CHARACTERS[choice - 1].NhanhNhen = True
+                    bua_money = 300 # Gán giá tiền cho bùa
+                    user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_2:
-                CHARACTERS[choice - 1].TroiHon = True
-                bua_money = 400 # Gán giá tiền cho bùa
-                user_money -= bua_money
+                if user_money < 400:
+                    self.show_insufficient_funds_message()
+                else:
+                    CHARACTERS[choice - 1].TroiHon = True
+                    bua_money = 400 # Gán giá tiền cho bùa
+                    user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_3:
-                CHARACTERS[choice - 1].PhanKhich = True
-                bua_money = 500 # Gán giá tiền cho bùa
-                user_money -= bua_money
+                if user_money < 500:
+                    self.show_insufficient_funds_message()
+                else:
+                    CHARACTERS[choice - 1].PhanKhich = True
+                    bua_money = 500 # Gán giá tiền cho bùa
+                    user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_RETURN:
                 bua_money = 0
                 user_money -= bua_money
                 return MoneyBet()
+            
         return self
+    def show_insufficient_funds_message(self):
+        messages = {
+            'ENG': "You don't have enough money. You can play Minigame to earn",
+            'VIE': "Bạn không đủ tiền để chơi. Bạn có thể chơi minigame để lấy thêm tiền"
+        }
+        spilt_text = []
+        for item in LANGUAGE:
+            parts = item.split('/')
+            spilt_text.append(parts[-3])
+        if LANGUAGE_INDEX == 0:
+            message = messages['ENG']
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+            self.another_text = self.another_font.render(message, True, (255, 255, 255))
+            screen.blit(self.another_text, (10,10))
+        elif LANGUAGE_INDEX == 1:
+            message = messages[LANGUAGE_INDEX]
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+            self.another_text = self.another_font.render(message, True, '#F97C04')
+            screen.blit(self.another_text, (10, 10))
 
 class MoneyBet: 
     global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_bet
