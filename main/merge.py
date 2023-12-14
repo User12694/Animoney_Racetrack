@@ -357,9 +357,7 @@ class History:
         self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha
         self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         self.histoyText = font.render(historyLine.getvalue(), True, '#2B95D1')
-        self.leftButton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToLeft.png')
         self.LEFT_BUTTON = Button(pos=(screen.get_width() / 4, screen.get_height() / 4 * 3), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
-        self.rightButton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToRight.png')
         self.RIGHT_BUTTON = Button(pos=(screen.get_width() / 4 * 3, screen.get_height() / 4 * 3), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
     
@@ -378,7 +376,9 @@ class History:
             if self.RIGHT_BUTTON.CheckClick(pos) and traceBackCount > 0:
                 traceBackCount -= 1
                 readHistorLineFromFile()
-
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                return MenuClass()
     #def traceBack():
 
 
@@ -1318,7 +1318,7 @@ class MenuClass:
     def __init__(self):
         reset_game()
         global VOLUME_INDEX, present_volume
-        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.95), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
+        self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.95), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.minigame = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.45), imageNormal = "minigame.png", imageChanged = "minigame2.png")
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
