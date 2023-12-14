@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import LoginSignup1
 #quy định các màu
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
@@ -8,12 +9,12 @@ bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 #Lấy các biến từ file khác
-user_id = 'loc'
-user_money = 500
+user_id = LoginSignup1.user_id
+user_money = int(LoginSignup1.user_money)
 
 #Mod lại subpath để có thể đưa menugame vào:
 subpath = './main/flappybird'
-
+account_sub_path = './assets/player/'
 pygame.init()
 
 volume = 0.2
@@ -52,16 +53,12 @@ y_back_button = screen_Height / (8 / 6)
 
 #Cập nhật trạng thái account. Cần sửa file này
 def update_account(usr_id, money):
-    data = []
-    with open(f'{subpath}/account.txt', 'r') as old_file:
-        for line in old_file:
-            if line.split(',')[0] == usr_id:
-                pos = line.rfind(',')
-                line = line[:pos + 1] + str(money) + '\n'
-            data.append(line)
-    with open('account.txt', 'w') as new_file:
-        for line in data:
-            new_file.write(line)
+    with open(f'{account_sub_path}/{user_id}/{user_id}.txt', 'r') as old_file:
+        lines = old_file.readlines()
+        lines[1] = str(money) + '\n'
+    with open(f'{account_sub_path}/{user_id}/{user_id}.txt', 'w') as new_file:
+        new_file.writelines(lines)
+
 
 def show_fps(screen, clock):
     # Tạo font chữ
@@ -117,6 +114,7 @@ def flappy_bird():
     check = 0
     
     while running:
+        global user_id, user_money
         #pygame.mixer.music.pause()
         #clock.tick(60) đã được quy định. Có thể xóa dòng này
         clock.tick(120)
@@ -286,6 +284,7 @@ def flappy_bird():
                 if x_back_button + width > mouse[0] > x_back_button and y_back_button + height > mouse[
                     1] > y_back_button:
                     print('end game')
+                    update_account(user_id, user_money)
                     return 2
 
         show_fps(screen, clock)
