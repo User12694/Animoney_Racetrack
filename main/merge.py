@@ -336,34 +336,21 @@ def flappy_bird():
         pygame.mixer.music.play()
 ##############################################################
 
-class Money:
-    global user_money, user_id
-    global bet_money, bua_money
-    global historyLine
-    global traceBackCount
-    global doesWin
 
-    def writeMoney():
-        with open(f'./assets/player/{user_id}/{user_id}.txt') as f:
-            lines = f.readlines()
-        lines[1] = f"{user_money}\n" # Thay đổi dòng cần thiết. Ở đây thay thế money.
-        with open(f'./assets/player/{user_id}/{user_id}.txt','w') as f:
-            f.writelines(lines) # Ghi lại tien
-    
-    def updateMoneyAndWriteHistory():
-        global traceBackCount
-        if doesWin:
-            user_money += bet_money * 3 
-            result = f"win +{bet_money * 3}"
-        else:
-            user_money -= bet_money
-            result = f'lose -{bet_money}'
-        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        result_to_write = f"{current_time}: {user_id} {result}, balance: {user_money}"
+def updateMoneyAndWriteHistory():
+    global traceBackCount, bet_money, user_money
+    if doesWin:
+        user_money += bet_money * 3 
+        result = f"win +{bet_money * 3}"
+    else:
+        user_money -= bet_money
+        result = f'lose -{bet_money}'
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    result_to_write = f"{current_time}: {user_id} {result}, balance: {user_money}"
 
-        with open(f'./assets/player/{user_id}/{user_id}.txt', 'a') as file:
-            file.write('\n'+ result_to_write)
-        traceBackCount = 0
+    with open(f'./assets/player/{user_id}/{user_id}.txt', 'a') as file:
+        file.write('\n'+ result_to_write)
+    traceBackCount = 0
 
 def readHistorLineFromFile():
     global traceBackCount, historyLine, user_id
@@ -382,7 +369,6 @@ class History:
         self.histoyText = font.render(historyLine.getvalue(), True, '#2B95D1')
         self.LEFT_BUTTON = Button(pos=(screen.get_width() / 4, screen.get_height() / 4 * 3), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
         self.RIGHT_BUTTON = Button(pos=(screen.get_width() / 4 * 3, screen.get_height() / 4 * 3), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
-        self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
     
     def draw(self, mouse_pos):
         screen.blit(self.image, (0, 0))
@@ -402,7 +388,6 @@ class History:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 return MenuClass()
-    #def traceBack():
 
 
 #Màn hình cài đặt âm lượng
