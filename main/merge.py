@@ -92,7 +92,7 @@ def update_account(usr_id, money):
 
 def show_fps(screen, clock):
     # Tạo font chữ
-    font = pygame.font.Font(None, 30)
+    font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 30)
     # Tính toán FPS
     fps = str(int(clock.get_fps()))
     # Tạo text surface
@@ -132,7 +132,7 @@ def flappy_bird():
     #Điểm. Sẽ reset khi nhấn nút chơi lại
     score = 0
     #Load font. Sau này chỉnh sửa chỗ này lại cho dùng font mình
-    fontend = pygame.font.SysFont('sans', 50)
+    fontend = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 40)
     # Các biến thông báo chim vượt qua ống hay chưa
     tube1_pass = False
     tube2_pass = False
@@ -145,7 +145,7 @@ def flappy_bird():
     check = 0
     
     while running:
-        global user_id, user_money,present_volume
+        global user_id, user_money,present_volume, outOfMoney
         #pygame.mixer.music.pause()
         #clock.tick(60) đã được quy định. Có thể xóa dòng này
         clock.tick(120)
@@ -260,6 +260,10 @@ def flappy_bird():
                     hit_sound.set_volume(VOLUME[VOLUME_INDEX])
                     hit_sound.play()
                     dem = 1
+                    if outOfMoney == True and user_money >= 500:
+                        outOfMoney = False
+                        if outOfMoney:
+                            Nuff_man_GoBackandBetMTF()
                 game_over_txt = fontend.render("Game over, score: " + str(score), True, BLACK)
                 screen.blit(game_over_txt, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 170)))
                 money_receiver = fontend.render("the money you get: " + str(score * 10), True, BLACK)
@@ -705,11 +709,13 @@ class Character():
                 user_money += 3* bet_money
                 if user_money < 0:
                     user_money = 0
+                WriteHistory()
                 update_account(user_id, user_money)
             else:
                 doesWin = 0
                 if user_money < 0:
                     user_money = 0
+                WriteHistory()
                 update_account(user_id, user_money)
 
     def update(self):
