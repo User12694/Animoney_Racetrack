@@ -32,6 +32,7 @@ list_charImage = [] # Lưu trữ lại giá trị của list_image_load
 money_choice = 0
 bet_money = 0
 bua_money = 0
+outOfMoney = False
 # store 5 characters
 CHARACTERS = []
 LUCKYBOX = []
@@ -266,6 +267,7 @@ def flappy_bird():
                     pygame.draw.rect(screen, old_red,
                                      (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
                 screen.blit(back_button, (x_back_button + 10, y_back_button))
+        global user_money
         # Nền hoạt động chính của game. Chú ý cái video resize
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -299,9 +301,12 @@ def flappy_bird():
                         check = 0
                         pausing = False
                     if run == False:
-                        run = True
-                        begin = True
-                        dem = 0
+                        if user_money >= 300:
+                            return Nuff_man_GoBackandBetMTF()
+                        else:
+                            run = True
+                            begin = True
+                            dem = 0
                     pygame.mixer.Sound(f'{subpath}/flappybird/sounds/wing.wav').play()
                     pygame.mixer.music.set_volume(present_volume)
                     bird_drop_velocity = 0
@@ -1641,54 +1646,145 @@ class Shop:
                     return MenuClass()
             if event.key == pygame.K_1:
                 if user_money < 300:
-                    self.show_insufficient_funds_message()
+                    return ShowInsufficientFundsMessage()
                 else:
                     CHARACTERS[choice - 1].NhanhNhen = True
                     bua_money = 300 # Gán giá tiền cho bùa
                     user_money -= bua_money
-                return MoneyBet()
+                    return MoneyBet()
             if event.key == pygame.K_2:
                 if user_money < 400:
-                    self.show_insufficient_funds_message()
+                    return ShowInsufficientFundsMessage()
                 else:
                     CHARACTERS[choice - 1].TroiHon = True
                     bua_money = 400 # Gán giá tiền cho bùa
                     user_money -= bua_money
-                return MoneyBet()
+                    return MoneyBet()
             if event.key == pygame.K_3:
                 if user_money < 500:
-                    self.show_insufficient_funds_message()
+                    return ShowInsufficientFundsMessage()
                 else:
                     CHARACTERS[choice - 1].PhanKhich = True
                     bua_money = 500 # Gán giá tiền cho bùa
                     user_money -= bua_money
-                return MoneyBet()
+                    return MoneyBet()
             if event.key == pygame.K_RETURN:
                 bua_money = 0
                 user_money -= bua_money
                 return MoneyBet()
             
         return self
-    def show_insufficient_funds_message(self):
-        messages = {
-            'ENG': "You don't have enough money. You can play Minigame to earn",
-            'VIE': "Bạn không đủ tiền để chơi. Bạn có thể chơi minigame để lấy thêm tiền"
-        }
+
+class ShowInsufficientFundsMessage:
+    '''Khởi tạo bốn đối tượng: Một cái màn hình đen, một cái frame, hai cái nút yes no
+    Draw chúng lên
+    Update: Nhấn vô hai nút : Yes thì chuyển sang Minigame, No thì chuyển về Shop
+    Sẽ dùng chung với class MoneyBet'''
+    def __init__(self):
+        self.cover_frame = pygame.surface.Surface(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.SRCALPHA)
+        self.cover_frame.fill((0,0,0,180))
+        self.yesButton = Button(pos=(screen.get_width() / 2, screen.get_height() * 0.65), imageNormal = "yes.png", imageChanged = "yes2.png") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
+        self.noButton = Button(pos=(screen.get_width() / 2, screen.get_height() * 0.8), imageNormal = "no.png", imageChanged = "no2.png") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
+    def draw(self, mouse_pos):
         spilt_text = []
+        messages = {
+            'ENG': """You don't have enough money.
+You can play Minigame to earn.
+Want to go to Minigame?""",
+            'VIE': """Bạn không đủ tiền để chơi.
+Bạn có thể chơi minigame để lấy thêm tiền.
+Bạn có muốn chuyển đến Minigame?"""
+        }
+        screen.blit(self.cover_frame,(0,0))
         for item in LANGUAGE:
             parts = item.split('/')
             spilt_text.append(parts[-3])
         if LANGUAGE_INDEX == 0:
             message = messages['ENG']
-            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
-            self.another_text = self.another_font.render(message, True, (255, 255, 255))
-            screen.blit(self.another_text, (10,10))
-        elif LANGUAGE_INDEX == 1:
-            message = messages[LANGUAGE_INDEX]
-            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 44)
             self.another_text = self.another_font.render(message, True, '#F97C04')
-            screen.blit(self.another_text, (10, 10))
+            lines = message.split('\n')
+            for i, line in enumerate(lines):
+                line_text = self.another_font.render(line, True, '#F97C04')
+                screen.blit(line_text, (screen_Width / 2 - screen_Width / 5, i*50 + screen_Height / 4))
+        elif LANGUAGE_INDEX == 1:
+            message = messages['VIE']
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 44)
+            self.another_text = self.another_font.render(message, True, '#F97C04')
+            lines = message.split('\n')
+            for i, line in enumerate(lines):
+                line_text = self.another_font.render(line, True, '#F97C04')
+                screen.blit(line_text, (screen_Width / 2 - screen_Width / 5, i*50 + screen_Height * 4))
+        self.yesButton.update(mouse_pos)
+        self.noButton.update(mouse_pos)
+    def update(self, event):
+        global outOfMoney
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                Back_To_Menu = Pause_Game()
+                if Back_To_Menu:
+                    return MenuClass()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.yesButton.CheckClick(pos):
+                outOfMoney = True
+                flappy_bird()
+            if self.noButton.CheckClick(pos):
+                return Shop()
+        return self
 
+class Nuff_man_GoBackandBetMTF:
+    def __init__(self):
+        self.cover_frame = pygame.surface.Surface(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.SRCALPHA)
+        self.cover_frame.fill((0,0,0,180))
+        self.yesButton = Button(pos=(screen.get_width() / 2, screen.get_height() * 0.65), imageNormal = "yes.png", imageChanged = "yes2.png") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
+        self.noButton = Button(pos=(screen.get_width() / 2, screen.get_height() * 0.8), imageNormal = "no.png", imageChanged = "no2.png") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
+    def draw(self, mouse_pos):
+        spilt_text = []
+        messages = {
+            'ENG': """You have enough money to make a bet.
+Wanna play?
+If choose No, you'll be directed to Menu""",
+            'VIE': """Bạn có đủ tiền chơi một lần rồi kìa.
+Muốn đặt cược không?
+Nếu chọn không, bạn sẽ được đưa về Menu chính"""
+        }
+        screen.blit(self.cover_frame,(0,0))
+        for item in LANGUAGE:
+            parts = item.split('/')
+            spilt_text.append(parts[-2])
+        if LANGUAGE_INDEX == 0:
+            message = messages['ENG']
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 44)
+            self.another_text = self.another_font.render(message, True, '#F97C04')
+            lines = message.split('\n')
+            for i, line in enumerate(lines):
+                line_text = self.another_font.render(line, True, '#F97C04')
+                screen.blit(line_text, (screen_Width / 2 - screen_Width / 5, i*50 + screen_Height / 4))
+        elif LANGUAGE_INDEX == 1:
+            message = messages['VIE']
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 44)
+            self.another_text = self.another_font.render(message, True, '#F97C04')
+            lines = message.split('\n')
+            for i, line in enumerate(lines):
+                line_text = self.another_font.render(line, True, '#F97C04')
+                screen.blit(line_text, (screen_Width / 2 - screen_Width / 5, i*50 + screen_Height * 4))
+        self.yesButton.update(mouse_pos)
+        self.noButton.update(mouse_pos)
+    def update(self, event):
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                Back_To_Menu = Pause_Game()
+                if Back_To_Menu:
+                    return MenuClass()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.yesButton.CheckClick(pos):
+                return MapSelection()
+            if self.noButton.CheckClick(pos):
+                return MenuClass()
+        return self
+        
 class MoneyBet: 
     global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_bet
     def draw(self, mouse_pos):
@@ -1714,31 +1810,11 @@ class MoneyBet:
                 money_choice = event.key - pygame.K_0
                 bet_money = bet_values[money_choice]
                 if user_money < bet_money:
-                    self.show_insufficient_funds_message()
+                    return ShowInsufficientFundsMessage()
                 else:
                     user_money -= bet_money
                     return Play()
         return self
-
-    def show_insufficient_funds_message(self):
-        messages = {
-            'ENG': "You don't have enough money. You can play Minigame to earn",
-            'VIE': "Bạn không đủ tiền để chơi. Bạn có thể chơi minigame để lấy thêm tiền"
-        }
-        spilt_text = []
-        for item in LANGUAGE:
-            parts = item.split('/')
-            spilt_text.append(parts[-3])
-        if LANGUAGE_INDEX == 0:
-            message = messages['ENG']
-            font = pygame.font.Font(None, 36)
-            text = font.render(message, True, (255, 255, 255))
-            screen.blit(text, (10,10))
-        elif LANGUAGE_INDEX == 1:
-            message = messages[LANGUAGE_INDEX]
-            font = pygame.font.Font(None, 36)
-            text = font.render(message, True, '#F97C04')
-            screen.blit(text, (10, 10))
 
         #pygame.display.flip()
 
@@ -1771,15 +1847,6 @@ def reset_game():
     gameSound = True
     countDownCheck = True
 
-def show_fps(screen, clock):
-    # Tạo font chữ
-    font = pygame.font.Font(None, 30)
-    # Tính toán FPS
-    fps = str(int(clock.get_fps()))
-    # Tạo text surface
-    text = font.render("FPS: " + fps, 1, pygame.Color("red"))
-    # Vẽ text surface lên màn hình
-    screen.blit(text, (0, 0))
 
 #Đây là main loop
 def main():
@@ -1799,6 +1866,5 @@ def main():
         mouse_pos = pygame.mouse.get_pos()
         current_class.draw(mouse_pos)  # Vẽ đối tượng hiện tại lên màn hình
         pygame.display.flip()  # Cập nhật toàn bộ cửa sổ
-        show_fps(screen, clock)
         clock.tick(60)  # Đảm bảo chương trình chạy không quá 60 khung hình/giây
 main()
