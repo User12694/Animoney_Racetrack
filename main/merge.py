@@ -343,7 +343,7 @@ def flappy_bird():
 ##############################################################
 
 
-def updateMoneyAndWriteHistory():
+def writeHistory():
     global traceBackCount, bet_money, user_money
     if doesWin:
         user_money += bet_money * 3 
@@ -373,8 +373,8 @@ class History:
         self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         self.historyText = font.render(historyLine.getvalue(), True, '#2B95D1')
-        self.LEFT_BUTTON = Button(pos=(screen.get_width() / 4, screen.get_height() / 4 * 3), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
-        self.RIGHT_BUTTON = Button(pos=(screen.get_width() / 4 * 3, screen.get_height() / 4 * 3), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
+        self.LEFT_BUTTON = Button(pos=(screen.get_width() * 0.29, screen.get_height() * 0.35), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
+        self.RIGHT_BUTTON = Button(pos=(screen.get_width() * 0.71, screen.get_height() * 0.35), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
     
     def draw(self, mouse_pos):
         screen.blit(self.image, (0, 0))
