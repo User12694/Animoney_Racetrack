@@ -324,15 +324,9 @@ def flappy_bird():
         pygame.mixer.music.play()
 ##############################################################
 
-class Money:
-    global user_money, user_id
-    global bet_money, bua_money
-    global historyLine
-    global traceBackCount
-    global doesWin
-    
-    def WriteHistory():
-        global traceBackCount
+
+def WriteHistory():
+        global traceBackCount, bet_money, user_id, historyLine, doesWin
         if doesWin:
             result = f'win +{bet_money * 3}'
         else:
@@ -344,26 +338,43 @@ class Money:
             file.write('\n'+ result_to_write)
         traceBackCount = 0
 
+def readHistorLineFromFile():
+    global traceBackCount, historyLine, user_id
+    with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
+        lines = file.readlines()
+        line_number = len(lines) - 1 - traceBackCount
+        if line_number < len(lines) and line_number >= 2:
+            historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
+            historyLine.seek(0) #trỏ vào đầu chuỗi đấy
+            historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
 
 class History:
     def __init__(self):
-        global traceBackCount, user_id, historyLine
         self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha
         self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         self.histoyText = font.render(historyLine.getvalue(), True, '#2B95D1')
         self.leftButton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToLeft.png')
-        self.rightBtton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToRight.png')
+        self.LEFT_BUTTON = Button(pos=(screen.get_width() / 4, screen.get_height() / 4 * 3), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
+        self.rightButton = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/buttonToRight.png')
+        self.RIGHT_BUTTON = Button(pos=(screen.get_width() / 4 * 3, screen.get_height() / 4 * 3), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
+        self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
+    
+    def draw(self, mouse_pos):
+        screen.blit(self.image, (0, 0))
+        self.LEFT_BUTTON.update(mouse_pos)
+        self.RIGHT_BUTTON.update(mouse_pos)
+    
+    def update(self, event):
+        global traceBackCount
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.LEFT_BUTTON.CheckClick(pos):
+                traceBackCount += 1
+                readHistorLineFromFile()
+            if self.RIGHT_BUTTON.CheckClick(pos) and traceBackCount > 0:
+                traceBackCount -= 1
+                readHistorLineFromFile()
 
-    def readHistorLineFromFile():
-        with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
-            lines = file.readlines()
-            line_number = len(lines) - 1 - traceBackCount
-            if line_number < len(lines) and line_number >= 2:
-                historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
-                historyLine.seek(0) #trỏ vào đầu chuỗi đấy
-                historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
-    #def buttonBack():
-    #def buttonNext():
     #def traceBack():
 
 
@@ -513,155 +524,155 @@ class Character():
                     self.image = pygame.image.load(CharsMap1[0][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap1[0][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 1:
                 if self.run:
                     self.image = pygame.image.load(CharsMap1[1][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap1[1][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 2:
                 if self.run:
                     self.image = pygame.image.load(CharsMap1[2][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap1[2][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 3:
                 if self.run:
                     self.image = pygame.image.load(CharsMap1[3][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap1[3][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 4:
                 if self.run:
                     self.image = pygame.image.load(CharsMap1[4][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap1[4][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
         elif self.map == 1:
             if self.number == 0:
                 if self.run:
                     self.image = pygame.image.load(CharsMap2[0][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap2[0][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 1:
                 if self.run:
                     self.image = pygame.image.load(CharsMap2[1][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap2[1][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 2:
                 if self.run:
                     self.image = pygame.image.load(CharsMap2[2][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap2[2][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 3:
                 if self.run:
                     self.image = pygame.image.load(CharsMap2[3][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap2[3][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 4:
                 if self.run:
                     self.image = pygame.image.load(CharsMap2[4][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap2[4][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
         elif self.map == 2:
             if self.number == 0:
                 if self.run:
                     self.image = pygame.image.load(CharsMap3[0][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap3[0][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 1:
                 if self.run:
                     self.image = pygame.image.load(CharsMap3[1][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap3[1][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 2:
                 if self.run:
                     self.image = pygame.image.load(CharsMap3[2][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap3[2][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 3:
                 if self.run:
                     self.image = pygame.image.load(CharsMap3[3][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap3[3][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 4:
                 if self.run:
                     self.image = pygame.image.load(CharsMap3[4][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap3[4][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
         elif self.map == 3:
             if self.number == 0:
                 if self.run:
                     self.image = pygame.image.load(CharsMap4[0][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap4[0][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 1:
                 if self.run:
                     self.image = pygame.image.load(CharsMap4[1][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap4[1][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 2:
                 if self.run:
                     self.image = pygame.image.load(CharsMap4[2][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap4[2][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 3:
                 if self.run:
                     self.image = pygame.image.load(CharsMap4[3][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap4[3][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 4:
                 if self.run:
                     self.image = pygame.image.load(CharsMap4[4][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap4[4][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
         elif self.map == 4:
             if self.number == 0:
                 if self.run:
                     self.image = pygame.image.load(CharsMap5[0][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap5[0][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 1:
                 if self.run:
                     self.image = pygame.image.load(CharsMap5[1][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap5[1][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 2:
                 if self.run:
                     self.image = pygame.image.load(CharsMap5[2][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap5[2][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 3:
                 if self.run:
                     self.image = pygame.image.load(CharsMap5[3][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap5[3][int(self.count_run)]).convert_alpha()
+                    self.image = self.original_image
             if self.number == 4:
                 if self.run:
                     self.image = pygame.image.load(CharsMap5[4][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = pygame.image.load(CharsMap5[4][int(self.count_run)]).convert_alpha()
+                    self.image = CharsMap5[4][int(self.count_run)]
 
 
     def move(self):
@@ -669,7 +680,7 @@ class Character():
             self.rect.x += self.speed
     #Check điều kiện thắng
     def checkFinishLine(self):
-        global list_image_load, doesWin
+        global list_image_load, doesWin, user_money, bet_money
         if self.rect.x > WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.95:
             if not self.Finish:
                 rank.append(self)
@@ -679,10 +690,15 @@ class Character():
         # Kiểm tra xem có chiến thắng hay không
             if list_image_load[0] == choice - 1:
                 doesWin = 1
-                
+                user_money += 3* bet_money
+                if user_money < 0:
+                    user_money = 0
+                update_account(user_id, user_money)
             else:
                 doesWin = 0
-            
+                if user_money < 0:
+                    user_money = 0
+                update_account(user_id, user_money)
 
     def update(self):
         global choice
@@ -1108,13 +1124,10 @@ class Result:
         else:
             self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/lose{bet_money}.png').convert_alpha()
             self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
-        self.continueButton = pygame.image.load(f"{LANGUAGE[LANGUAGE_INDEX]}/continue.png").convert_alpha()
-        self.continueButton = pygame.transform.smoothscale(self.continueButton, (WINDOW_SIZES[WINDOW_SIZE_INDEX][0]*0.1,WINDOW_SIZES[WINDOW_SIZE_INDEX][1]*0.1))
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
 
     def draw(self, mouse_pos):
         screen.blit(self.image,(0,0))
-        screen.blit(self.continueButton,((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] //2- self.continueButton.get_width() // 2), (WINDOW_SIZES[WINDOW_SIZE_INDEX][1] //16* 14)))
         self.CONTINUE_BUTTON.update(mouse_pos)
     def update(self, event):
         pos = pygame.mouse.get_pos()
@@ -1122,7 +1135,8 @@ class Result:
             if self.CONTINUE_BUTTON.CheckClick(pos):
                 return MenuClass()
         return self
-
+def update_money(user_info, user_money):
+    pass
 
 #Biến được sử dụng
 InitGame = False
@@ -1626,25 +1640,54 @@ class Shop:
                     InitGame = False
                     return MenuClass()
             if event.key == pygame.K_1:
-                CHARACTERS[choice - 1].NhanhNhen = True
-                bua_money = 300 # Gán giá tiền cho bùa
-                user_money -= bua_money
+                if user_money < 300:
+                    self.show_insufficient_funds_message()
+                else:
+                    CHARACTERS[choice - 1].NhanhNhen = True
+                    bua_money = 300 # Gán giá tiền cho bùa
+                    user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_2:
-                CHARACTERS[choice - 1].TroiHon = True
-                bua_money = 400 # Gán giá tiền cho bùa
-                user_money -= bua_money
+                if user_money < 400:
+                    self.show_insufficient_funds_message()
+                else:
+                    CHARACTERS[choice - 1].TroiHon = True
+                    bua_money = 400 # Gán giá tiền cho bùa
+                    user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_3:
-                CHARACTERS[choice - 1].PhanKhich = True
-                bua_money = 500 # Gán giá tiền cho bùa
-                user_money -= bua_money
+                if user_money < 500:
+                    self.show_insufficient_funds_message()
+                else:
+                    CHARACTERS[choice - 1].PhanKhich = True
+                    bua_money = 500 # Gán giá tiền cho bùa
+                    user_money -= bua_money
                 return MoneyBet()
             if event.key == pygame.K_RETURN:
                 bua_money = 0
                 user_money -= bua_money
                 return MoneyBet()
+            
         return self
+    def show_insufficient_funds_message(self):
+        messages = {
+            'ENG': "You don't have enough money. You can play Minigame to earn",
+            'VIE': "Bạn không đủ tiền để chơi. Bạn có thể chơi minigame để lấy thêm tiền"
+        }
+        spilt_text = []
+        for item in LANGUAGE:
+            parts = item.split('/')
+            spilt_text.append(parts[-3])
+        if LANGUAGE_INDEX == 0:
+            message = messages['ENG']
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+            self.another_text = self.another_font.render(message, True, (255, 255, 255))
+            screen.blit(self.another_text, (10,10))
+        elif LANGUAGE_INDEX == 1:
+            message = messages[LANGUAGE_INDEX]
+            self.another_font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+            self.another_text = self.another_font.render(message, True, '#F97C04')
+            screen.blit(self.another_text, (10, 10))
 
 class MoneyBet: 
     global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_bet
