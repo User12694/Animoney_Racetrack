@@ -314,7 +314,9 @@ def flappy_bird():
                         run = True
                         begin = True
                         dem = 0
-                    pygame.mixer.Sound(f'{subpath}/flappybird/sounds/wing.wav').play()
+                    wing_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/wing.wav')
+                    wing_sound.set_volume(VOLUME[VOLUME_INDEX])
+                    wing_sound.play()
                     pygame.mixer.music.set_volume(present_volume)
                     bird_drop_velocity = 0
                     bird_drop_velocity -= screen_Height/80
@@ -337,7 +339,7 @@ def flappy_bird():
 ##############################################################
 
 
-def WriteHistory():
+def writeHistory():
     global traceBackCount, bet_money, user_money
     if doesWin:
         user_money += bet_money * 3 
@@ -392,10 +394,6 @@ class History:
         return self
 
 
-#Màn hình cài đặt âm lượng
-VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-VOLUME_INDEX = 4
-present_volume = VOLUME[VOLUME_INDEX]
 MenuSound = False
 gameSound = False
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
@@ -1149,8 +1147,6 @@ class Result:
             if self.CONTINUE_BUTTON.CheckClick(pos):
                 return MenuClass()
         return self
-def update_money(user_info, user_money):
-    pass
 
 #Biến được sử dụng
 InitGame = False
