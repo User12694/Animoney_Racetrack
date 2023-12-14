@@ -9,6 +9,7 @@ import re
 
 # Luôn đặt cửa sổ xuất hiện từ góc trái màn hình
 pygame.init()
+pygame.font.init()
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
@@ -25,7 +26,7 @@ money_bet_list = [200,500,1000]
 #Các biến cần dùng
 user_id = LoginSignup1.user_id
 user_pwd = ''
-historyLine = StringIO() # một dòng cần xem của history
+historyLine = StringIO() # một dòng cần xem của history. K phải cái này r
 traceBackCount = 0
 user_money = int(LoginSignup1.user_money)
 set_choice = 1
@@ -65,7 +66,7 @@ screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZAB
 pygame.display.set_caption('Flappy Bird')
 running = True
 # Phông chữ :
-font = pygame.font.SysFont("comicsansms", int(screen_Width / screen_Width * 32))
+font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 32))
 text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
 menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
 
@@ -351,37 +352,45 @@ def writeHistory():
     else:
         user_money -= bet_money
         result = f'lose -{bet_money}'
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    current_time = datetime.now()
+    current_time = current_time.replace(microsecond=0)
+    current_time = current_time.strftime('%Y/%m/%d %H:%M:%S')
     result_to_write = f"{current_time}: {user_id} {result}, balance: {user_money}"
 
     with open(f'./assets/player/{user_id}/{user_id}.txt', 'a') as file:
         file.write('\n'+ result_to_write)
     traceBackCount = 0
+    # Ở câu lệnh này, khi trả ra một dòng mới kèm dấu Enter, nếu là dòng đầu tiên, thì history mới sẽ bị đẩy xuống dòng thứ 3
 
 def readHistorLineFromFile():
     global traceBackCount, historyLine, user_id
     with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
         lines = file.readlines()
         line_number = len(lines) - 1 - traceBackCount
-        if line_number < len(lines) and line_number >= 2:
-            historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
-            historyLine.seek(0) #trỏ vào đầu chuỗi đấy
-            historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
+        for i in range (line_number + 1):
+            if line_number < len(lines) and line_number >= 3:
+                historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
+                historyLine.seek(0) #trỏ vào đầu chuỗi đấy
+                historyLine.write(lines[i]) #viết mới vào biến đệm str historyline
+
+    # Không có trả về text nên k hiển thị
 
 class History:
     def __init__(self):
+        global historyLine
+
         self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
-        self.historyText = font.render(historyLine.getvalue(), True, '#2B95D1')
+        self.historyText = font.render(historyLine.getvalue(), True, 'white') 
         self.LEFT_BUTTON = Button(pos=(screen.get_width() * 0.29, screen.get_height() * 0.35), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
         self.RIGHT_BUTTON = Button(pos=(screen.get_width() * 0.71, screen.get_height() * 0.35), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
-    
+        self.back_button = Button(pos=(screen.get_width() / 2 * 1.05 , screen.get_height() * 0.65), imageNormal = "back.png", imageChanged = "back2.png")
     def draw(self, mouse_pos):
         screen.blit(self.image, (0, 0))
-        screen.blit(self.historyText, (screen.get_width() / 3, screen.get_height() / 3))
         self.LEFT_BUTTON.update(mouse_pos)
         self.RIGHT_BUTTON.update(mouse_pos)
-    
+        screen.blit(self.historyText, (screen.get_width() / 3, screen.get_height() / 3))
+
     def update(self, event):
         global traceBackCount
         pos = pygame.mouse.get_pos()
@@ -704,19 +713,7 @@ class Character():
                 self.run = False
                 self.Finish = True
         # Kiểm tra xem có chiến thắng hay không
-            if list_image_load[0] == choice - 1:
-                doesWin = 1
-                user_money += 3* bet_money
-                if user_money < 0:
-                    user_money = 0
-                WriteHistory()
-                update_account(user_id, user_money)
-            else:
-                doesWin = 0
-                if user_money < 0:
-                    user_money = 0
-                WriteHistory()
-                update_account(user_id, user_money)
+
 
     def update(self):
         global choice
@@ -1105,7 +1102,7 @@ class Congratulations:
 
     # Cập nhật các trạng thái của thuộc tính
     def update(self, event):
-        global MenuSound, gameSound, InitGame
+        global MenuSound, gameSound, InitGame, user_id, user_money, doesWin
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
                 pygame.quit()
@@ -1119,6 +1116,17 @@ class Congratulations:
         if event.type == pygame.MOUSEBUTTONDOWN:
         #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.CONTINUE_BUTTON.CheckClick(pos):
+                if doesWin == 1:
+                    user_money += 3* bet_money
+                    if user_money < 0:
+                        user_money = 0
+                    update_account(user_id, user_money)
+                    writeHistory()
+                else:
+                    if user_money < 0:
+                        user_money = 0
+                    update_account(user_id, user_money)
+                    writeHistory()
                 return Result()
                 '''if QuitConfirm():
                     InitGame = False
@@ -1167,7 +1175,7 @@ class Play:
         self.CheckPass = False #Check xem 5 nv có về đích chưa
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
-        global VOLUME_INDEX, present_volume, countDownCheck, gameSound, set_choice, MAP_INDEX
+        global VOLUME_INDEX, present_volume, countDownCheck, gameSound, set_choice, MAP_INDEX, user_id, user_money, doesWin
         #Ảnh nền
         MAP_INDEX = set_choice - 1
         if MAP_INDEX == set_choice - 1 :
@@ -1201,6 +1209,17 @@ class Play:
         #Check xong game
         if FinishLine_Pass():
             self.CheckPass = True
+            if list_image_load[0] == choice - 1:
+                doesWin = 1
+                user_money += 3* bet_money
+                if user_money < 0:
+                    user_money = 0
+                update_account(user_id, user_money)
+            else:
+                doesWin = 0
+                if user_money < 0:
+                    user_money = 0
+                update_account(user_id, user_money)
         
         # Vẽ trạng thái tiền vs user ID
         update_account(user_id, user_money)
@@ -1646,7 +1665,7 @@ class Shop:
         DrawInfo()
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, choice, bua_money, user_money
+        global InitGame, choice, bua_money, user_money, bet_money
         if not InitGame:
             init_character_luckybox()
             InitGame = True
@@ -1810,7 +1829,7 @@ class MoneyBet:
         DrawInfo()
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_choice
+        global InitGame, MAP_INDEX, set_choice, choice, bet_money,bua_money, user_money, money_choice
         bet_values = {1: 200, 2: 500, 3: 1000}
         if event.type == pygame.QUIT:
                 pygame.quit()
@@ -1869,11 +1888,12 @@ def reset_game():
 
 #Đây là main loop
 def main():
-    global login_lock, list_image_load
+    global login_lock, list_image_load,historyLine
     if not login_lock:
         pygame.quit()
         sys.exit()
     #Lớp phủ xuất hiện đầu tiên chính là màn hình cài đặt
+    print(historyLine.read())
     current_class = MenuClass()
     #Vòng lặp chính
     while True:  # Vòng lặp vô hạn, chương trình sẽ chạy cho đến khi có sự kiện thoát
