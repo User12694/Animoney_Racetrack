@@ -983,6 +983,7 @@ def DrawInfo():
 class MenuClass: 
     #Khởi tạo các thuộc tính
     def __init__(self):
+        reset_game()
         global VOLUME_INDEX, present_volume
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.95), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
