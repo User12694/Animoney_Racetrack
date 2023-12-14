@@ -1112,13 +1112,10 @@ class Result:
         else:
             self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/lose{bet_money}.png').convert_alpha()
             self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
-        self.continueButton = pygame.image.load(f"{LANGUAGE[LANGUAGE_INDEX]}/continue.png").convert_alpha()
-        self.continueButton = pygame.transform.smoothscale(self.continueButton, (WINDOW_SIZES[WINDOW_SIZE_INDEX][0]*0.1,WINDOW_SIZES[WINDOW_SIZE_INDEX][1]*0.1))
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
 
     def draw(self, mouse_pos):
         screen.blit(self.image,(0,0))
-        screen.blit(self.continueButton,((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] //2- self.continueButton.get_width() // 2), (WINDOW_SIZES[WINDOW_SIZE_INDEX][1] //16* 14)))
         self.CONTINUE_BUTTON.update(mouse_pos)
     def update(self, event):
         pos = pygame.mouse.get_pos()
