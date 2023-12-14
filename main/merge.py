@@ -370,21 +370,43 @@ class Money:
             file.write('\n'+ result_to_write)
         traceBackCount = 0
 
-    def updateMuaBuaMoney():
-        user_money -= bua_money
+def readHistorLineFromFile():
+    global traceBackCount, historyLine, user_id
+    with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
+        lines = file.readlines()
+        line_number = len(lines) - 1 - traceBackCount
+        if line_number < len(lines) and line_number >= 2:
+            historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
+            historyLine.seek(0) #trỏ vào đầu chuỗi đấy
+            historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
 
 class History:
-    global traceBackCount, user_id, historyLine
-    def readHistorLineFromFile():
-        with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
-            lines = file.readlines()
-            line_number = len(lines) - 1 - traceBackCount
-            if line_number < len(lines) and line_number >= 2:
-                historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
-                historyLine.seek(0) #trỏ vào đầu chuỗi đấy
-                historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
-    #def buttonBack():
-    #def buttonNext():
+    def __init__(self):
+        self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha
+        self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        self.histoyText = font.render(historyLine.getvalue(), True, '#2B95D1')
+        self.LEFT_BUTTON = Button(pos=(screen.get_width() / 4, screen.get_height() / 4 * 3), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
+        self.RIGHT_BUTTON = Button(pos=(screen.get_width() / 4 * 3, screen.get_height() / 4 * 3), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
+        self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
+    
+    def draw(self, mouse_pos):
+        screen.blit(self.image, (0, 0))
+        self.LEFT_BUTTON.update(mouse_pos)
+        self.RIGHT_BUTTON.update(mouse_pos)
+    
+    def update(self, event):
+        global traceBackCount
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.LEFT_BUTTON.CheckClick(pos):
+                traceBackCount += 1
+                readHistorLineFromFile()
+            if self.RIGHT_BUTTON.CheckClick(pos) and traceBackCount > 0:
+                traceBackCount -= 1
+                readHistorLineFromFile()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                return MenuClass()
     #def traceBack():
 
 
