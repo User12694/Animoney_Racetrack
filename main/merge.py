@@ -62,6 +62,7 @@ WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
 screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
+screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1]
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 pygame.display.set_caption('Flappy Bird')
 running = True
@@ -266,13 +267,13 @@ def flappy_bird():
                         if outOfMoney:
                             Nuff_man_GoBackandBetMTF()
                 game_over_txt = fontend.render("Game over, score: " + str(score), True, BLACK)
-                screen.blit(game_over_txt, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 170)))
-                money_receiver = fontend.render("the money you get: " + str(score * 10), True, BLACK)
-                screen.blit(money_receiver, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 270)))
+                screen.blit(game_over_txt, (screen_Width / (screen_Width / 850), screen_Height / (screen_Height / 170)))
+                money_receiver = fontend.render("The money you get: " + str(score * 5), True, BLACK)
+                screen.blit(money_receiver, (screen_Width / (screen_Width / 850), screen_Height / (screen_Height / 270)))
                 press_space_txt = fontend.render("Press Space to Play again", True, BLACK)
-                screen.blit(press_space_txt, (screen_Width / (screen_Width / 750), screen_Height / (screen_Height / 370)))
+                screen.blit(press_space_txt, (screen_Width / (screen_Width / 850), screen_Height / (screen_Height / 370)))
                 if check == 0:
-                    user_money += (score * 10)
+                    user_money += (score * 5)
                     update_account(user_id, user_money)
                     check = 1
                 if x_back_button + width > mouse[0] > x_back_button and y_back_button + height > mouse[
@@ -293,8 +294,8 @@ def flappy_bird():
                 screen_Width, screen_Height = event.size
                 screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
                 #Sửa vị trí
-                text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 28)) # Thay thế bằng font của ta
-                menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
+                text_Font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 28)) # Thay thế bằng font của ta
+                menu_Font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 45))
                 font = pygame.font.SysFont("SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 32))
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -1170,9 +1171,9 @@ class Result:
 def take_screenshot():
     now = datetime.now()
     now = now.replace(microsecond=0)
-    now = now.strftime('%d-%m-%y %H %M %S')
+    now = now.strftime('%d-%m-%y_%H_%M_%S')
     screenshot_title = "Screenshot " + now
-    pygame.image.save(screen, f"./assets/screenshots/{screenshot_title}.png")
+    pygame.image.save(screen, f"./screenshots/{screenshot_title}.png")
 #Biến được sử dụng
 InitGame = False
 rankSound = False
@@ -1222,15 +1223,8 @@ class Play:
             self.CheckPass = True
             if list_image_load[0] == choice - 1:
                 doesWin = 1
-                user_money += 3* bet_money
-                if user_money < 0:
-                    user_money = 0
-                update_account(user_id, user_money)
             else:
                 doesWin = 0
-                if user_money < 0:
-                    user_money = 0
-                update_account(user_id, user_money)
         
         # Vẽ trạng thái tiền vs user ID
         update_account(user_id, user_money)
@@ -1345,12 +1339,12 @@ def DrawInfo():
     font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
     update_account(user_id, user_money)
     # Render thông tin user_id và user_money
-    text_id = font.render(user_id, True, '#2B95D1')
-    text_money = font.render(str(user_money), True, '#2B95D1')
+    text_id = font.render(user_id, True, '#E36414')
+    text_money = font.render(str(user_money), True, '#E36414')
 
     # Hiển thị thông tin lên hình chữ nhật
     screen.blit(image,(0,0))
-    screen.blit(text_id, (40, 0))
+    screen.blit(text_id, (40, 10))
     screen.blit(text_money, (40, 60))
 
 
