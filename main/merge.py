@@ -62,7 +62,7 @@ WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
 screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
-screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1]
+screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 pygame.display.set_caption('Flappy Bird')
 running = True
@@ -348,10 +348,8 @@ def flappy_bird():
 def writeHistory():
     global traceBackCount, bet_money, user_money
     if doesWin:
-        user_money += bet_money * 3 
         result = f"win +{bet_money * 3}"
     else:
-        user_money -= bet_money
         result = f'lose -{bet_money}'
     current_time = datetime.now()
     current_time = current_time.replace(microsecond=0)
@@ -1120,7 +1118,6 @@ class Congratulations:
         #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.CONTINUE_BUTTON.CheckClick(pos):
                 if doesWin == 1:
-                    user_money += 3* bet_money
                     if user_money < 0:
                         user_money = 0
                     update_account(user_id, user_money)
@@ -1559,7 +1556,7 @@ class WindowModeSettingClass:
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global halfScreen_active, screen
+        global halfScreen_active, screen, WINDOW_SIZE_INDEX, SCREEN_SIZE_INDEX
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
@@ -1568,6 +1565,8 @@ class WindowModeSettingClass:
             if self.fullScreenButton.CheckClick(pos):
                 halfScreen_active = not halfScreen_active
                 WINDOW_SIZE_INDEX = 0
+                if WINDOW_SIZE_INDEX == 0:
+                    screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
                 SCREEN_SIZE_INDEX = 0
                 return self
             elif self.halfScreenButton.CheckClick(pos):
@@ -1682,7 +1681,7 @@ class Shop:
                 Back_To_Menu = Pause_Game()
                 if Back_To_Menu:
                     InitGame = False
-                    user_money =user_money + bua_money + bet_money
+                    user_money =user_money + bua_money
                     update_account(user_id, user_money)
                     bua_money = 0
                     bet_money = 0
