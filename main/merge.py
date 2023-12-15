@@ -699,7 +699,7 @@ class Character():
                     self.image = pygame.image.load(CharsMap5[4][int(self.count_run)]).convert_alpha()
                     self.count_run += 0.1
                 else:
-                    self.image = CharsMap5[4][int(self.count_run)]
+                    self.image = self.original_image
 
 
     def move(self):
