@@ -26,7 +26,7 @@ money_bet_list = [200,500,1000]
 #Các biến cần dùng
 user_id = LoginSignup1.user_id
 user_pwd = ''
-historyLine = StringIO() # một dòng cần xem của history. K phải cái này r
+historyLine = StringIO() 
 traceBackCount = 0
 user_money = int(LoginSignup1.user_money)
 set_choice = 1
@@ -367,11 +367,10 @@ def readHistorLineFromFile():
     with open(f'./assets/player/{user_id}/{user_id}.txt', 'r') as file:
         lines = file.readlines()
         line_number = len(lines) - 1 - traceBackCount
-        for i in range (line_number + 1):
-            if line_number < len(lines) and line_number >= 3:
-                historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
-                historyLine.seek(0) #trỏ vào đầu chuỗi đấy
-                historyLine.write(lines[i]) #viết mới vào biến đệm str historyline
+        if line_number < len(lines) and line_number >= 2:
+            historyLine.truncate(0) #cắt ngắn hết ký tự ở historyline
+            historyLine.seek(0) #trỏ vào đầu chuỗi đấy
+            historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
 
     # Không có trả về text nên k hiển thị
 
@@ -381,14 +380,17 @@ class History:
 
         self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
-        self.historyText = font.render(historyLine.getvalue(), True, 'white') 
+        readHistorLineFromFile()
+        self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
         self.LEFT_BUTTON = Button(pos=(screen.get_width() * 0.29, screen.get_height() * 0.35), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
         self.RIGHT_BUTTON = Button(pos=(screen.get_width() * 0.71, screen.get_height() * 0.35), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
         self.back_button = Button(pos=(screen.get_width() / 2 * 1.05 , screen.get_height() * 0.65), imageNormal = "back.png", imageChanged = "back2.png")
     def draw(self, mouse_pos):
+        global historyLine
         screen.blit(self.image, (0, 0))
         self.LEFT_BUTTON.update(mouse_pos)
         self.RIGHT_BUTTON.update(mouse_pos)
+        self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
         screen.blit(self.historyText, (screen.get_width() / 3, screen.get_height() / 3))
 
     def update(self, event):
