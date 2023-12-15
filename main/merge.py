@@ -5,23 +5,21 @@ from io import StringIO
 from LoginSignup1 import *
 from flappybird import minigame
 import re
-#Khởi tạo các thứ
-
-# Luôn đặt cửa sổ xuất hiện từ góc trái màn hình
+# LKhởi tạo các thứ
 pygame.init()
 pygame.font.init()
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
-
-VOLUME = [0,0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-VOLUME_INDEX = 0
+VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+VOLUME_INDEX = 4
 present_volume = VOLUME[VOLUME_INDEX]
 # Đường dẫn đén file thông tin người chơi
 account_sub_path = './assets/player/'
 #Ngôn ngữ
 LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
 LANGUAGE_INDEX = 0
+
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
 user_id = LoginSignup1.user_id
@@ -36,6 +34,7 @@ list_charImage = [] # Lưu trữ lại giá trị của list_image_load
 money_choice = 0
 bet_money = 0
 bua_money = 0
+total_money = 0
 outOfMoney = False
 # store 5 characters
 CHARACTERS = []
@@ -62,7 +61,7 @@ WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
 screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
-screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1]
+screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 pygame.display.set_caption('Flappy Bird')
 running = True
@@ -92,7 +91,7 @@ def update_account(usr_id, money):
         new_file.writelines(lines)
 
 
-def show_fps(screen, clock):
+'''def show_fps(screen, clock):
     # Tạo font chữ
     font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 30)
     # Tính toán FPS
@@ -100,7 +99,7 @@ def show_fps(screen, clock):
     # Tạo text surface
     text = font.render("FPS: " + fps, 1, pygame.Color("red"))
     # Vẽ text surface lên màn hình
-    screen.blit(text, (0, 0))
+    screen.blit(text, (0, 0))'''
 
 def flappy_bird():
     #Khai báo các thành phần toàn cục
@@ -111,7 +110,6 @@ def flappy_bird():
     # Màu đen 
     BLACK = (0, 0, 0)
     screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
-    clock = pygame.time.Clock()
     #Quy định các thành phần cục bộ: Chiều rộng ống, tốc độ của ống để di chuyển
     TUBE_WIDTH = int(screen_Width / 30)
     TUBE_VELOCITY = int(screen_Width / 250)
@@ -134,7 +132,7 @@ def flappy_bird():
     #Điểm. Sẽ reset khi nhấn nút chơi lại
     score = 0
     #Load font. Sau này chỉnh sửa chỗ này lại cho dùng font mình
-    fontend = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 40)
+    fontend = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
     # Các biến thông báo chim vượt qua ống hay chưa
     tube1_pass = False
     tube2_pass = False
@@ -149,9 +147,6 @@ def flappy_bird():
     while running:
         global user_id, user_money,present_volume, outOfMoney
         #pygame.mixer.music.pause()
-        #clock.tick(60) đã được quy định. Có thể xóa dòng này
-        clock.tick(120)
-        #Khởi tạo và vẽ ảnh lên màn hình
         background_image = pygame.image.load(f"{subpath}/flappybird/background.png").convert_alpha()
         background_image = pygame.transform.scale(background_image, (screen_Width, screen_Height))
         screen.blit(background_image, (0, 0))
@@ -267,11 +262,11 @@ def flappy_bird():
                         if outOfMoney:
                             Nuff_man_GoBackandBetMTF()
                 game_over_txt = fontend.render("Game over, score: " + str(score), True, BLACK)
-                screen.blit(game_over_txt, (screen_Width / (screen_Width / 850), screen_Height / (screen_Height / 170)))
+                screen.blit(game_over_txt, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 170)))
                 money_receiver = fontend.render("The money you get: " + str(score * 5), True, BLACK)
-                screen.blit(money_receiver, (screen_Width / (screen_Width / 850), screen_Height / (screen_Height / 270)))
+                screen.blit(money_receiver, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 270)))
                 press_space_txt = fontend.render("Press Space to Play again", True, BLACK)
-                screen.blit(press_space_txt, (screen_Width / (screen_Width / 850), screen_Height / (screen_Height / 370)))
+                screen.blit(press_space_txt, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 370)))
                 if check == 0:
                     user_money += (score * 5)
                     update_account(user_id, user_money)
@@ -284,6 +279,7 @@ def flappy_bird():
                     pygame.draw.rect(screen, old_red,
                                     (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
                 screen.blit(back_button, (x_back_button + 10, y_back_button))
+                update_account(user_id, user_money)
         # Nền hoạt động chính của game. Chú ý cái video resize
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -336,7 +332,6 @@ def flappy_bird():
                     pygame.mixer.music.play()
                     return 2
 
-        show_fps(screen, clock)
         pygame.display.flip()
         pygame.mixer.init()
         pygame.mixer.music.load(f'{subpath}/Sounds/nhac2.wav')
@@ -1864,7 +1859,7 @@ class MoneyBet:
 # Đây là hàm reset game
 def reset_game():
     global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
-    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos, doesWin
+    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos, doesWin, total_money
     file = './assets/sounds/mainmenu.mp3'
     pygame.init()
     pygame.mixer.init()
@@ -1874,6 +1869,7 @@ def reset_game():
     set_choice = 1
     choice = 0
     bet_money = 0
+    total_money = 0
     doesWin = 1
     CHARACTERS = []
     LUCKYBOX = []
@@ -1893,12 +1889,11 @@ def reset_game():
 
 #Đây là main loop
 def main():
-    global login_lock, list_image_load,historyLine
+    global login_lock, list_image_load,historyLine, screen
     if not login_lock:
         pygame.quit()
         sys.exit()
     #Lớp phủ xuất hiện đầu tiên chính là màn hình cài đặt
-    print(historyLine.read())
     current_class = MenuClass()
     #Vòng lặp chính
     while True:  # Vòng lặp vô hạn, chương trình sẽ chạy cho đến khi có sự kiện thoát
