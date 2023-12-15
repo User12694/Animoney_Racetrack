@@ -1168,7 +1168,7 @@ class Result:
 def take_screenshot():
     now = datetime.now()
     now = now.replace(microsecond=0)
-    now = now.strftime('%d/%m/%y %H:%M:%S')
+    now = now.strftime('%d-%m-%y %H %M %S')
     screenshot_title = "Screenshot " + now
     pygame.image.save(screen, f"./assets/screenshots/{screenshot_title}.png")
 #Biến được sử dụng
