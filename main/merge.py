@@ -66,7 +66,7 @@ screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZAB
 pygame.display.set_caption('Flappy Bird')
 running = True
 # Phông chữ :
-font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 32))
+font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", 32*screen_ratio)
 text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
 menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
 
