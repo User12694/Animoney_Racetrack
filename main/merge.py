@@ -66,7 +66,7 @@ screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZAB
 pygame.display.set_caption('Flappy Bird')
 running = True
 # Phông chữ :
-font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", 32*screen_ratio)
+font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(32*screen_ratio))
 text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
 menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
 
@@ -260,7 +260,7 @@ def flappy_bird():
                     if outOfMoney == True and user_money >= 500:
                         outOfMoney = False
                         if outOfMoney:
-                            Nuff_man_GoBackandBetMTF()
+                            return Nuff_man_GoBackandBetMTF()
                 game_over_txt = fontend.render("Game over, score: " + str(score), True, BLACK)
                 screen.blit(game_over_txt, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 170)))
                 money_receiver = fontend.render("The money you get: " + str(score * 5), True, BLACK)
