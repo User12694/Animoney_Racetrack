@@ -100,242 +100,237 @@ def update_account(usr_id, money):
     # Vẽ text surface lên màn hình
     screen.blit(text, (0, 0))'''
 
-def flappy_bird():
-    #Khai báo các thành phần toàn cục
-    global present_volume
-    global screen_Width, screen_Height, screen, text_Font, menu_Font, font, tube1_height, tube2_height, tube3_height
-    global user_id, user_money
-    running = True
-    # Màu đen 
-    BLACK = (0, 0, 0)
-    screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
-    #Quy định các thành phần cục bộ: Chiều rộng ống, tốc độ của ống để di chuyển
-    TUBE_WIDTH = int(screen_Width / 30)
-    TUBE_VELOCITY = int(screen_Width / 250)
-    TUBE_GAP = int(screen_Height * 23 / 80)
-    #Quy định các vị trí ống xuất hiện
-    tube1_x = int(screen_Width * 6 / 15)
-    tube2_x = int(screen_Width * 8 / 15)
-    tube3_x = int(screen_Width * 10 / 15)
-    # Quy định chiều cao spawn ống ngẫu nhiên
-    tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-    tube2_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-    tube3_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-    #Các quy định về tốc độ chim bay, vị trí của chim, trong lực
-    BIRD_X = screen_Width * 2 / 15
-    bird_y = screen_Height / (2)
-    BIRD_WIDTH = int(screen_Width * 7 / 300)
-    BIRD_HEIGHT = int(screen_Height * 7 / 300)
-    bird_drop_velocity = 0
-    GRAVITY = 0.7
-    #Điểm. Sẽ reset khi nhấn nút chơi lại
-    score = 0
-    #Load font. Sau này chỉnh sửa chỗ này lại cho dùng font mình
-    fontend = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
-    # Các biến thông báo chim vượt qua ống hay chưa
-    tube1_pass = False
-    tube2_pass = False
-    tube3_pass = False
+class FlappyBird:
+    def __init__(self):
+        global present_volume
+        global screen_Width, screen_Height, screen, text_Font, font
+        global user_id, user_money, rect_text
+        self.running = True
+        # Màu đen 
+        self.BLACK = (0, 0, 0)
+        self.screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
+        #Quy định các thành phần cục bộ: Chiều rộng ống, tốc độ của ống để di chuyển
+        self.TUBE_WIDTH = int(screen_Width / 30)
+        self.TUBE_VELOCITY = int(screen_Width / 250)
+        self.TUBE_GAP = int(screen_Height * 23 / 80)
+        #Quy định các vị trí ống xuất hiện
+        self.tube1_x = int(screen_Width * 6 / 15)
+        self.tube2_x = int(screen_Width * 8 / 15)
+        self.tube3_x = int(screen_Width * 10 / 15)
+        # Quy định chiều cao spawn ống ngẫu nhiên
+        self.tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
+        self.tube2_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
+        self.tube3_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
+        #Các quy định về tốc độ chim bay, vị trí của chim, trong lực
+        self.BIRD_X = screen_Width * 2 / 15
+        self.bird_y = screen_Height / (2)
+        self.BIRD_WIDTH = int(screen_Width * 7 / 300)
+        self.BIRD_HEIGHT = int(screen_Height * 7 / 300)
+        self.bird_drop_velocity = 0
+        self.GRAVITY = 0.7
+        #Điểm. Sẽ reset khi nhấn nút chơi lại
+        self.score = 0
+        #Load font. Sau này chỉnh sửa chỗ này lại cho dùng font mình
+        self.fontend = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+        # Các biến thông báo chim vượt qua ống hay chưa
+        self.tube1_pass = False
+        self.tube2_pass = False
+        self.tube3_pass = False
 
-    pausing = False
-    run = False
-    begin = False
-    dem = 0
-    check = 0
-    
-    while running:
-        global user_id, user_money,present_volume, outOfMoney
-        #pygame.mixer.music.pause()
-        background_image = pygame.image.load(f"{subpath}/flappybird/background.png").convert_alpha()
-        background_image = pygame.transform.scale(background_image, (screen_Width, screen_Height))
-        screen.blit(background_image, (0, 0))
-        
+        self.pausing = False
+        self.run = False
+        self.begin = False
+        self.dem = 0
+        self.check = 0
+
+    def draw(self, mouse_pos):
+        global present_volume
+        global screen_Width, screen_Height, screen, text_Font, font
+        global user_id, user_money, rect_text        #pygame.mixer.music.pause()
+        self.background_image = pygame.image.load(f"{subpath}/flappybird/background.png").convert_alpha()
+        self.background_image = pygame.transform.scale(self.background_image, (screen_Width, screen_Height))
+        self.screen.blit(self.background_image, (0, 0))
+       
         #Load các thông số người chơi: ID, money
-        user_info = text_Font.render('ID: ' + user_id, True, black)
-        money_info = text_Font.render('Money: ' + str(user_money), True, black)
+        self.user_info = text_Font.render('ID: ' + user_id, True, black)
+        self.money_info = text_Font.render('Money: ' + str(user_money), True, black)
         #Tạo nút back có text màu trăng
-        back_button = font.render('Back', True, black)
+        self.back_button = font.render('Back', True, black)
         #Viết thông tin ID và số tiền. Hiện tại k lấy đc
-        screen.blit(user_info, (screen_Width - user_info.get_width() - money_info.get_width() - 40, 10))
-        screen.blit(money_info,
-                    (screen_Width - money_info.get_width() - screen_Width / (screen_Width / 20), screen_Height / (screen_Height / 10)))
-        bird_image = pygame.image.load(f"{subpath}/flappybird/bird.png").convert_alpha()
-        bird_image = pygame.transform.scale(bird_image, (BIRD_WIDTH, BIRD_HEIGHT))
-        base_image = pygame.image.load(f"{subpath}/flappybird/base.png").convert_alpha()
-        base_image = pygame.transform.scale(base_image, (screen_Width, screen_Height // 4))
-
-        tube_image1 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
-        tube_image1 = pygame.transform.scale(tube_image1, (TUBE_WIDTH, tube1_height))
-        tube_inv_image1 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
-        tube_inv_image1 = pygame.transform.scale(tube_inv_image1, (TUBE_WIDTH, screen_Height - tube1_height - TUBE_GAP))
-
-        tube_image2 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
-        tube_image2 = pygame.transform.scale(tube_image2, (TUBE_WIDTH, tube2_height))
-        tube_inv_image2 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
-        tube_inv_image2 = pygame.transform.scale(tube_inv_image2, (TUBE_WIDTH, screen_Height - tube2_height - TUBE_GAP))
-
-        tube_image3 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
-        tube_image3 = pygame.transform.scale(tube_image3, (TUBE_WIDTH, tube3_height))
-        tube_inv_image3 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
-        tube_inv_image3 = pygame.transform.scale(tube_inv_image3, (TUBE_WIDTH, screen_Height - tube3_height - TUBE_GAP))
-
+        self.screen.blit(self.user_info, (screen_Width - self.user_info.get_width() - self.money_info.get_width() - 40, 10))
+        self.screen.blit(self.money_info,
+                    (screen_Width - self.money_info.get_width() - screen_Width / (screen_Width / 20), screen_Height / (screen_Height / 10)))
+        self.bird_image = pygame.image.load(f"{subpath}/flappybird/bird.png").convert_alpha()
+        self.bird_image = pygame.transform.scale(self.bird_image, (self.BIRD_WIDTH, self.BIRD_HEIGHT))
+        self.base_image = pygame.image.load(f"{subpath}/flappybird/base.png").convert_alpha()
+        self.base_image = pygame.transform.scale(self.base_image, (screen_Width, screen_Height // 4))
+        self.tube_image1 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
+        self.tube_image1 = pygame.transform.scale(self.tube_image1, (self.TUBE_WIDTH, self.tube1_height))
+        self.tube_inv_image1 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
+        self.tube_inv_image1 = pygame.transform.scale(self.tube_inv_image1, (self.TUBE_WIDTH, screen_Height - self.tube1_height - self.TUBE_GAP))
+        self.tube_image2 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
+        self.tube_image2 = pygame.transform.scale(self.tube_image2, (self.TUBE_WIDTH, self.tube2_height))
+        self.tube_inv_image2 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
+        self.tube_inv_image2 = pygame.transform.scale(self.tube_inv_image2, (self.TUBE_WIDTH, screen_Height - self.tube2_height - self.TUBE_GAP))
+        self.tube_image3 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
+        self.tube_image3 = pygame.transform.scale(self.tube_image3, (self.TUBE_WIDTH, self.tube3_height))
+        self.tube_inv_image3 = pygame.image.load(f"{subpath}/flappybird/pipe2.png").convert_alpha()
+        self.tube_inv_image3 = pygame.transform.scale(self.tube_inv_image3, (self.TUBE_WIDTH, screen_Height - self.tube3_height - self.TUBE_GAP))
         # Draw tube
-        tube1_rect = screen.blit(tube_image1, (tube1_x, 0))
-        tube2_rect = screen.blit(tube_image2, (tube2_x, 0))
-        tube3_rect = screen.blit(tube_image3, (tube3_x, 0))
-
-
+        self.tube1_rect = self.screen.blit(self.tube_image1, (self.tube1_x, 0))
+        self.tube2_rect = self.screen.blit(self.tube_image2, (self.tube2_x, 0))
+        self.tube3_rect = self.screen.blit(self.tube_image3, (self.tube3_x, 0))
         # Draw tube inverse
-        tube1_rect_inv = screen.blit(tube_inv_image1, (tube1_x, tube1_height + TUBE_GAP))
-        tube2_rect_inv = screen.blit(tube_inv_image2, (tube2_x, tube2_height + TUBE_GAP))
-        tube3_rect_inv = screen.blit(tube_inv_image3, (tube3_x, tube3_height + TUBE_GAP))
-
-
+        self.tube1_rect_inv = self.screen.blit(self.tube_inv_image1, (self.tube1_x, self.tube1_height + self.TUBE_GAP))
+        self.tube2_rect_inv = self.screen.blit(self.tube_inv_image2, (self.tube2_x, self.tube2_height + self.TUBE_GAP))
+        self.tube3_rect_inv = self.screen.blit(self.tube_inv_image3, (self.tube3_x, self.tube3_height + self.TUBE_GAP))
         # draw sand
-        sand_rect = screen.blit(base_image, (0, screen_Height / (8 / 6)))
+        self.sand_rect = self.screen.blit(self.base_image, (0, screen_Height / (8 / 6)))
         # draw bird
-        bird_rect = screen.blit(bird_image, (BIRD_X, bird_y))
-        if begin == False:
-            begin_txt = fontend.render("Press Space to Play", True, BLACK)
-            screen.blit(begin_txt, (screen_Width / (1536 / 1152), screen_Height / 2))
-        if run == True:
+        self.bird_rect = self.screen.blit(self.bird_image, (self.BIRD_X, self.bird_y))
+        if self.begin == False:
+            self.begin_txt = self.fontend.render("Press Space to Play", True, self.BLACK)
+            self.screen.blit(self.begin_txt, (screen_Width / 2, screen_Height / 2))
+
+    def update(self, event):
+        global present_volume
+        global screen_Width, screen_Height, screen, text_Font, font
+        global user_id, user_money, rect_text, outOfMoney
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                self.run == True
+        if self.run == True:
             # move tube to the left
-            tube1_x = tube1_x - TUBE_VELOCITY
-            tube2_x = tube2_x - TUBE_VELOCITY
-            tube3_x = tube3_x - TUBE_VELOCITY
+            self.tube1_x = self.tube1_x - self.TUBE_VELOCITY
+            self.tube2_x = self.tube2_x - self.TUBE_VELOCITY
+            self.tube3_x = self.tube3_x - self.TUBE_VELOCITY
 
             # bird falls
-            bird_y += bird_drop_velocity
-            bird_drop_velocity += GRAVITY
+            self.bird_y += self.bird_drop_velocity
+            self.bird_drop_velocity += self.GRAVITY
+
             # generate new tubes
-            if tube1_x < -TUBE_WIDTH:
-                tube1_x = screen_Width / (1536 / 563)
-                tube1_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
-                tube1_pass = False
-            if tube2_x < -TUBE_WIDTH:
-                tube2_x = screen_Width / (1536 / 563)
-                tube2_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
-                tube2_pass = False
-            if tube3_x < -TUBE_WIDTH:
-                tube3_x = screen_Width / (1536 / 563)
-                tube3_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
-                tube3_pass = False
+            if self.tube1_x < -self.TUBE_WIDTH:
+                self.tube1_x = screen_Width / (screen_Width / 550)
+                self.tube1_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
+                self.tube1_pass = False
+            if self.tube2_x < -self.TUBE_WIDTH:
+                self.tube2_x = screen_Width / (screen_Width / 550)
+                self.tube2_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
+                self.tube2_pass = False
+            if self.tube3_x < -self.TUBE_WIDTH:
+                self.tube3_x = screen_Width / (screen_Width / 550)
+                self.tube3_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
+                self.tube3_pass = False
 
-            score_txt = fontend.render("Score: " + str(score) + ", max score = 20", True, BLACK)
-            screen.blit(score_txt, (screen_Width / (1536 / 973), screen_Height / 2))
-        # update điểm. Chạy âm tăng điểm khi chim đi qua
-        if tube1_x + TUBE_WIDTH <= BIRD_X and tube1_pass == False:
-            point_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/point.wav')
-            point_sound.set_volume(VOLUME[VOLUME_INDEX])
-            point_sound.play()
-            score += 1
-            tube1_pass = True
-        if tube2_x + TUBE_WIDTH <= BIRD_X and tube2_pass == False:
-            point_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/point.wav')
-            point_sound.set_volume(VOLUME[VOLUME_INDEX])
-            point_sound.play()
-            score += 1
-            tube2_pass = True
-        if tube3_x + TUBE_WIDTH <= BIRD_X and tube3_pass == False:
-            point_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/point.wav')
-            point_sound.set_volume(VOLUME[VOLUME_INDEX])
-            point_sound.play()
-            score += 1
-            tube3_pass = True
+            # update score
+            self.score_txt = self.fontend.render("Score: " + str(self.score) + ", max score = 20", True, self.BLACK)
+            self.screen.blit(self.score_txt, (screen_Width / (15 / 8), screen_Height / 2))
+            if self.tube1_x + self.TUBE_WIDTH <= self.BIRD_X and self.tube1_pass == False:
+                self.point_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/point.wav')
+                self.point_sound.set_volume(VOLUME[VOLUME_INDEX])
+                self.point_sound.play()
+                self.score += 1
+                self.tube1_pass = True
+            if self.tube2_x + self.TUBE_WIDTH <= self.BIRD_X and self.tube2_pass == False:
+                self.point_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/point.wav')
+                self.point_sound.set_volume(VOLUME[VOLUME_INDEX])
+                self.point_sound.play()
+                self.score += 1
+                self.tube2_pass = True
+            if self.tube3_x + self.TUBE_WIDTH <= self.BIRD_X and self.tube3_pass == False:
+                self.point_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/point.wav')
+                self.point_sound.set_volume(VOLUME[VOLUME_INDEX])
+                self.point_sound.play()
+                self.score += 1
+                self.tube3_pass = True
 
-        mouse = pygame.mouse.get_pos()
-        # check collision
-        for tube in [tube1_rect, tube2_rect, tube3_rect, tube1_rect_inv, tube2_rect_inv, tube3_rect_inv, sand_rect]:
-            if bird_rect.colliderect(tube) or score == 20:
-                pausing = True
-                run = False
-                TUBE_VELOCITY = 0
-                bird_drop_velocity = 0
-                if dem == 0:
-                    hit_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/hit.wav')
-                    hit_sound.set_volume(VOLUME[VOLUME_INDEX])
-                    hit_sound.play()
-                    dem = 1
+            self.mouse = pygame.mouse.get_pos()
+            # check collision
+            for tube in [self.tube1_rect, self.tube2_rect, self.tube3_rect, self.tube1_rect_inv, self.tube2_rect_inv, self.tube3_rect_inv, self.sand_rect]:
+                if self.bird_rect.colliderect(tube) or self.score == 20:
+                    self.pausing = True
+                    self.run = False
+                    self.TUBE_VELOCITY = 0
+                    self.bird_drop_velocity = 0
+                    if self.dem == 0:
+                        self.hit_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/hit.wav')
+                        self.hit_sound.set_volume(VOLUME[VOLUME_INDEX])
+                        self.hit_sound.play()
+                        self.dem = 1
                     if outOfMoney == True and user_money >= 500:
                         outOfMoney = False
                         if outOfMoney:
-                            Nuff_man_GoBackandBetMTF()
-                game_over_txt = fontend.render("Game over, score: " + str(score), True, BLACK)
-                screen.blit(game_over_txt, (screen_Width / (1536 / 973), screen_Height / (864 / 184)))
-                money_receiver = fontend.render("The money you get: " + str(score * 5), True, BLACK)
-                screen.blit(money_receiver, (screen_Width / (1536 / 973), screen_Height / (864 / 364)))
-                press_space_txt = fontend.render("Press Space to Play again", True, BLACK)
-                screen.blit(press_space_txt, (screen_Width / (1536 / 973), screen_Height / (864 / 544)))
-                if check == 0:
-                    user_money += (score * 5)
+                            return Nuff_man_GoBackandBetMTF()
+                    self.game_over_txt = self.fontend.render("Game over, score: " + str(self.score), True, self.BLACK)
+                    self.screen.blit(self.game_over_txt, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 170)))
+                    self.money_receiver = self.fontend.render("The money you get: " + str(self.score * 5), True, self.BLACK)
+                    self.screen.blit(self.money_receiver, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 270)))
+                    self.press_space_txt = self.fontend.render("Press Space to Play again", True, self.BLACK)
+                    self.screen.blit(self.press_space_txt, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 370)))
+                    if self.check == 0:
+                        user_money += (self.score * 5)
+                        update_account(user_id, user_money)
+                        self.check = 1
+                    if x_back_button + width > self.mouse[0] > x_back_button and y_back_button + height > self.mouse[1] > y_back_button:  # tạo hiệu ứng khi click  vào logo
+                        pygame.draw.rect(self.screen, bright_red,
+                                        (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
+                    else:
+                        pygame.draw.rect(self.screen, old_red,
+                                        (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
+                    self.screen.blit(self.back_button, (x_back_button + 10, y_back_button))
                     update_account(user_id, user_money)
-                    check = 1
-                if x_back_button + width > mouse[0] > x_back_button and y_back_button + height > mouse[
-                    1] > y_back_button:  # tạo hiệu ứng khi click  vào logo
-                    pygame.draw.rect(screen, bright_red,
-                                    (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
-                else:
-                    pygame.draw.rect(screen, old_red,
-                                    (x_back_button, y_back_button, screen_Width / (15), screen_Height / (16)))
-                screen.blit(back_button, (x_back_button + 10, y_back_button))
-                update_account(user_id, user_money)
-        # Nền hoạt động chính của game. Chú ý cái video resize
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                self.running = False
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
                 screen_Width, screen_Height = event.size
-                screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
+                self.screen = pygame.display.set_mode((screen_Width, screen_Height), pygame.RESIZABLE)
                 #Sửa vị trí
-                text_Font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 28)) # Thay thế bằng font của ta
-                menu_Font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 45))
-                font = pygame.font.SysFont("SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 32))
+                text_Font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / 1536 * 28)) # Thay thế bằng font của ta
+                menu_Font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / 864 * 45))
+                font = pygame.font.SysFont("SVN-Retron_2000.ttf", int(screen_Width / 1536 * 32))
             if event.type == pygame.KEYDOWN:
+                #reset_game
                 if event.key == pygame.K_SPACE:
-                    # reset 
-                    if pausing:
-                        bird_y = screen_Height / (2)
-                        TUBE_VELOCITY = 8
-                        tube1_x = screen_Width / (1536 / 614)
-                        tube2_x = screen_Width / (1536 / 819)
-                        tube3_x = screen_Width / (1536 / 1024)
+                    if self.pausing:
+                        self.bird_y = screen_Height / (2)
+                        self.TUBE_VELOCITY = 8
+                        self.tube1_x = screen_Width / (screen_Width / 600)
+                        self.tube2_x = screen_Width / (screen_Width / 800)
+                        self.tube3_x = screen_Width / (screen_Width / 1000)
 
+                        self.tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
+                        self.tube2_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
+                        self.tube3_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
 
-                        tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-                        tube2_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-                        tube3_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
-
-                        score = 0
-                        dem = 0
-                        check = 0
-                        pausing = False
-                    if run == False:
-                        run = True
-                        begin = True
-                        dem = 0
-                    wing_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/wing.wav')
-                    wing_sound.set_volume(VOLUME[VOLUME_INDEX])
-                    wing_sound.play()
+                        self.score = 0
+                        self.dem = 0
+                        self.check = 0
+                        self.pausing = False
+                    if self.run == False:
+                        self.run = True
+                        self.begin = True
+                        self.dem = 0
+                    self.wing_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/wing.wav')
+                    self.wing_sound.set_volume(VOLUME[VOLUME_INDEX])
+                    self.wing_sound.play()
                     pygame.mixer.music.set_volume(present_volume)
-                    bird_drop_velocity = 0
-                    bird_drop_velocity -= screen_Height/80
+                    self.bird_drop_velocity = 0
+                    self.bird_drop_velocity -= screen_Height/80
             if event.type == pygame.MOUSEBUTTONUP:
-                if x_back_button + width > mouse[0] > x_back_button and y_back_button + height > mouse[
-                    1] > y_back_button:
+                if x_back_button + width > self.mouse[0] > x_back_button and y_back_button + height > self.mouse[1] > y_back_button:
                     print('end game')
                     update_account(user_id, user_money)
                     pygame.mixer.music.load(f'./assets/sounds/mainmenu.mp3')
                     pygame.mixer.music.set_volume(present_volume)
                     pygame.mixer.music.play()
                     return 2
+        return self
 
-        pygame.display.flip()
-        pygame.mixer.init()
-        pygame.mixer.music.load(f'{subpath}/Sounds/nhac2.wav')
-        pygame.mixer.music.set_volume(present_volume)
-        pygame.mixer.music.play()
 ##############################################################
 
 
@@ -1392,7 +1387,7 @@ class MenuClass:
                 pygame.quit()
                 sys.exit()
             if self.minigame.CheckClick(pos):
-                flappy_bird()
+                return FlappyBird()
             if self.historyButton.CheckClick(pos):
                 return History()
                     
@@ -1760,7 +1755,7 @@ Bạn có muốn chuyển đến Minigame?"""
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.yesButton.CheckClick(pos):
                 outOfMoney = True
-                flappy_bird()
+                return FlappyBird()
             if self.noButton.CheckClick(pos):
                 return Shop()
         return self
