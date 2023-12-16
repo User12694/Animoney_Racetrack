@@ -1,2 +1,9 @@
 123
-940
+95
+
+2023/12/16 18:47:53: sang lose -200, balance: 440
+2023/12/16 18:50:25: sang win +600, balance: 955
+2023/12/16 18:51:30: sang win +600, balance: 955
+2023/12/16 18:52:04: sang lose -200, balance: 255
+2023/12/16 18:54:58: sang lose -200, balance: 105
+2023/12/16 19:09:10: sang lose -200, balance: 110
