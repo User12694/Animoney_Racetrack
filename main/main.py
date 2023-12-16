@@ -1,8 +1,8 @@
 import pygame, random, sys, time
-import main.LoginSignup as LoginSignup
+import LoginSignup 
 from datetime import datetime
 from io import StringIO 
-from main.LoginSignup import *
+from LoginSignup import *
 import re
 # LKhởi tạo các thứ
 pygame.init()
