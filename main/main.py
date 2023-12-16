@@ -3,7 +3,6 @@ import LoginSignup1
 from datetime import datetime
 from io import StringIO 
 from LoginSignup1 import *
-from flappybird import minigame
 import re
 # LKhởi tạo các thứ
 pygame.init()
@@ -56,7 +55,6 @@ color = pygame.Color('lightskyblue3')
 subpath = './main/flappybird'
 account_sub_path = './assets/player/'
 pygame.init()
-clock = pygame.time.Clock()
 WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
 WINDOW_SIZE_INDEX = 0
 screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
@@ -145,8 +143,9 @@ def flappy_bird():
     check = 0
     
     while running:
-        global user_id, user_money,present_volume, outOfMoney
+        global user_id, user_money,present_volume, outOfMoney, clock
         #pygame.mixer.music.pause()
+        clock.tick(60)
         background_image = pygame.image.load(f"{subpath}/flappybird/background.png").convert_alpha()
         background_image = pygame.transform.scale(background_image, (screen_Width, screen_Height))
         screen.blit(background_image, (0, 0))
@@ -1275,7 +1274,6 @@ def Pause_Game():
                     return
 
         pygame.display.update()
-        clock.tick(60)
 
 def QuitConfirm():
     while True:
@@ -1304,7 +1302,6 @@ def QuitConfirm():
                     return False
 
         pygame.display.update()
-        clock.tick(60)
 
 #Hàm read_data để đọc dữ liệu
 def update_account(usr_id, money):
