@@ -11,8 +11,8 @@ pygame.font.init()
 pygame.display.set_caption("Race game")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
-VOLUME = [0,0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-VOLUME_INDEX = 5
+VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+VOLUME_INDEX = 4
 present_volume = VOLUME[VOLUME_INDEX]
 # Đường dẫn đén file thông tin người chơi
 account_sub_path = './assets/player/'
@@ -66,13 +66,12 @@ screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZAB
 pygame.display.set_caption('Flappy Bird')
 running = True
 # Phông chữ :
-font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(screen_Width / screen_Width * 32))
+font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(32*screen_ratio))
 text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
-menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
 
 # vẽ hình chữ nhật chứa text
-rect_text = pygame.Rect(screen_Width / (screen_Width / 568), screen_Height / (screen_Height / 440), screen_Width / (screen_Width / 350),
-                        screen_Height / (screen_Height / 40))
+rect_text = pygame.Rect(screen_Width / (1536 / 581), screen_Height / (1536 / 440), screen_Width  / (1536 / 358),
+                        screen_Height / (1536 / 41))
 
 # Nút bấm
 
@@ -198,7 +197,7 @@ def flappy_bird():
         bird_rect = screen.blit(bird_image, (BIRD_X, bird_y))
         if begin == False:
             begin_txt = fontend.render("Press Space to Play", True, BLACK)
-            screen.blit(begin_txt, (screen_Width / 2, screen_Height / 2))
+            screen.blit(begin_txt, (screen_Width / (1536 / 1152), screen_Height / 2))
         if run == True:
             # move tube to the left
             tube1_x = tube1_x - TUBE_VELOCITY
@@ -210,20 +209,20 @@ def flappy_bird():
             bird_drop_velocity += GRAVITY
             # generate new tubes
             if tube1_x < -TUBE_WIDTH:
-                tube1_x = screen_Width / (screen_Width / 550)
+                tube1_x = screen_Width / (1536 / 563)
                 tube1_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
                 tube1_pass = False
             if tube2_x < -TUBE_WIDTH:
-                tube2_x = screen_Width / (screen_Width / 550)
+                tube2_x = screen_Width / (1536 / 563)
                 tube2_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
                 tube2_pass = False
             if tube3_x < -TUBE_WIDTH:
-                tube3_x = screen_Width / (screen_Width / 550)
+                tube3_x = screen_Width / (1536 / 563)
                 tube3_height = random.randint(screen_Height // (screen_Width // 100), screen_Height // (screen_Width // 250))
                 tube3_pass = False
 
             score_txt = fontend.render("Score: " + str(score) + ", max score = 20", True, BLACK)
-            screen.blit(score_txt, (screen_Width / (15 / 8), screen_Height / 2))
+            screen.blit(score_txt, (screen_Width / (1536 / 973), screen_Height / 2))
         # update điểm. Chạy âm tăng điểm khi chim đi qua
         if tube1_x + TUBE_WIDTH <= BIRD_X and tube1_pass == False:
             point_sound = pygame.mixer.Sound(f'{subpath}/flappybird/sounds/point.wav')
@@ -262,11 +261,11 @@ def flappy_bird():
                         if outOfMoney:
                             Nuff_man_GoBackandBetMTF()
                 game_over_txt = fontend.render("Game over, score: " + str(score), True, BLACK)
-                screen.blit(game_over_txt, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 170)))
+                screen.blit(game_over_txt, (screen_Width / (1536 / 973), screen_Height / (864 / 184)))
                 money_receiver = fontend.render("The money you get: " + str(score * 5), True, BLACK)
-                screen.blit(money_receiver, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 270)))
+                screen.blit(money_receiver, (screen_Width / (1536 / 973), screen_Height / (864 / 364)))
                 press_space_txt = fontend.render("Press Space to Play again", True, BLACK)
-                screen.blit(press_space_txt, (screen_Width / (screen_Width / 950), screen_Height / (screen_Height / 370)))
+                screen.blit(press_space_txt, (screen_Width / (1536 / 973), screen_Height / (864 / 544)))
                 if check == 0:
                     user_money += (score * 5)
                     update_account(user_id, user_money)
@@ -299,9 +298,9 @@ def flappy_bird():
                     if pausing:
                         bird_y = screen_Height / (2)
                         TUBE_VELOCITY = 8
-                        tube1_x = screen_Width / (screen_Width / 600)
-                        tube2_x = screen_Width / (screen_Width / 800)
-                        tube3_x = screen_Width / (screen_Width / 1000)
+                        tube1_x = screen_Width / (1536 / 614)
+                        tube2_x = screen_Width / (1536 / 819)
+                        tube3_x = screen_Width / (1536 / 1024)
 
 
                         tube1_height = random.randint(int(screen_Height / 8), int(screen_Height * 5 / 16))
@@ -343,10 +342,8 @@ def flappy_bird():
 def writeHistory():
     global traceBackCount, bet_money, user_money
     if doesWin:
-        user_money += bet_money * 3 
         result = f"win +{bet_money * 3}"
     else:
-        user_money -= bet_money
         result = f'lose -{bet_money}'
     current_time = datetime.now()
     current_time = current_time.replace(microsecond=0)
@@ -1115,7 +1112,6 @@ class Congratulations:
         #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.CONTINUE_BUTTON.CheckClick(pos):
                 if doesWin == 1:
-                    user_money += 3* bet_money
                     if user_money < 0:
                         user_money = 0
                     update_account(user_id, user_money)
@@ -1554,7 +1550,7 @@ class WindowModeSettingClass:
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global halfScreen_active, screen
+        global halfScreen_active, screen, WINDOW_SIZE_INDEX, SCREEN_SIZE_INDEX
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
@@ -1563,6 +1559,8 @@ class WindowModeSettingClass:
             if self.fullScreenButton.CheckClick(pos):
                 halfScreen_active = not halfScreen_active
                 WINDOW_SIZE_INDEX = 0
+                if WINDOW_SIZE_INDEX == 0:
+                    screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
                 SCREEN_SIZE_INDEX = 0
                 return self
             elif self.halfScreenButton.CheckClick(pos):
@@ -1677,7 +1675,7 @@ class Shop:
                 Back_To_Menu = Pause_Game()
                 if Back_To_Menu:
                     InitGame = False
-                    user_money =user_money + bua_money + bet_money
+                    user_money =user_money + bua_money
                     update_account(user_id, user_money)
                     bua_money = 0
                     bet_money = 0
@@ -1889,12 +1887,11 @@ def reset_game():
 
 #Đây là main loop
 def main():
-    global login_lock, list_image_load,historyLine
+    global login_lock, list_image_load,historyLine, screen
     if not login_lock:
         pygame.quit()
         sys.exit()
     #Lớp phủ xuất hiện đầu tiên chính là màn hình cài đặt
-    print(historyLine.read())
     current_class = MenuClass()
     #Vòng lặp chính
     while True:  # Vòng lặp vô hạn, chương trình sẽ chạy cho đến khi có sự kiện thoát

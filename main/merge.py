@@ -1115,6 +1115,7 @@ class Congratulations:
                 if doesWin == 1:
                     if user_money < 0:
                         user_money = 0
+                    user_money = user_money + 3 * bet_money
                     update_account(user_id, user_money)
                     writeHistory()
                 else:
