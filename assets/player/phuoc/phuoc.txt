@@ -1,5 +1,5 @@
 123
-492885
+493235
 
 
 2023/12/15 02:37:42: phuoc win +600, balance: 500400 
@@ -15,3 +15,16 @@
 2023/12/15 13:45:03: phuoc win +600, balance: 494100
 2023/12/15 13:50:34: phuoc lose -200, balance: 492800
 2023/12/16 19:06:34: phuoc win +3000, balance: 492670
+2023/12/16 21:05:58: phuoc lose -200, balance: 492385
+2023/12/16 21:07:24: phuoc lose -200, balance: 491885
+2023/12/16 21:21:09: phuoc win +3000, balance: 493385
+2023/12/16 21:22:04: phuoc win +3000, balance: 495885
+2023/12/16 21:26:58: phuoc lose -200, balance: 495385
+2023/12/16 21:27:54: phuoc lose -1000, balance: 494385
+2023/12/16 21:28:52: phuoc win +3000, balance: 496385
+2023/12/16 21:30:15: phuoc lose -1000, balance: 495085
+2023/12/16 21:31:36: phuoc lose -1000, balance: 493785
+2023/12/16 21:33:11: phuoc win +3000, balance: 495485
+2023/12/16 21:34:01: phuoc lose -1000, balance: 494085
+2023/12/16 21:38:46: phuoc lose -200, balance: 493085
+2023/12/16 21:40:08: phuoc win +600, balance: 493185

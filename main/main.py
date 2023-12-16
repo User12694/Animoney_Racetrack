@@ -1834,7 +1834,7 @@ class MoneyBet:
 # Đây là hàm reset game
 def reset_game():
     global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
-    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos, doesWin, total_money
+    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos, doesWin, total_money, list_image_load
     file = './assets/sounds/mainmenu.mp3'
     pygame.init()
     pygame.mixer.init()
@@ -1852,6 +1852,7 @@ def reset_game():
     rank = [] #List nhân vật khi thắng đc thêm vào
     Speed = []
     LuckyBox_Pos = []
+    list_image_load = []
     winner = 0
     last = 0
     Victory_sound_Play = True
