@@ -1,7 +1,8 @@
 asd
-3400
+7000
 2023/12/15 03:19:39: thuan lose -500, balance: 3400
 2023/12/15 03:19:39: thuan lose -600, balance: 3400
 2023/12/15 03:19:39: thuan lose -700, balance: 3400
 2023/12/15 03:19:39: thuan lose -800, balance: 3400
 2023/12/15 03:19:39: thuan lose -900, balance: 3400
+2023/12/15 09:39:56: thuan win +1500, balance: 7000
