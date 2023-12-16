@@ -1,16 +1,17 @@
-# Import các thư viện cần thiết
-# import cv2
-import numpy as np
-import tkinter as tk
+# Import thư viện CustomTkinter
+import customtkinter as ctk
 import tkinter.messagebox
-from tkinter import filedialog
 from PIL import Image, ImageTk
+import smtplib
+import random
+import string
 import os
-import time
-# import findPicture as fp
-import fnmatch
-import subprocess
 
+login_lock = False
+WINDOW_SIZES = [(1280,720),(768,432)]
+WINDOW_SIZES_INDEX = 0
+ratio = WINDOW_SIZES[WINDOW_SIZES_INDEX][0]/1536
+email = None
 code = None
 # Các khai báo cho biến toàn cục
 login_lock = False
@@ -19,7 +20,8 @@ img_label = None
 # confirm_button = None Nút xác nhận được gắn hàm kiểm tra trong FindPicture.py (hiện bị disable)
 bg_color = "#2b95d1"
 image_load_path = None
-user_id, user_money = None, None 
+user_id, user_money = None, None
+
 def fileread(username):
     global user_id, user_money
     with open(f"assets/player/{username}/{username}.txt") as f:
@@ -27,258 +29,282 @@ def fileread(username):
         user_id = username
         user_money = lines[1]
         return user_id, user_money
-
-def filePath():
-    anh = "captured_image.png"
-
-    # Tách tên ảnh và đuôi file
-    ten, duoi_file = anh.split('.')
-
-    print("Tên ảnh:", ten)
-    print("Đuôi file:", duoi_file)
-    imgpath = f'{ten}.{duoi_file}'
-    return imgpath
-'''def face_detect(image_path):
-    img = cv2_read_image(image_path)
-    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-
-    # Khởi tạo Haar cascade
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
-    # Phát hiện khuôn mặt trong hình ảnh
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
-    # Kiểm tra xem có phát hiện được khuôn mặt nào không
-    if len(faces) == 0:
-        text = "Không tìm thấy khuôn mặt nào. Vui lòng đưa lại ảnh"
-        return False, text
-    else:
-        text = "Phát hiện khuôn mặt."
-        return True, text
-#Đọc đường dẫn file chứa kí tự Unicode (nếu có)
-def cv2_read_image(image_path):
-    print(image_path)
-    image_data = np.fromfile(image_path, dtype=np.uint8)
-    # Giải mã mảng byte thành ảnh
-    image = cv2.imdecode(image_data, cv2.IMREAD_UNCHANGED)
-    return image
-def compare_faces(image1_path, image2_path):
-    # Đọc hai hình ảnh từ đường dẫn
-    img1 = cv2_read_image(image1_path)
-    img2 = cv2_read_image(image2_path)
-
-    #Chuyển đổi hình ảnh sang hệ màu xám 
-    changed_img1 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
-    changed_img2 = cv2.cvtColor(img2, cv2.COLOR_RGB2GRAY)
-    # Khởi tạo Haar cascade
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
-    # Phát hiện khuôn mặt trong hai hình ảnh
-    faces1 = face_cascade.detectMultiScale(changed_img1, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    faces2 = face_cascade.detectMultiScale(changed_img2, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
-    # Kiểm tra xem có phát hiện được khuôn mặt không
-    if len(faces1) == 0 or len(faces2) == 0:
-        print("Không tìm thấy khuôn mặt trong một hoặc cả hai hình ảnh.")
-        return
-
-    # Chọn khuôn mặt lớn nhất trong mỗi hình ảnh
-    x1, y1, w1, h1 = faces1[0]
-    x2, y2, w2, h2 = faces2[0]
-
-    # Cắt hai hình ảnh để chỉ giữ lại khuôn mặt lớn nhất
-    cropped_img1 = img1[y1:y1+h1, x1:x1+w1]
-    cropped_img2 = img2[y2:y2+h2, x2:x2+w2]
-
-    # Tính toán histogram cho hai hình ảnh
-    hist1 = cv2.calcHist([cropped_img1], [0], None, [256], [0, 256])
-    hist2 = cv2.calcHist([cropped_img2], [0], None, [256], [0, 256])
-
-    # So sánh hai histogram
-    compare_val = cv2.compareHist(hist1, hist2, cv2.HISTCMP_CORREL)
-    print("Độ tương đồng giữa hai khuôn mặt:", compare_val)
-    return compare_val'''
-
-# Định nghĩa lớp LoginRegisterMenu
-class LoginRegisterMenu:
-    # Hàm khởi tạo
-    def __init__(self, root):
-        self.root = root  # Lưu trữ tham chiếu đến cửa sổ gốc
-        self.img_label = None
-        self.img_display = None
-        self.confirm_button = None
-        logo = Image.open("assets/icon/banner.png")
-        self.logo = ImageTk.PhotoImage(logo)
-        self.root.geometry('400x600')  # Đặt kích thước cửa sổ
-        self.frame = tk.Frame(self.root,bg=bg_color)  # Tạo một frame để chứa các widget
-        self.frame.pack()  # Đóng gói frame vào cửa sổ
-
-        # Tạo các widget và đóng gói chúng vào frame
-        self.game_logo = tk.Label(self.frame, image=self.logo)
-        self.username_label = tk.Label(self.frame, text="Username", bg=bg_color)  # Nhãn cho trường nhập tên người dùng
-        self.note_label = tk.Label(self.frame,text="(If you login by face, username must be filled)",bg=bg_color)
-        self.username_entry = tk.Entry(self.frame)  # Trường nhập tên người dùng
-        self.password_label = tk.Label(self.frame, text="Password",bg=bg_color)  # Nhãn cho trường nhập mật khẩu
-        self.password_entry = tk.Entry(self.frame, show="*")  # Trường nhập mật khẩu
-        self.login_button = tk.Button(self.frame, text="Login", command=self.login)  # Nút đăng nhập
-        self.switch_button = tk.Button(self.frame, text="Don't have one? Register", command=self.switch_to_register) # Nút chuyển đổi giữa đăng nhập và đăng ký
-        # self.open_button = tk.Button(self.frame,text="Login by your face? Browse...",command = self.open_image)
-        # self.image_label = tk.Label(self.frame,bg=bg_color)
+class LoginMenu:
+    def __init__(self,root):
+        # Tạo một cửa sổ mới với kích thước 1536x864 px và màu nền trắng
+        self.window = root
+        self.window.geometry(f'1280x720+128+72')
+        # Tạo hình ảnh 
+        self.background = Image.open("./main/image.png")
+        self.photo_background = ImageTk.PhotoImage(self.background)
+        self.background_label = ctk.CTkLabel(self.window, image=self.photo_background,width=1173*ratio, height=864*ratio, text='')
+        self.background_label.place(x=363*ratio, y=0)
         
-        '''self.confirm_button = tk.Button(self.frame,text="Confirm image",command=self.confirm_image)
-        self.confirmed_notification = tk.Label(self.frame, text="Image loaded!", bg=bg_color)
-        self.face_detected = tk.Label(self.frame, text="Have faces!", bg=bg_color)
-        self.noface_detected = tk.Label(self.frame, text="No faces!", bg=bg_color)'''
-        # Đóng gói các widget vào frame
-        self.game_logo.pack()
-        self.username_label.pack()
-        self.note_label.pack()
-        self.username_entry.pack()
-        self.password_label.pack()
-        self.password_entry.pack()
-        self.login_button.pack(pady=10)
-        self.switch_button.pack()
-        # self.open_button.pack()
-        # self.image_label.pack()
+        # Tạo một khung CTKFrame với màu nền là màu hex #2b95d1 và đặt ở vị trí x = 0, y = 0
+        self.frame = ctk.CTkFrame(self.window,width=512*ratio, height=864*ratio, fg_color="#2b95d1")
+        self.frame.place(x=0, y=0)
+
+        # Tạo nhãn "Username/Email" và đặt ở tọa độ (92,334)
+        self.username_label = ctk.CTkLabel(self.frame, text="Username/Email", font=("default", 20*ratio, "bold"))
+        self.username_label.place(x=92*ratio, y=334*ratio)
+
+        # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
+        self.password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20*ratio, "bold"))
+        self.password_label.place(x=92*ratio, y=443*ratio)
+
+        # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
+        self.username_entry = ctk.CTkEntry(self.frame, width=343*ratio, height=54*ratio, fg_color="white", border_width=1, border_color="black", corner_radius=20, font=("default", 20))
+        self.username_entry.configure(text_color="black")
+        self.username_entry.place(x=92*ratio, y=370*ratio)
+
+        # Tạo hộp nhập liệu thứ hai và đặt ở tọa độ (92,478)
+        self.password_entry = ctk.CTkEntry(self.frame, width=343*ratio, height=54*ratio, fg_color="white", border_width=1, border_color="black", corner_radius=20, font=("default", 20), show='•')
+        self.password_entry.configure(text_color="black")
+        self.password_entry.place(x=92*ratio, y=478*ratio)
+
+        # Tạo nhãn "Don't have an account?" và đặt ở tọa độ (158,728)
+        self.account_label = ctk.CTkLabel(self.frame, text="Don't have an account?", font=("default", 12*ratio, "bold"), fg_color="transparent", width=145*ratio, height=20*ratio)
+        self.account_label.place(x=158*ratio, y=728*ratio)
+
+        # Tạo nút "Sign up" và đặt ở tọa độ (303,728)sel
+        self.signup_button = ctk.CTkButton(self.frame, text="Sign up", font=("default", 12*ratio, "bold"), fg_color="transparent", width=51*ratio, height=20*ratio, command=self.create_account)
+        self.signup_button.place(x=303*ratio, y=728*ratio)
+
+        # Tạo nút "Login" và đặt ở tọa độ (213,608)
+        self.login_button = ctk.CTkButton(self.frame, text="Login", font=("default", 20*ratio, "bold"), fg_color="#F7B104", width=169*ratio, height=47*ratio, corner_radius=30, command=self.login)
+        self.login_button.place(x=179*ratio, y=575*ratio)
+
+        # Tạo hình ảnh và đặt ở tọa độ (156,71)
+        self.image = Image.open("./main/image_transparent.png")
+        self.image = self.image.resize((int(200*ratio), int(200*ratio)))
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.image_label = ctk.CTkLabel(self.frame, image=self.photo, width=int(200*ratio), height=int(200*ratio), text='')
+        self.image_label.place(x=156*ratio, y=71*ratio)
+
+        # Tạo nhãn "Login" và đặt ở tọa độ (167,271)
+        self.login_label = ctk.CTkLabel(self.frame, text="Login", font=("default", 32*ratio, "bold"), fg_color="transparent", width=177*ratio, height=45*ratio)
+        self.login_label.place(x=167*ratio, y=271*ratio)
+
+        self.confirm_password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20*ratio, "bold"))
+
+        self.confirm_password_entry = ctk.CTkEntry(self.frame, width=343*ratio, height=54*ratio, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20*ratio),show='•')
+
+    def draw(self):
+        # Lặp vô tận để hiển thị cửa sổ
+        self.window.mainloop()
+    def choice_to_register(self):
+        self.new_window = ctk.CTkToplevel(self.window)
+        self.new_window.title("Register")
+        self.new_window.geometry('250x200')
+        self.new_frame = ctk.CTkFrame(self.new_window, width= self.new_window._current_width, height=self.new_window._current_height)
+        self.new_frame.place(x=0, y=0)
+        self.signup_button1 = ctk.CTkButton(self.new_frame, text="Sign up by Google", font=('Montserrat',16*ratio,"bold"), width=100*ratio, height=40*ratio, command=self.switch_to_register)
+        self.signup_button1.place(x = 25*ratio, y = 40*ratio)
+        
+        self.signup_button2 = ctk.CTkButton(self.new_frame, text="Sign up by local account", width=100*ratio, height=40*ratio, command=self.create_account)
+        self.signup_button2.place(x = 25*ratio, y = 100*ratio)
+
+    def switch_to_register(self): # Đăng kí bằng email
+        clear_entry(self.username_entry)
+        clear_entry(self.password_entry)
+        clear_entry(self.confirm_password_entry)
+        self.login_label.configure(text="Register")
+        self.username_label.configure(text="Email")
+        self.password_label.place_forget()
+        self.password_entry.place_forget()
+
+        # Chuyển đổi text trên nút "Login" thành "Register"
+        self.login_button.configure(text="Confirm Email", command= self.confirm_email)
+
+        # Thay đổi chữ trong label "Don't have an account?" thành "Already have one?"
+        self.account_label.configure(text="Already have one?")
+
+        # Thay đổi chữ trên nút "Sign up" thành "Sign in"
+        self.signup_button.configure(text="Sign in", command=self.switch_to_login)
+    def switch_to_login(self):
+        self.login_label.configure(text="Login")
+        self.username_label.configure(text="Username/Email")
+        self.login_button.configure(text="Login")
+        self.confirm_password_entry.place_forget()
+        self.confirm_password_label.place_forget()
+        self.login_button.place_forget()
+        self.password_label.place_forget()
+        self.password_entry.place_forget()
+        clear_entry(self.username_entry)
+        clear_entry(self.password_entry)
+        clear_entry(self.confirm_password_entry)
+        self.login_button.configure(command=self.login)
+        self.login_button.place(x = 179*ratio, y = 575*ratio)
+        self.password_label.place(x = 92*ratio, y = 443*ratio)
+        self.password_entry.place(x = 92*ratio, y = 478*ratio)
+        self.account_label.configure(text="Don't have an account?")
+        self.signup_button.configure(text="Sign up", command=self.create_account)
+
+    def confirm_email(self):
+        global code, email
+        email_input = self.username_entry.get()
+        if email_input == '':
+            tkinter.messagebox.showerror('Empty email', 'Email must be filled!')
+        else:
+            if check_gmail_in_string(email_input) == True:
+                code = send_verification_code(email_input)
+                email = email_input
+                self.login_button.configure(text="Confirm", command= self.veri_confirm)
+                self.login_label.configure(text="Confirmation")
+                self.username_label.configure(text="Enter the code")
+                self.username_entry.place_forget()
+                self.username_entry.place(x=92*ratio, y = 370*ratio)
+            else:
+                code = send_verification_code(email_input + "@gmail.com")
+                email = email_input
+                self.login_button.configure(text="Confirm", command= self.veri_confirm)
+                self.login_label.configure(text="Confirmation code")
+                self.username_label.configure(text="Enter the code")
+                self.username_entry.place_forget()
+                self.username_entry.place(x=92*ratio, y = 370*ratio)
+        return code
+    
+    def veri_confirm(self):
+        global code, email
+        self.login_label.configure(text="Confirmation code")
+        self.username_label.configure(text="Enter the code")
+        self.username_entry.place_forget()
+        self.username_entry.place(x=92*ratio, y = 370*ratio)
+        veri_code = self.username_entry.get()
+        if veri_code == '':
+            tkinter.messagebox.showinfo("Check")
+        else:
+            if veri_code == code:
+                tkinter.messagebox.showinfo("Success!","Confirm success!")
+                self.create_account()
+            else:
+                tkinter.messagebox.showerror("Invalid!","Invalid code!")
+
+    def create_account(self):
+        clear_entry(self.username_entry)
+        clear_entry(self.password_entry)
+        clear_entry(self.confirm_password_entry)
+        self.username_label.place_forget()
+        self.username_label.configure(text="Username")
+        self.password_entry.place_forget()
+        self.password_entry.place_forget()
+        self.login_button.place_forget()
+        self.username_label.place(x=92*ratio, y=334*ratio)
+        self.password_label.place(x=92*ratio, y=443*ratio)
+        self.password_entry.place(x=92*ratio, y=478*ratio)
+        self.account_label.configure(text="Already have account?")
+        self.signup_button.configure(text="Sign in", command=self.switch_to_login)
+        # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
+        self.confirm_password_label.place(x=92*ratio, y=549*ratio)
+        # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
+        self.confirm_password_entry.place(x=92*ratio, y=584*ratio)
+
+        self.login_button.configure(text="Register", command=self.register)
+        self.login_button.place(x = 179*ratio, y = 651*ratio)
+
     # Hàm xử lý sự kiện đăng nhập
     def login(self):
-        global user_id, user_money
+        global email, login_lock, user_id, user_money
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
-        if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
-            with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
-                if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
-                    tk.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
-                    global login_lock
-                    login_lock = True
-                    user_id, user_money = fileread(username)
-                    self.root.quit()  # Thoát chương trình
+        emails = find_file_in_subdirectories('./assets/player',f'{username}.txt')
+        if len(emails) == 0:
+                if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
+                    with open(f"assets/player/{username}/{username}.txt", "r") as file:  # Mở file tương ứng với tên người dùng
+                        if password == file.readline().strip():  # Kiểm tra xem mật khẩu có khớp không
+                            tkinter.messagebox.showinfo("Login successful!", "Login successful!")  # Hiển thị thông báo thành công
+                            global login_lock
+                            login_lock = True
+                            user_id, user_money = fileread(username)
+                            self.window.quit()  # Thoát chương trình
+                            self.window.destroy()
+                        else:
+                            tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
                 else:
-                    tk.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
+                    tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi        else: 
         else:
-            tk.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
+            if check_first_line_in_files(emails,password):
+                tkinter.messagebox.showinfo("Success!", "Login successful!")  # Hiển thị thông báo 
+                login_lock = True
+                self.window.quit()
+            else:
+                tkinter.messagebox.showerror("Invalid username or password!", "Invalid username or password!")  # Hiển thị thông báo lỗi
+        
     # Hàm xử lí sự kiện đăng nhập bằng khuôn mặt
     
     # Hàm xử lí sự kiện đăng kí bằng khuôn mặt
 
     # Hàm xử lý sự kiện đăng ký
     def register(self):
+        global email
         username = self.username_entry.get()  # Lấy tên người dùng từ trường nhập liệu
         password = self.password_entry.get()  # Lấy mật khẩu từ trường nhập liệu
-        repeat_password = self.repeat_password_entry.get()  # Lấy mật khẩu nhập lại từ trường nhập liệu
+        repeat_password = self.confirm_password_entry.get()  # Lấy mật khẩu nhập lại từ trường nhập liệu
         if username == "" or password == "" or repeat_password == "":
-            tk.messagebox.showerror("Have blank emulation!", "Have blank emulation!")
+            tkinter.messagebox.showerror("Have blank emulation!", "Have blank emulation!")
         else:
             if os.path.exists(f"assets/player/{username}/{username}.txt"):  # Kiểm tra xem tên người dùng có tồn tại không
-                tk.messagebox.showerror("Username existed!", "Username existed!")  # Hiển thị thông báo lỗi
+                tkinter.messagebox.showerror("Username existed!", "Username existed!")  # Hiển thị thông báo lỗi
             elif password == repeat_password:  # Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp không
                 os.makedirs(f"assets/player/{username}",exist_ok=True)
                 with open(f"assets/player/{username}/{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
                     file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
                     file.write("500" + "\n")  # Ghi "500" vào dòng thứ hai của file
-                tk.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
+                '''with open(f"assets/player/{username}/{email}.txt") as file:
+                    file.write(email + '\n')'''
+                tkinter.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
                 self.switch_to_login()  # Chuyển về chế độ đăng nhập
             else:
-                tk.messagebox.showerror("Passwords do not match!", "Passwords do not match!")  # Hiển thị thông báo lỗi
+                tkinter.messagebox.showerror("Passwords do not match!", "Passwords do not match!")  # Hiển thị thông báo lỗi
+def check_gmail_in_string(s):
+    return "@gmail.com" in s
+def send_verification_code(receiver_email):
+    # Tạo mã xác minh ngẫu nhiên
+    global code
+    veri_code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    code = veri_code
+    # Tạo nội dung email
+    subject = "Your verification code confirm the email to login/signup into Animal RaceTrack"
+    body = f"""Hello {receiver_email}.
+    We have sent a verificaion code to verify your login or registration.
+    Your verification code is: {veri_code}
+    You have sent this email because you requested the registration or login into your account.
+    If not, you can ignore this."""
+    message = f"Subject: {subject}\n\n{body}"
 
-    # Hàm chuyển đổi sang chế độ đăng ký
-    def switch_to_register(self):
-        self.login_button.config(text="Register", command=self.register)  # Thay đổi nút đăng nhập thành nút đăng ký
-        self.switch_button.config(text="Already have an account? Login", command=self.switch_to_login)  # Thay đổi nút chuyển đổi thành nút đăng nhập
-        self.note_label.config(text="(If you register by face, username must be filled.)")
-        # self.open_button.config(text="Register by your face? Browse...",command=self.open_image)
-        self.repeat_password_label = tk.Label(self.frame, text="Repeat Password",bg=bg_color)  # Tạo nhãn cho trường nhập lại mật khẩu
-        self.repeat_password_entry = tk.Entry(self.frame, show="*")  # Tạo trường nhập lại mật khẩu
-        self.repeat_password_label.pack()  # Đóng gói nhãn vào frame
-        self.repeat_password_entry.pack()  # Đóng gói trường nhập liệu vào frame
-        self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
-        self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
-        # self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi fame
-        # self.image_label.pack_forget()
-        # self.confirm_button.pack_forget()
-        # self.confirmed_notification.pack_forget()
-        # self.face_detected.pack_forget()
-        # self.noface_detected.pack_forget()
-        self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
-        self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
-        # self.open_button.pack() # Đóng gói nút mở ảnh vào frame
-        self.login_button.pack()
+    # Thông tin tài khoản Gmail của bạn
+    sender_email = "devteam.animalracetrack@gmail.com"
+    password = "dzlh mowf obyr bfei"
 
-    # Hàm chuyển đổi sang chế độ đăng nhập
-    def switch_to_login(self):
-        self.login_button.config(text="Login", command=self.login)  # Thay đổi nút đăng ký thành nút đăng nhập
-        self.switch_button.config(text="Don't have one? Register", command=self.switch_to_register)  # Thay đổi nút chuyển đổi thành nút đăng ký
-        self.note_label.config(text="(If you login by face, username must be filled.)")
-        # self.open_button.config(text="Login by your face? Browse...",command=self.open_image)
-        self.repeat_password_label.pack_forget()  # Loại bỏ nhãn khỏi frame
-        self.repeat_password_entry.pack_forget()  # Loại bỏ trường nhập liệu khỏi frame
-        self.login_button.pack_forget()  # Loại bỏ nút đăng nhập khỏi frame
-        self.switch_button.pack_forget()  # Loại bỏ nút chuyển đổi khỏi frame
-        # self.open_button.pack_forget() #Loại bỏ nút mở ảnh khỏi frame
-        # self.image_label.pack_forget()
-        # self.confirm_button.pack_forget()
-        # self.confirmed_notification.pack_forget()
-        # self.face_detected.pack_forget()
-        # self.noface_detected.pack_forget()
-        self.login_button.pack(pady=10)  # Đóng gói nút đăng nhập vào frame
-        self.switch_button.pack()  # Đóng gói nút chuyển đổi vào frame
-        # self.open_button.pack() # Loại bỏ nút mở ảnh khỏi frame
-        
-    # Hàm dùng để mở ảnh 
-'''    def open_image(self):
-        global image_load, image_load_path
-        # Mở cửa sổ chọn file để chọn ảnh
-        self.file_path = filedialog.askopenfilename(filetypes=[('Image Files', '*.jpg')])
-        # Mở ảnh và điều chỉnh kích thước
-        self.image = Image.open(self.file_path)
-        self.image.thumbnail((self.image.width // 10, self.image.height // 10))
-        # Chuyển ảnh sang định dạng phù hợp để hiển thị trong tkinter
-        self.photo = ImageTk.PhotoImage(self.image)
-        # Hiển thị ảnh trong cửa sổ tkinter
-        self.image_label.pack_forget()
-        self.image_label.config(image=self.photo)
-        self.image_label.pack()
-        self.image_label.image = self.photo
-        self.confirmed_notification.pack_forget()
-        self.noface_detected.pack_forget()
-        self.face_detected.pack_forget()
-        self.confirm_button.pack_forget()
-        # Hiển thị nút "Xác nhận ảnh"
-        self.confirm_button.pack()
-        # self.login_button.config(command=self.result)
-        image_load_path = self.file_path
-        return image_load_path
-        
-    def confirm_image(self):
-        global image_paths, image_load_path
-        if image_load_path:
-            self.confirmed_notification.pack_forget()
-            self.confirmed_notification.pack()
-            # self.login_button.config(command=self.result())
-        else:
-            self.confirmed_notification.pack_forget()
-            self.confirmed_notification.config(text="No image loaded! Try again.",bg=bg_color)
-            self.confirmed_notification.pack()
-    def result(self):
-        global image_paths, image_load_path
-        result, text = face_detect(image_load_path)
-        if result:
-            result_list = []
-            for path in image_paths:
-                result_list.append(compare_faces(image_load_path, path))
-            print(result_list)
-        else:
-            self.noface_detected.pack_forget()
-            self.noface_detected.pack()'''
-            
-#Thực hiện lệnh shell để nhận đường dẫn Unicode:
-subprocess.run(['cmd', '/c', 'chcp', '65001'])
-# Tạo một cửa sổ gốc
-root = tk.Tk()
-# root.protocol("WM_DELETE_WINDOW", disable_event)
-root.title("Animoney RaceTrack - Login")
-root.config(bg=bg_color)
-# Tạo một đối tượng LoginRegisterMenu và truyền cửa sổ gốc vào hàm khởi tạo
-app = LoginRegisterMenu(root)
-# Bắt đầu vòng lặp sự kiện của cửa sổ gốc
-root.mainloop()
+    # Gửi email
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+
+    print(f"Verification code sent to {receiver_email}.")
+    return code
+def clear_entry(entry):
+    entry.delete(0,'end')
+def find_file_in_subdirectories(relative_path, filename):
+    # Chuyển đổi đường dẫn phụ thuộc thành đường dẫn tuyệt đối
+    directory = os.path.abspath(relative_path)
+    
+    matching_files = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file == filename + '.txt':
+                # Chuyển đổi đường dẫn tuyệt đối thành đường dẫn phụ thuộc
+                matching_files.append(os.path.relpath(os.path.join(root, file), directory))
+    return matching_files
+def check_first_line_in_files(file_list, target_string):
+    for file_path in file_list:
+        with open(file_path, 'r') as file:
+            first_line = file.readline().strip()
+            if first_line == target_string:
+                return True
+    return False
+# Tạo một đối tượng LoginMenu và vẽ nó
+window = ctk.CTk()
+window.title("Login")
+app = LoginMenu(window)
+window.mainloop()

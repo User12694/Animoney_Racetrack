@@ -1,7 +1,7 @@
 import pygame
 import random
 import sys
-import LoginSignup1
+import main.LoginSignup as LoginSignup
 #quy định các màu
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
@@ -9,8 +9,8 @@ bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
 #Lấy các biến từ file khác
-user_id = LoginSignup1.user_id
-user_money = int(LoginSignup1.user_money)
+user_id = LoginSignup.user_id
+user_money = int(LoginSignup.user_money)
 
 #Mod lại subpath để có thể đưa menugame vào:
 subpath = './main/flappybird'

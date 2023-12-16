@@ -2,7 +2,7 @@ import pygame
 import sys
 
 # Quy định kích thước cửa sổ
-WINDOWS_SCREEN_SIZE = [(1920,1080),(1366,768)]
+WINDOWS_SCREEN_SIZE = [(1536,864),(768,432)]
 global WINDOWS_INDEX
 WINDOWS_INDEX = 0
 # Nhạc menu chính
@@ -265,6 +265,7 @@ class WindowModeSettingClass:
         self.esc_button.draw(screen)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
+        global WINDOWS_SCREEN_SIZE
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
@@ -272,12 +273,15 @@ class WindowModeSettingClass:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.button1.isOver(pos):
                 #Kiểm tra xem nút đầu tiên có được nhấn hay không
-                self.button2_active = not self.button2_active
-                pass
-            if self.button2.isOver(pos):
-                pass
+                self.button2_active = not self.button2_active   
+
+            
             if self.esc_button.isOver(pos):
                 return SettingClass() #Trả về màn hình cài đặt
+        if event.type == pygame.VIDEORESIZE:
+            if self.button2.isOver(pos):
+                WINDOWS_SCREEN_SIZE = 1
+                scr
         # Kiểm tra xem có đang rê chuột trên nút hay không
         if event.type == pygame.MOUSEMOTION:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
@@ -406,7 +410,7 @@ def main(): #Hàm chính của vòng lặp
     menu_track = pygame.mixer.music.load(my_sound) #Load nhạc
     pygame.mixer.music.play() #Lên nhạc
     pygame.mixer.music.set_volume(VOLUME[VOLUME_INDEX]) #Đặt âm lượng mặc định
-    screen = pygame.display.set_mode((1920, 1080)) #Đặt cửa sổ mặc định
+    screen = pygame.display.set_mode(WINDOWS_SCREEN_SIZE[WINDOWS_INDEX]) #Đặt cửa sổ mặc định
     clock = pygame.time.Clock() #Đặt đồng hồ
     #Lớp phủ xuất hiện đầu tiên chính là màn hình cài đặt
     current_class = MenuClass()
