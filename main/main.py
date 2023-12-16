@@ -362,7 +362,6 @@ def readHistorLineFromFile():
             historyLine.seek(0) #trỏ vào đầu chuỗi đấy
             historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
 
-    # Không có trả về text nên k hiển thị
 
 class History:
     def __init__(self):
@@ -372,8 +371,8 @@ class History:
         self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         readHistorLineFromFile()
         self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
-        self.LEFT_BUTTON = Button(pos=(screen.get_width() * 0.29, screen.get_height() * 0.35), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
-        self.RIGHT_BUTTON = Button(pos=(screen.get_width() * 0.71, screen.get_height() * 0.35), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
+        self.LEFT_BUTTON = Button(pos=(screen.get_width() * 0.20, screen.get_height() * 0.38), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
+        self.RIGHT_BUTTON = Button(pos=(screen.get_width() * 0.80, screen.get_height() * 0.38), imageNormal = "buttonToRight.png", imageChanged = "buttonToRight.png")
         self.back_button = Button(pos=(screen.get_width() / 2 * 1.05 , screen.get_height() * 0.65), imageNormal = "back.png", imageChanged = "back2.png")
     def draw(self, mouse_pos):
         global historyLine
@@ -381,7 +380,7 @@ class History:
         self.LEFT_BUTTON.update(mouse_pos)
         self.RIGHT_BUTTON.update(mouse_pos)
         self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
-        screen.blit(self.historyText, (screen.get_width() / 3, screen.get_height() / 3))
+        screen.blit(self.historyText, (screen.get_width() * 0.26, screen.get_height() * 0.36))
 
     def update(self, event):
         global traceBackCount
