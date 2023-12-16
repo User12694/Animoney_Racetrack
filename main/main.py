@@ -1,8 +1,8 @@
 import pygame, random, sys, time
-import LoginSignup1
+import main.LoginSignup as LoginSignup
 from datetime import datetime
 from io import StringIO 
-from LoginSignup1 import *
+from main.LoginSignup import *
 import re
 # LKhởi tạo các thứ
 pygame.init()
@@ -21,11 +21,11 @@ LANGUAGE_INDEX = 0
 
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
-user_id = LoginSignup1.user_id
+user_id = LoginSignup.user_id
 user_pwd = ''
 historyLine = StringIO() 
 traceBackCount = 0
-user_money = int(LoginSignup1.user_money)
+user_money = int(LoginSignup.user_money)
 set_choice = 1
 choice = 0
 list_image_load = []
