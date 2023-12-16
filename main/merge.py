@@ -43,7 +43,7 @@ GROUP = []
 rank = [] #List nhân vật khi thắng đc thêm vào
 winner = 0
 last = 0
-doesWin = 1
+doesWin = None
 #################Khu vực để Minigame####################
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
@@ -339,9 +339,9 @@ def flappy_bird():
 
 def writeHistory():
     global traceBackCount, bet_money, user_money
-    if doesWin:
+    if doesWin == 'win':
         result = f"win +{bet_money * 3}"
-    else:
+    elif doesWin == 'lose':
         result = f'lose -{bet_money}'
     current_time = datetime.now()
     current_time = current_time.replace(microsecond=0)
@@ -1109,13 +1109,13 @@ class Congratulations:
         if event.type == pygame.MOUSEBUTTONDOWN:
         #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.CONTINUE_BUTTON.CheckClick(pos):
-                if doesWin == 1:
+                if doesWin == 'win':
                     if user_money < 0:
                         user_money = 0
                     user_money = user_money + 3 * bet_money
                     update_account(user_id, user_money)
                     writeHistory()
-                else:
+                elif doesWin == 'lose':
                     if user_money < 0:
                         user_money = 0
                     update_account(user_id, user_money)
@@ -1137,14 +1137,14 @@ class Congratulations:
 class Result:
     def __init__(self):
         global doesWin, bet_money
-        if doesWin:
+        if doesWin == 'win':
             self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/win{bet_money*3}.png').convert_alpha()
             self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
-        else:
+        elif doesWin == 'lose':
             self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/lose{bet_money}.png').convert_alpha()
             self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
-        self.screenshot_button = Button(pos=(screen_Width / 2 - screen_Width / 10, screen_Height - screen_Height / 4*3), imageNormal="screenshot.png", imageChanged="screenshot2.png")
+        self.screenshot_button = Button(pos=(screen_Width - screen_Width / 10, screen_Height - screen_Height / 4*3), imageNormal="screenshot.png", imageChanged="screenshot2.png")
     def draw(self, mouse_pos):
         screen.blit(self.image,(0,0))
         self.CONTINUE_BUTTON.update(mouse_pos)
@@ -1212,9 +1212,9 @@ class Play:
         if FinishLine_Pass():
             self.CheckPass = True
             if list_image_load[0] == choice - 1:
-                doesWin = 1
+                doesWin = 'win'
             else:
-                doesWin = 0
+                doesWin = 'lose'
         
         # Vẽ trạng thái tiền vs user ID
         update_account(user_id, user_money)
@@ -1848,7 +1848,7 @@ def reset_game():
     choice = 0
     bet_money = 0
     total_money = 0
-    doesWin = 1
+    doesWin = None
     CHARACTERS = []
     LUCKYBOX = []
     GROUP = []
