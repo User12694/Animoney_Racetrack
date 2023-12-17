@@ -8,7 +8,7 @@ import re
     
 pygame.init()
 pygame.font.init()
-pygame.display.set_caption("Race game")
+pygame.display.set_caption("12BET - Animoney RaceTrack")
 clock = pygame.time.Clock()
 random.seed(datetime.now().timestamp())
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
@@ -396,10 +396,10 @@ class History:
         self.LEFT_BUTTON.update(mouse_pos)
         self.RIGHT_BUTTON.update(mouse_pos)
         if check_keywords_in_text(historyLine.getvalue()) == 1:
-            self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("green")) 
+            self.historyText = font.render(historyLine.getvalue(), True, '#508D69') 
             screen.blit(self.historyText, (screen.get_width() * 0.26, screen.get_height() * 0.36))
         elif check_keywords_in_text(historyLine.getvalue()) == 0:
-            self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
+            self.historyText = font.render(historyLine.getvalue(), True, '#860A35') 
             screen.blit(self.historyText, (screen.get_width() * 0.26, screen.get_height() * 0.36))
         else:
             self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("black")) 
