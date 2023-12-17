@@ -59,17 +59,16 @@ pygame.init()
 screen_size = pygame.display.get_desktop_sizes()[0]
 half_screen_size = (screen_size[0] / 2, screen_size[1]/2)
 WINDOW_SIZES = [screen_size, half_screen_size]
-WINDOW_SIZE_INDEX = 1
+WINDOW_SIZE_INDEX = 0
 screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
 screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
 screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
-pygame.display.set_caption('Flappy Bird')
 running = True
 # Phông chữ :
 font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(32*screen_ratio))
-text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
-menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
+text_Font = pygame.font.Font(None, int(screen_ratio * 38))
+menu_Font = pygame.font.Font(None, int(screen_ratio * 45))
 
 # vẽ hình chữ nhật chứa text
 rect_text = pygame.Rect(screen_Width / (screen_Width / 568), screen_Height / (screen_Height / 440), screen_Width / (screen_Width / 350),
@@ -1049,6 +1048,8 @@ class Congratulations:
         self.last_time = pygame.time.get_ticks()
         self.interval = 50
         self.current_image = 0
+        #Biến dùng để người chơi chiến thắng ăn mừng
+        self.start_time = pygame.time.get_ticks()
         
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
@@ -1089,11 +1090,31 @@ class Congratulations:
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
-            original_width, original_height = rank[i].original_image.get_size()
-            new_width, new_height = original_width * 2, original_height * 2
-            scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
-            scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
-            screen.blit(scaledImage, scaledImage_rect)
+            if i != 0:
+                original_width, original_height = rank[i].original_image.get_size()
+                new_width, new_height = original_width * 2, original_height * 2
+                scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
+                scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
+                screen.blit(scaledImage, scaledImage_rect)
+            else:
+                original_width, original_height = rank[i].original_image.get_size()
+                new_width, new_height = original_width * 2, original_height * 2
+                scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
+                scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
+                 # Tính thời gian hiện tại
+                current_time = pygame.time.get_ticks()
+
+                # Tính vị trí mới của hình chữ nhật dựa trên thời gian
+                elapsed_time = current_time - self.start_time
+                if elapsed_time <= 500:  # Chỉ di chuyển trong 1 giây
+                    scaledImage_rect.bottom = WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.78
+                else:
+                    if elapsed_time >= 1000:
+                        self.start_time = pygame.time.get_ticks()
+                    else:
+                        scaledImage_rect.bottom = WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.70
+                
+                screen.blit(scaledImage, scaledImage_rect)
 
 
     # Cập nhật các trạng thái của thuộc tính
@@ -1317,16 +1338,17 @@ def update_account(usr_id, money):
 
       
 def DrawInfo():
+    global WINDOW_SIZES, WINDOW_SIZE_INDEX,ratio
     # Lấy kích thước màn hình hiện tại
-    screen_info = pygame.display.Info()
+    screen_info = WINDOW_SIZES[WINDOW_SIZE_INDEX]
     # Tính toán kích thước của hình chữ nhật
-    rect_width = screen_info.current_w // 8
-    rect_height = screen_info.current_h // 8
+    rect_width = screen_info[0] // 4
+    rect_height = screen_info[1] // 4
     # Vẽ hình chữ nhật
     image = pygame.image.load('./assets/menu/nameAndMoney.png').convert_alpha()
-    image = pygame.transform.smoothscale(image,(image.get_width(), image.get_height()))
+    image = pygame.transform.smoothscale(image,(rect_width, rect_height))
     # Tạo font chữ
-    font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', 36)
+    font = pygame.font.Font('./assets/font/SVN-Retron_2000.ttf', int(36*ratio))
     update_account(user_id, user_money)
     # Render thông tin user_id và user_money
     text_id = font.render(user_id, True, '#E36414')
@@ -1334,8 +1356,8 @@ def DrawInfo():
 
     # Hiển thị thông tin lên hình chữ nhật
     screen.blit(image,(0,0))
-    screen.blit(text_id, (40, 10))
-    screen.blit(text_money, (40, 60))
+    screen.blit(text_id, (40*ratio, 10*ratio))
+    screen.blit(text_money, (40*ratio, 60*ratio))
 
 
 # Lớp menu chính
@@ -1577,7 +1599,6 @@ class WindowModeSettingClass:
         screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
         screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
         screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
-        screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
         font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(32*screen_ratio))
         text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
         menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
