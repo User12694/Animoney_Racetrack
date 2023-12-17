@@ -1,5 +1,5 @@
 asd
-6340
+5580
 2023/12/15 03:19:39: thuan lose -500, balance: 3400
 2023/12/15 03:19:39: thuan lose -600, balance: 3400
 2023/12/15 03:19:39: thuan lose -700, balance: 3400
