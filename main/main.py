@@ -371,6 +371,13 @@ def readHistorLineFromFile():
             historyLine.seek(0) #trỏ vào đầu chuỗi đấy
             historyLine.write(lines[line_number]) #viết mới vào biến đệm str historyline
 
+def check_keywords_in_text(text):
+    if 'win' in text and 'lose' not in text:
+        return 1
+    elif 'lose' in text and 'win' not in text:
+        return 0
+    else:
+        return 2
 
 class History:
     def __init__(self):
@@ -388,8 +395,15 @@ class History:
         screen.blit(self.image, (0, 0))
         self.LEFT_BUTTON.update(mouse_pos)
         self.RIGHT_BUTTON.update(mouse_pos)
-        self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
-        screen.blit(self.historyText, (screen.get_width() * 0.26, screen.get_height() * 0.36))
+        if check_keywords_in_text(historyLine.getvalue()) == 1:
+            self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("green")) 
+            screen.blit(self.historyText, (screen.get_width() * 0.26, screen.get_height() * 0.36))
+        elif check_keywords_in_text(historyLine.getvalue()) == 0:
+            self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
+            screen.blit(self.historyText, (screen.get_width() * 0.26, screen.get_height() * 0.36))
+        else:
+            self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("black")) 
+            screen.blit(self.historyText, (screen.get_width() * 0.26, screen.get_height() * 0.36))
 
     def update(self, event):
         global traceBackCount

@@ -1,7 +1,7 @@
 import pygame
 import random
 import sys
-import main.LoginSignup as LoginSignup
+import LoginSignup as LoginSignup
 #quy định các màu
 black = pygame.Color(0, 0, 0)
 white = pygame.Color(255, 255, 255)
