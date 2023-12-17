@@ -50,8 +50,9 @@ white = pygame.Color(255, 255, 255)
 bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
-#Lấy các biến từ file khác
-
+music_list = ["mainmenu.mp3","mainmenu2.wav","mainmenu3.wav","mainmenu4.wav","AzeleaTown.mp3","NewBarkTown.mp3","PokeMart.mp3"]
+music_path = random.choice(music_list)
+music = './assets/sounds/' + music_path
 #Mod lại subpath để có thể đưa menugame vào:
 subpath = './main/flappybird'
 account_sub_path = './assets/player/'
@@ -324,7 +325,7 @@ def flappy_bird():
                     1] > y_back_button:
                     print('end game')
                     update_account(user_id, user_money)
-                    pygame.mixer.music.load(f'./assets/sounds/mainmenu.mp3')
+                    pygame.mixer.music.load(music)
                     pygame.mixer.music.set_volume(present_volume)
                     pygame.mixer.music.play()
                     outOfMoney = False
@@ -1392,7 +1393,7 @@ class MenuClass:
         global MenuSound, gameSound, LANGUAGE
         if not MenuSound:
             pygame.mixer.music.set_volume(present_volume)
-            pygame.mixer.music.load('assets/sounds/mainmenu.mp3')
+            pygame.mixer.music.load(music)
             pygame.mixer.music.play(loops = -1)
             MenuSound = True
         pos = pygame.mouse.get_pos()
@@ -1466,12 +1467,13 @@ class VolumeSettingClass:
         # Chú ý các thành phần như âm lượng hiện tại và chỉ số âm lượng được đánh dấu toàn cục. Sau này sẽ thêm các thuộc tính WINDOW
         global present_volume, VOLUME_INDEX
         # self.label1 = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2 * 0.4,125,50,'Mute Volume') # Dòng chữ 'Mute Volume'  
-        self.esc_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.5),imageNormal = "back.png", imageChanged = "back2.png")    # Nút có chữ 'Back'
+        self.esc_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.75),imageNormal = "back.png", imageChanged = "back2.png")    # Nút có chữ 'Back'
         self.mute_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 0.55),imageNormal = "mute.png", imageChanged = "mute2.png") # Nút có chữ 'Mute'
         # self.label2 = Label(screen.get_width() / 2 * 0.92, screen.get_height() / 2 * 0.8,125,50,'Volume')     # dòng chữ "Volume"
         self.minusVol_button = Button((screen.get_width() / 2 * 0.6, screen.get_height() / 2 * 0.95),imageNormal = "low.png", imageChanged = "low2.png") #Các nút +, - để tăng giảm âm lượng
         self.plusVol_button = Button((screen.get_width() / 2 * 1.4, screen.get_height() / 2 * 0.95),imageNormal = "high.png", imageChanged = "high2.png")
         self.display_volume_label = Label(screen.get_width() / 2 * 0.95, screen.get_height() / 2,50,50, f"{present_volume * 100}") # Trường hiển thị âm lượng hiện tại
+        self.changeMusic_button = Button((screen.get_width() / 2, screen.get_height() / 2 * 1.375), imageNormal="changebg.png", imageChanged="changebg2.png")
         
         self.isMute = False #Các biến khai báo. Ở đây là biến xác định xem có đang tắt âm hay không
         #Các khai báo cho xác định âm lượng của âm thanh
@@ -1492,10 +1494,11 @@ class VolumeSettingClass:
         self.mute_button.update(mouse_pos)
         self.plusVol_button.update(mouse_pos)
         self.minusVol_button.update(mouse_pos)
+        self.changeMusic_button.update(mouse_pos)
         self.display_volume_label.draw(screen)
     #Cập nhật các trạng thái. Khai báo biến toàn cục là để giữ trạng thái âm lượng
     def update(self, event):
-        global present_volume
+        global present_volume, music_path, music_list, music
         global VOLUME_INDEX
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
@@ -1549,6 +1552,11 @@ class VolumeSettingClass:
                         present_volume=self.volume  # Khôi phục giá trị âm lượng
                         self.display_volume_label.text = f'{present_volume * 100}' #Khôi phục giá trị hiển thị âm lượng hiện tại
                         pygame.mixer.music.set_volume(present_volume)
+            if self.changeMusic_button.CheckClick(pos):
+                pygame.mixer.music.stop()
+                music = './assets/sounds/' + random.choice(music_list)
+                pygame.mixer.music.load(music)
+                pygame.mixer.music.play()
         return self
     
 #Quy định đối tượng màn hình cài đặt kích thước cửa sổ
@@ -1868,8 +1876,9 @@ class MoneyBet:
 # Đây là hàm reset game
 def reset_game():
     global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
-    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos, doesWin, total_money, list_image_load
-    file = './assets/sounds/mainmenu.mp3'
+    global rankSound, InitGame, countDownCheck, gameSound, Position, LuckyBox_Pos, doesWin, total_money, list_image_load, music,music_list
+    file = random.choice(music_list)
+    file = './assets/sounds/' + file
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load(file)
