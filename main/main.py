@@ -123,8 +123,8 @@ def flappy_bird():
     #Các quy định về tốc độ chim bay, vị trí của chim, trong lực
     BIRD_X = screen_Width * 2 / 15
     bird_y = screen_Height / (2)
-    BIRD_WIDTH = int(screen_Width * 7 / 300)
-    BIRD_HEIGHT = int(screen_Height * 7 / 300)
+    BIRD_WIDTH = int(screen_Width * 7 / 250)
+    BIRD_HEIGHT = int(screen_Height * 7 / 250)
     bird_drop_velocity = 0
     GRAVITY = 0.7
     #Điểm. Sẽ reset khi nhấn nút chơi lại
