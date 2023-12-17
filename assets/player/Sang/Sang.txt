@@ -1,5 +1,5 @@
 123
-95
+43600
 
 2023/12/16 18:47:53: sang lose -200, balance: 440
 2023/12/16 18:50:25: sang win +600, balance: 955
@@ -7,3 +7,34 @@
 2023/12/16 18:52:04: sang lose -200, balance: 255
 2023/12/16 18:54:58: sang lose -200, balance: 105
 2023/12/16 19:09:10: sang lose -200, balance: 110
+2023/12/17 09:49:13: sang win +600, balance: 735
+2023/12/17 10:02:01: sang lose -200, balance: 235
+2023/12/17 10:10:04: sang lose -200, balance: 35
+2023/12/17 10:12:20: sang win +600, balance: 49900
+2023/12/17 10:15:44: sang win +600, balance: 49800
+2023/12/17 10:17:12: sang lose -200, balance: 49200
+2023/12/17 10:18:40: sang win +600, balance: 49100
+2023/12/17 10:20:13: sang win +600, balance: 49200
+2023/12/17 10:22:53: sang lose -200, balance: 48700
+2023/12/17 10:24:01: sang lose -200, balance: 48200
+2023/12/17 10:25:20: sang win +600, balance: 48300
+2023/12/17 10:26:29: sang win +600, balance: 48200
+2023/12/17 10:31:42: sang win +600, balance: 48300
+2023/12/17 10:34:23: sang lose -200, balance: 47800
+2023/12/17 10:36:46: sang win +600, balance: 47900
+2023/12/17 10:39:15: sang win +600, balance: 48000
+2023/12/17 10:40:22: sang win +600, balance: 48100
+2023/12/17 10:41:31: sang win +600, balance: 48200
+2023/12/17 10:52:15: sang win +600, balance: 47800
+2023/12/17 10:53:34: sang lose -200, balance: 47300
+2023/12/17 10:54:21: sang lose -200, balance: 46800
+2023/12/17 10:57:39: sang lose -200, balance: 46300
+2023/12/17 10:59:26: sang win +600, balance: 46400
+2023/12/17 11:00:33: sang win +600, balance: 46500
+2023/12/17 11:01:50: sang win +600, balance: 46600
+2023/12/17 11:03:37: sang lose -200, balance: 46100
+2023/12/17 11:05:19: sang lose -200, balance: 45600
+2023/12/17 11:10:26: sang lose -200, balance: 45100
+2023/12/17 11:14:37: sang lose -200, balance: 44600
+2023/12/17 11:18:18: sang lose -200, balance: 44100
+2023/12/17 11:19:16: sang lose -200, balance: 43600

@@ -1044,6 +1044,8 @@ class Congratulations:
         self.last_time = pygame.time.get_ticks()
         self.interval = 50
         self.current_image = 0
+        #Biến dùng để người chơi chiến thắng ăn mừng
+        self.start_time = pygame.time.get_ticks()
         
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
@@ -1084,11 +1086,31 @@ class Congratulations:
                                 (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
-            original_width, original_height = rank[i].original_image.get_size()
-            new_width, new_height = original_width * 2, original_height * 2
-            scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
-            scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
-            screen.blit(scaledImage, scaledImage_rect)
+            if i != 0:
+                original_width, original_height = rank[i].original_image.get_size()
+                new_width, new_height = original_width * 2, original_height * 2
+                scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
+                scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
+                screen.blit(scaledImage, scaledImage_rect)
+            else:
+                original_width, original_height = rank[i].original_image.get_size()
+                new_width, new_height = original_width * 2, original_height * 2
+                scaledImage = pygame.transform.smoothscale(rank[i].original_image, (new_width, new_height))
+                scaledImage_rect = scaledImage.get_rect(midbottom = Congratulations_pos[i])
+                 # Tính thời gian hiện tại
+                current_time = pygame.time.get_ticks()
+
+                # Tính vị trí mới của hình chữ nhật dựa trên thời gian
+                elapsed_time = current_time - self.start_time
+                if elapsed_time <= 500:  # Chỉ di chuyển trong 1 giây
+                    scaledImage_rect.bottom = WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.78
+                else:
+                    if elapsed_time >= 1000:
+                        self.start_time = pygame.time.get_ticks()
+                    else:
+                        scaledImage_rect.bottom = WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.70
+                
+                screen.blit(scaledImage, scaledImage_rect)
 
 
     # Cập nhật các trạng thái của thuộc tính
