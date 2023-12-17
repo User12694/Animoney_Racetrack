@@ -1528,12 +1528,13 @@ class VolumeSettingClass:
 class WindowModeSettingClass:
     def __init__(self):
         #Khởi tạo các thuộc tính
+        global screen
         self.fullScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = "continue.png", imageChanged = "continue2.png") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
         self.halfScreenButton = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = "continue.png", imageChanged = "continue2.png") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
         self.esc_button = Button(pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.2), imageNormal = "back.png", imageChanged = "back2.png") # Nút quay về
     #Vẽ các thuộc tính lên bề mặt
     def draw(self, mouse_pos):
-        global LANGUAGE_INDEX
+        global screen
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
         Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
@@ -1544,7 +1545,7 @@ class WindowModeSettingClass:
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global halfScreen_active, screen, WINDOW_SIZE_INDEX, SCREEN_SIZE_INDEX
+        global halfScreen_active, screen, screen_Width, screen_Height, screen_ratio, font, text_Font, menu_Font, SCREEN_SIZE_INDEX, WINDOW_SIZE_INDEX, WINDOW_SIZES
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
@@ -1560,14 +1561,24 @@ class WindowModeSettingClass:
             elif self.halfScreenButton.CheckClick(pos):
                 WINDOW_SIZE_INDEX = 1
                 SCREEN_SIZE_INDEX = 1
+                screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
                 halfScreen_active = True
                 return self
             if self.esc_button.CheckClick(pos):
                 return SettingClass() #Trả về màn hình cài đặt
-            elif event.type == pygame.VIDEORESIZE:
-                # Xử lý sự kiện resize màn hình
-                width, height = event.w, event.h
-                screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+            # elif event.type == pygame.VIDEORESIZE:
+            #     # Xử lý sự kiện resize màn hình
+            #     width, height = event.w, event.h
+            #     screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+
+        screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+        screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
+        screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
+        screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
+        font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(32*screen_ratio))
+        text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
+        menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
+
         return self
         
 
