@@ -56,11 +56,11 @@ subpath = './main/flappybird'
 account_sub_path = './assets/player/'
 pygame.init()
 WINDOW_SIZES = [(1920, 1080), (1920 * 0.8 , 1080  * 0.8)]
-window_size_index = 1
-screen_Width = WINDOW_SIZES[window_size_index][0]
-screen_Height = WINDOW_SIZES[window_size_index][1]
-screen_ratio = WINDOW_SIZES[window_size_index][0] * WINDOW_SIZES[window_size_index][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
-screen = pygame.display.set_mode(WINDOW_SIZES[window_size_index], pygame.RESIZABLE)
+WINDOW_SIZE_INDEX = 1
+screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
+screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 pygame.display.set_caption('Flappy Bird')
 running = True
 # Phông chữ :
@@ -368,7 +368,7 @@ class History:
         global historyLine
 
         self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/historyMenu.png').convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[window_size_index])
+        self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         readHistorLineFromFile()
         self.historyText = font.render(historyLine.getvalue(), True, pygame.Color("red")) 
         self.LEFT_BUTTON = Button(pos=(screen.get_width() * 0.20, screen.get_height() * 0.38), imageNormal = "buttonToLeft.png", imageChanged = "buttonToLeft.png")
@@ -403,7 +403,7 @@ gameSound = False
 #Kích thước màn hình (Do chưa có pygame_menu nên tạm thời bỏ qua)
 SCREEN_SIZE = ['assets/characters/']
 SCREEN_SIZE_INDEX = 0
-screen = pygame.display.set_mode(WINDOW_SIZES[window_size_index], pygame.RESIZABLE)
+screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
 halfScreen_active = False
 
 #Kiểu chữ
@@ -417,15 +417,15 @@ scoreBoard_Box = scoreBoard.get_rect(center = (screen.get_width() * 0.13, screen
 
 #Ảnh các loại
 map1 = pygame.image.load('assets/background/map1.png').convert_alpha()
-map1 = pygame.transform.smoothscale(map1, WINDOW_SIZES[window_size_index])
+map1 = pygame.transform.smoothscale(map1, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map2 = pygame.image.load('assets/background/map2.png').convert_alpha()
-map2 = pygame.transform.smoothscale(map2, WINDOW_SIZES[window_size_index])
+map2 = pygame.transform.smoothscale(map2, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map3 = pygame.image.load('assets/background/map3.png').convert_alpha()
-map3 = pygame.transform.smoothscale(map3, WINDOW_SIZES[window_size_index])
+map3 = pygame.transform.smoothscale(map3, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map4 = pygame.image.load('assets/background/map4.png').convert_alpha()
-map4 = pygame.transform.smoothscale(map4, WINDOW_SIZES[window_size_index])
+map4 = pygame.transform.smoothscale(map4, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 map5 = pygame.image.load('assets/background/map5.png').convert_alpha()
-map5 = pygame.transform.smoothscale(map5, WINDOW_SIZES[window_size_index])
+map5 = pygame.transform.smoothscale(map5, WINDOW_SIZES[WINDOW_SIZE_INDEX])
 MAPS = [map1, map2, map3, map4, map5]
 MAP_INDEX = 0
 #Các ảnh cần dùng đến
@@ -496,11 +496,11 @@ RandSpeed = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
 Speed = []
 for x in range(5):
     Speed.append(random.choice(RandSpeed))
-Position = [(WINDOW_SIZES[window_size_index][0] * 0.01, WINDOW_SIZES[window_size_index][1] * 0.55), 
-            (WINDOW_SIZES[window_size_index][0] * 0.01, WINDOW_SIZES[window_size_index][1] * 0.66), 
-            (WINDOW_SIZES[window_size_index][0] * 0.01, WINDOW_SIZES[window_size_index][1] * 0.76), 
-            (WINDOW_SIZES[window_size_index][0] * 0.01, WINDOW_SIZES[window_size_index][1] * 0.87), 
-            (WINDOW_SIZES[window_size_index][0] * 0.01, WINDOW_SIZES[window_size_index][1] * 0.98)]
+Position = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.55), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.66), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.76), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.87), 
+            (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.01, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.98)]
 
 #Ktra nhạc đã phát chưa
 Victory_sound_Play = True
@@ -697,7 +697,7 @@ class Character():
     #Check điều kiện thắng
     def checkFinishLine(self):
         global list_image_load, doesWin, user_money, bet_money
-        if self.rect.x > WINDOW_SIZES[window_size_index][0] * 0.95:
+        if self.rect.x > WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.95:
             if not self.Finish:
                 rank.append(self)
                 list_image_load.append(self.number)
@@ -784,7 +784,7 @@ class Character():
 
     def teleport(self, activated):
         if not activated:
-            self.rect.x = WINDOW_SIZES[window_size_index][0] * 0.8
+            self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * 0.8
 
     def goback(self, activated):
         if not activated and not self.isGoBack:
@@ -796,9 +796,9 @@ LuckyBox_Pos = []
 LuckyBox_Height = [0.55, 0.66, 0.76, 0.87, 0.98]
 for i in range(10):
     if i < 5:
-        LuckyBox_Pos.append((WINDOW_SIZES[window_size_index][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[window_size_index][1] * LuckyBox_Height[i]))
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
     else:
-        LuckyBox_Pos.append((WINDOW_SIZES[window_size_index][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[window_size_index][1] * LuckyBox_Height[i - 5]))
+        LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
 
 def init_character_luckybox():
     global set_choice, SCREEN_SIZE_INDEX
@@ -808,9 +808,9 @@ def init_character_luckybox():
     #Khởi tại vị trí lucky box
     for i in range(10):
         if i < 5:
-            LuckyBox_Pos.append((WINDOW_SIZES[window_size_index][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[window_size_index][1] * LuckyBox_Height[i]))
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.28, 0.5), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i]))
         else:
-            LuckyBox_Pos.append((WINDOW_SIZES[window_size_index][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[window_size_index][1] * LuckyBox_Height[i - 5]))
+            LuckyBox_Pos.append((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * random.uniform(0.65, 0.75), WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * LuckyBox_Height[i - 5]))
 
     for i in range(5):
         new_character = Character(speed = Speed[i], 
@@ -841,14 +841,14 @@ class IG_Objects():
         if self.name == "ChuChay":
             self.rect.x -= 2
             if self.rect.right <= 0:
-                self.rect.x = WINDOW_SIZES[window_size_index][0]
+                self.rect.x = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
     def update(self):
         if self.name == "ChuChay":
             self.move()
             screen.blit(self.image, self.rect)
 
 #Add object
-ChuChay = IG_Objects(name = 'ChuChay', pos = (WINDOW_SIZES[window_size_index][0], 0))
+ChuChay = IG_Objects(name = 'ChuChay', pos = (WINDOW_SIZES[WINDOW_SIZE_INDEX][0], 0))
 
 class LuckyBox():
     def __init__(self, pos, character):
@@ -1051,7 +1051,7 @@ class Congratulations:
     def draw(self, mouse_pos):
         global rank, rankSound,  WINDOW_SIZES, winner
         BG = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'BG_congratulations.png').convert_alpha()
-        BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[window_size_index])
+        BG = pygame.transform.smoothscale(BG, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(BG, (0, 0))
         self.CONTINUE_BUTTON.update(mouse_pos)
 
@@ -1074,16 +1074,16 @@ class Congratulations:
             firework_surface = pygame.image.load(firework_images[self.current_image]).convert_alpha()
             self.last_time = current_time
 
-        screen.blit(firework_surface, ((WINDOW_SIZES[window_size_index][0] / 2 * 1.05, WINDOW_SIZES[window_size_index][1] * 0.4)))
-        screen.blit(firework_surface, ((WINDOW_SIZES[window_size_index][0] / 2 * 0.7, WINDOW_SIZES[window_size_index][1] * 0.4)))
-        screen.blit(firework_surface, ((WINDOW_SIZES[window_size_index][0] / 2 * 0.9, WINDOW_SIZES[window_size_index][1] * 0.25)))
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.4)))
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.4)))
+        screen.blit(firework_surface, ((WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.9, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.25)))
 
         #Bảng xếp hạng
-        Congratulations_pos = [(WINDOW_SIZES[window_size_index][0] / 2 * 1.05, WINDOW_SIZES[window_size_index][1] * 0.78), 
-                                (WINDOW_SIZES[window_size_index][0] / 2 * 0.6, WINDOW_SIZES[window_size_index][1]* 0.85), 
-                                (WINDOW_SIZES[window_size_index][0] / 2 * 1.5, WINDOW_SIZES[window_size_index][1]* 0.85), 
-                                (WINDOW_SIZES[window_size_index][0] / 2 * 0.42, WINDOW_SIZES[window_size_index][1] * 0.93), 
-                                (WINDOW_SIZES[window_size_index][0] / 2 * 1.7, WINDOW_SIZES[window_size_index][1] * 0.93)]
+        Congratulations_pos = [(WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.05, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.78), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.6, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.5, WINDOW_SIZES[WINDOW_SIZE_INDEX][1]* 0.85), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 0.42, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93), 
+                                (WINDOW_SIZES[WINDOW_SIZE_INDEX][0] / 2 * 1.7, WINDOW_SIZES[WINDOW_SIZE_INDEX][1] * 0.93)]
 
         for i in range(5):
             if i != 0:
@@ -1159,10 +1159,10 @@ class Result:
         global doesWin, bet_money
         if doesWin == 'win':
             self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/win{bet_money*3}.png').convert_alpha()
-            self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[window_size_index])
+            self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         elif doesWin == 'lose':
             self.image = pygame.image.load(f'{LANGUAGE[LANGUAGE_INDEX]}/lose{bet_money}.png').convert_alpha()
-            self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[window_size_index])
+            self.image = pygame.transform.smoothscale(self.image, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         self.CONTINUE_BUTTON = Button(pos=(screen.get_width() / 2 * 1.05, screen.get_height() * 0.75), imageNormal = "continue.png", imageChanged = "continue2.png")
         self.screenshot_button = Button(pos=(screen_Width - screen_Width / 10, screen_Height - screen_Height / 4*3), imageNormal="screenshot.png", imageChanged="screenshot2.png")
     def draw(self, mouse_pos):
@@ -1265,7 +1265,7 @@ def Pause_Game():
      while True:
         #Ảnh nền
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Các nút ở trong Pause menu
         mouse_pos = pygame.mouse.get_pos()
@@ -1299,7 +1299,7 @@ def Pause_Game():
 def QuitConfirm():
     while True:
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'quitprompt.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         mouse_pos = pygame.mouse.get_pos()
         #Các nút trong quit confirm
@@ -1371,7 +1371,7 @@ class MenuClass:
     def draw(self, mouse_pos):
         global user_id, screen_info
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         update_account(user_id, user_money)
         DrawInfo()
@@ -1423,7 +1423,7 @@ class SettingClass: #Khởi tạo các nút, label và Button.
     #Vẽ các lớp phủ, các nút và chữ
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + 'settingsMenu.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0)) #Tạo một lớp phủ hình chữ nhật kích thước tối đa
         #Vẽ nút
         self.soundButton.update(mouse_pos)
@@ -1478,7 +1478,7 @@ class VolumeSettingClass:
     def draw(self, mouse_pos):
         #Vẽ lớp phủ hình chữ nhật kích thước bằng kích thước cửa sổ hiện hành
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'soundMenu.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background,(0,0))
         #Vẽ các thuộc tính khác đã nêu
         # self.label1.draw(screen)
@@ -1558,7 +1558,7 @@ class WindowModeSettingClass:
     def draw(self, mouse_pos):
         global screen
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'background.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         if halfScreen_active:
             self.fullScreenButton.update(mouse_pos)
@@ -1567,7 +1567,7 @@ class WindowModeSettingClass:
         self.esc_button.update(mouse_pos)
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
-        global halfScreen_active, screen, screen_Width, screen_Height, screen_ratio, font, text_Font, menu_Font, SCREEN_SIZE_INDEX, window_size_index, WINDOW_SIZES
+        global halfScreen_active, screen, screen_Width, screen_Height, screen_ratio, font, text_Font, menu_Font, SCREEN_SIZE_INDEX, WINDOW_SIZE_INDEX, WINDOW_SIZES
         #Lấy vị trí đầu con trỏ chuột
         pos = pygame.mouse.get_pos()
         #Kiểm tra xem có nhấn chuột không
@@ -1575,15 +1575,15 @@ class WindowModeSettingClass:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không
             if self.fullScreenButton.CheckClick(pos):
                 halfScreen_active = not halfScreen_active
-                window_size_index = 0
-                if window_size_index == 0:
-                    screen = pygame.display.set_mode(WINDOW_SIZES[window_size_index], pygame.RESIZABLE)
+                WINDOW_SIZE_INDEX = 0
+                if WINDOW_SIZE_INDEX == 0:
+                    screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
                 SCREEN_SIZE_INDEX = 0
                 return self
             elif self.halfScreenButton.CheckClick(pos):
-                window_size_index = 1
+                WINDOW_SIZE_INDEX = 1
                 SCREEN_SIZE_INDEX = 1
-                screen = pygame.display.set_mode(WINDOW_SIZES[window_size_index], pygame.RESIZABLE)
+                screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
                 halfScreen_active = True
                 return self
             if self.esc_button.CheckClick(pos):
@@ -1593,9 +1593,9 @@ class WindowModeSettingClass:
             #     width, height = event.w, event.h
             #     screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
-        screen_Width = WINDOW_SIZES[window_size_index][0]
-        screen_Height = WINDOW_SIZES[window_size_index][1]
-        screen_ratio = WINDOW_SIZES[window_size_index][0] * WINDOW_SIZES[window_size_index][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
+        screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
+        screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
+        screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
         font = pygame.font.Font("./assets/font/SVN-Retron_2000.ttf", int(32*screen_ratio))
         text_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 38))
         menu_Font = pygame.font.Font(None, int(screen_Width / screen_Width * 45))
@@ -1606,7 +1606,7 @@ class WindowModeSettingClass:
 class MapSelection:
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'mapselection.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
@@ -1647,7 +1647,7 @@ class CharacterSelection:
     global InitGame, MAP_INDEX, set_choice, choice
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+f'choose_char{set_choice}.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
     #Cập nhật trạng thái cho các thuộc tính
     def update(self, event):
@@ -1683,7 +1683,7 @@ class CharacterSelection:
 class Shop: 
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'shopee.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         update_account(user_id, user_money)
         DrawInfo()
@@ -1740,7 +1740,7 @@ class Shop:
 class ShowInsufficientFundsMessage:
     def __init__(self):
         global outOfMoney
-        self.cover_frame = pygame.surface.Surface(WINDOW_SIZES[window_size_index], pygame.SRCALPHA)
+        self.cover_frame = pygame.surface.Surface(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.SRCALPHA)
         self.cover_frame.fill((0,0,0,180))
         self.yesButton = Button(pos=(screen.get_width() / 2, screen.get_height() * 0.65), imageNormal = "yes.png", imageChanged = "yes2.png") # Nút để chỉnh chế độ cửa sổ, mặc định có text "Window"
         self.noButton = Button(pos=(screen.get_width() / 2, screen.get_height() * 0.8), imageNormal = "no.png", imageChanged = "no2.png") # Nút chuyển kích thước cửa sổ. Mặc định là 1920x1080
@@ -1829,7 +1829,7 @@ class MoneyBet:
     global InitGame, MAP_INDEX, set_choice, choice, bet_money, user_money, money_bet
     def draw(self, mouse_pos):
         Background = pygame.image.load(LANGUAGE[LANGUAGE_INDEX]+'moneyshop.png').convert_alpha()
-        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[window_size_index])
+        Background = pygame.transform.smoothscale(Background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
         screen.blit(Background, (0, 0))
         update_account(user_id, user_money)
         DrawInfo()
