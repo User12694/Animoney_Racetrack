@@ -4,7 +4,8 @@ from datetime import datetime
 from io import StringIO 
 from LoginSignup import *
 import re
-# LKhởi tạo các thứ
+
+    
 pygame.init()
 pygame.font.init()
 pygame.display.set_caption("Race game")
@@ -55,8 +56,10 @@ color = pygame.Color('lightskyblue3')
 subpath = './main/flappybird'
 account_sub_path = './assets/player/'
 pygame.init()
-WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
-WINDOW_SIZE_INDEX = 0
+screen_size = pygame.display.get_desktop_sizes()[0]
+half_screen_size = (screen_size[0] / 2, screen_size[1]/2)
+WINDOW_SIZES = [screen_size, half_screen_size]
+WINDOW_SIZE_INDEX = 1
 screen_Width = WINDOW_SIZES[WINDOW_SIZE_INDEX][0]
 screen_Height = WINDOW_SIZES[WINDOW_SIZE_INDEX][1]
 screen_ratio = WINDOW_SIZES[WINDOW_SIZE_INDEX][0] * WINDOW_SIZES[WINDOW_SIZE_INDEX][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
@@ -955,6 +958,7 @@ class LuckyBox():
 #Class nút
 class Button():
     def __init__(self, pos, imageNormal, imageChanged):
+        global screen_Width, screen_Height
         self.imageNormal = imageNormal
         self.imageChanged = imageChanged
         self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + imageNormal).convert_alpha()
@@ -968,9 +972,10 @@ class Button():
         return False
     
     def update(self, position):
-        global LANGUAGE_INDEX
+        global LANGUAGE_INDEX, screen_Width, screen_Height, WI
         if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
             self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageChanged).convert_alpha()
+            
         else:
             self.image = pygame.image.load(LANGUAGE[LANGUAGE_INDEX] + self.imageNormal).convert_alpha()
         screen.blit(self.image, self.rect)
@@ -1557,13 +1562,11 @@ class WindowModeSettingClass:
                 if WINDOW_SIZE_INDEX == 0:
                     screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
                 SCREEN_SIZE_INDEX = 0
-                return self
             elif self.halfScreenButton.CheckClick(pos):
                 WINDOW_SIZE_INDEX = 1
                 SCREEN_SIZE_INDEX = 1
                 screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX], pygame.RESIZABLE)
                 halfScreen_active = True
-                return self
             if self.esc_button.CheckClick(pos):
                 return SettingClass() #Trả về màn hình cài đặt
             # elif event.type == pygame.VIDEORESIZE:
@@ -1887,6 +1890,8 @@ def main():
             if event.type == pygame.QUIT:  # Nếu sự kiện là loại thoát (như nhấn nút đóng cửa sổ)
                 pygame.quit()  # Thoát khỏi Pygame
                 sys.exit()  # Thoát khỏi chương trình
+            elif event.type == pygame.VIDEORESIZE:
+                screen = pygame.display.set_mode(WINDOW_SIZES[WINDOW_SIZE_INDEX],pygame.RESIZABLE)
             current_class = current_class.update(event)  # Cập nhật trạng thái của đối tượng hiện tại dựa trên sự kiện
         mouse_pos = pygame.mouse.get_pos()
         current_class.draw(mouse_pos)  # Vẽ đối tượng hiện tại lên màn hình

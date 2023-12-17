@@ -80,6 +80,8 @@ class LoginMenu:
         # self.open_image_button = ctk.CTkButton(self.frame, text="Open image", font=("default", 12*ratio, "bold"), fg_color="transparent", width= 78*ratio, height=20*ratio, command=self.open_image)
         # self.open_image_button.place(x=303*ratio, y= 758*ratio)
 
+        # Tạo nút đăng kí bằng email
+        self.email_register = ctk.CTkButton(self.frame, text="Sign up by email", font=("default",12*ratio,"bold"),fg_color="transparent",width=145*ratio, height=20*ratio,command=self.switch_to_register)
         # Tạo hình ảnh và đặt ở tọa độ (156,71)
         self.image = Image.open("./main/image_transparent.png")
         self.image = self.image.resize((int(200*ratio), int(200*ratio)))
@@ -91,8 +93,7 @@ class LoginMenu:
         self.login_label = ctk.CTkLabel(self.frame, text="Login", font=("default", 32*ratio, "bold"), fg_color="transparent", width=177*ratio, height=45*ratio)
         self.login_label.place(x=167*ratio, y=271*ratio)
 
-        self.confirm_password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20*ratio, "bold"))
-
+        self.confirm_password_label = ctk.CTkLabel(self.frame, text="Confirm Password", font=("default", 20*ratio, "bold"))
         self.confirm_password_entry = ctk.CTkEntry(self.frame, width=343*ratio, height=54*ratio, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20*ratio),show='•')
     def open_image(self):
         pass
@@ -112,6 +113,7 @@ class LoginMenu:
         self.signup_button2.place(x = 25*ratio, y = 100*ratio)
 
     def switch_to_register(self): # Đăng kí bằng email
+        self.login_label.configure(text="Register")
         clear_entry(self.username_entry)
         clear_entry(self.password_entry)
         clear_entry(self.confirm_password_entry)
@@ -119,13 +121,10 @@ class LoginMenu:
         self.username_label.configure(text="Email")
         self.password_label.place_forget()
         self.password_entry.place_forget()
-
         # Chuyển đổi text trên nút "Login" thành "Register"
         self.login_button.configure(text="Confirm Email", command= self.confirm_email)
-
         # Thay đổi chữ trong label "Don't have an account?" thành "Already have one?"
         self.account_label.configure(text="Already have one?")
-
         # Thay đổi chữ trên nút "Sign up" thành "Sign in"
         self.signup_button.configure(text="Sign in", command=self.switch_to_login)
     def switch_to_login(self):
@@ -201,6 +200,8 @@ class LoginMenu:
         self.password_entry.place(x=92*ratio, y=478*ratio)
         self.account_label.configure(text="Already have account?")
         self.signup_button.configure(text="Sign in", command=self.switch_to_login)
+        self.email_register.place(x=116*ratio, y=855*ratio)
+        self.email_register.place_forget()
         # Tạo nhãn "Password" và đặt ở tọa độ (92,443)
         self.confirm_password_label.place(x=92*ratio, y=549*ratio)
         # Tạo hộp nhập liệu thứ nhất và đặt ở tọa độ (92,370)
