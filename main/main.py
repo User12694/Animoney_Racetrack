@@ -1202,6 +1202,7 @@ rankSound = False
 class Play:
     def __init__(self):
         # money_bet()
+        reset_game()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
@@ -1371,13 +1372,14 @@ def DrawInfo():
 class MenuClass: 
     #Khởi tạo các thuộc tính
     def __init__(self):
-        reset_game()
+
         global VOLUME_INDEX, present_volume
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.15), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.minigame = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "minigame.png", imageChanged = "minigame2.png")
         self.historyButton = Button (pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.55),imageNormal="history.png",imageChanged="history2.png")
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.8), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
+        self.infoButton = Button(pos = (screen.get_width() - screen.get_width() / 25, screen.get_height() / 20), imageNormal="info.jpg", imageChanged="info2.jpg") # Nút thông tin
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
@@ -1392,6 +1394,7 @@ class MenuClass:
         self.quitButton.update(mouse_pos)
         self.historyButton.update(mouse_pos)
         self.minigame.update(mouse_pos)
+        self.infoButton.update(mouse_pos)
         # self.changeLanguageButton.update(mouse_pos)
 
     # Cập nhật các trạng thái của thuộc tính
@@ -1407,6 +1410,8 @@ class MenuClass:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if self.infoButton.CheckClick(pos):
+                return Credit()
             if self.playButton.CheckClick(pos):
                 # if user_money < min(money_bet_list):
                 #     flappy_bird()
@@ -1879,6 +1884,24 @@ class MoneyBet:
 
         #pygame.display.flip()
 
+class Credit:
+    def __init__(self):
+        global LANGUAGE, LANGUAGE_INDEX, WINDOW_SIZES, WINDOW_SIZE_INDEX
+        self.background = pygame.image.load(f"{LANGUAGE[LANGUAGE_INDEX]}/credit.jpg").convert_alpha()
+        self.background = pygame.transform.smoothscale(self.background, WINDOW_SIZES[WINDOW_SIZE_INDEX])
+        self.end_game = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.85), imageNormal = "back.png", imageChanged = "back2.png") # Nút có dòng chữ "Quit"
+    def draw(self,mouse_pos):
+        screen.blit(self.background, (0,0))
+        self.end_game.update(mouse_pos)
+    def update(self,event):
+        pos = pygame.mouse.get_pos()
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.end_game.CheckClick(pos):
+                return MenuClass()
+        return self
 # Đây là hàm reset game
 def reset_game():
     global set_choice, choice, bet_money, CHARACTERS, LUCKYBOX, GROUP, rank, winner, last, Speed, Victory_sound_Play
