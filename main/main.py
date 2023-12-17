@@ -50,9 +50,15 @@ white = pygame.Color(255, 255, 255)
 bright_red = pygame.Color(255, 0, 0)
 old_red = pygame.Color(200, 0, 0)
 color = pygame.Color('lightskyblue3')
-music_list = ["mainmenu.mp3","mainmenu2.wav","mainmenu3.wav","mainmenu4.wav","AzeleaTown.mp3","NewBarkTown.mp3","PokeMart.mp3"]
-music_path = random.choice(music_list)
-music = './assets/sounds/' + music_path
+music, music_list, music_path = None, [], None
+if user_id == "devteam":
+    music_list = ["AntikytheraMechanism.mp3","Mii.mp3"]
+    music_path = random.choice(music_list)
+    music = './assets/sounds/' + music_path
+else:
+    music_list = ["mainmenu.mp3","mainmenu2.wav","mainmenu3.wav","mainmenu4.wav","AzeleaTown.mp3","NewBarkTown.mp3","PokeMart.mp3"]
+    music_path = random.choice(music_list)
+    music = './assets/sounds/' + music_path
 #Mod lại subpath để có thể đưa menugame vào:
 subpath = './main/flappybird'
 account_sub_path = './assets/player/'
