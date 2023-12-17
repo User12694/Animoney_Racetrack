@@ -281,7 +281,7 @@ class WindowModeSettingClass:
         if event.type == pygame.VIDEORESIZE:
             if self.button2.isOver(pos):
                 WINDOWS_SCREEN_SIZE = 1
-                scr
+    
         # Kiểm tra xem có đang rê chuột trên nút hay không
         if event.type == pygame.MOUSEMOTION:
             #Hàm isOver kiểm tra xem con trỏ chuột có đè lên các thuộc tính Button trong khi đang nhấn nút chuột trái hay không

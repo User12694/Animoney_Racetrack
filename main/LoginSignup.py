@@ -66,13 +66,19 @@ class LoginMenu:
         self.account_label = ctk.CTkLabel(self.frame, text="Don't have an account?", font=("default", 12*ratio, "bold"), fg_color="transparent", width=145*ratio, height=20*ratio)
         self.account_label.place(x=158*ratio, y=728*ratio)
 
-        # Tạo nút "Sign up" và đặt ở tọa độ (303,728)sel
+        # Tạo nút "Sign up" và đặt ở tọa độ (303,728)
         self.signup_button = ctk.CTkButton(self.frame, text="Sign up", font=("default", 12*ratio, "bold"), fg_color="transparent", width=51*ratio, height=20*ratio, command=self.create_account)
         self.signup_button.place(x=303*ratio, y=728*ratio)
 
         # Tạo nút "Login" và đặt ở tọa độ (213,608)
         self.login_button = ctk.CTkButton(self.frame, text="Login", font=("default", 20*ratio, "bold"), fg_color="#F7B104", width=169*ratio, height=47*ratio, corner_radius=30, command=self.login)
         self.login_button.place(x=179*ratio, y=575*ratio)
+
+        # self.open_image_label = ctk.CTkLabel(self.frame, text="Other choice? ", font=("default", 12*ratio, "bold"), fg_color="transparent", width=145*ratio, height=20*ratio)
+        # self.open_image_label.place(x= 158*ratio, y= 758*ratio)
+
+        # self.open_image_button = ctk.CTkButton(self.frame, text="Open image", font=("default", 12*ratio, "bold"), fg_color="transparent", width= 78*ratio, height=20*ratio, command=self.open_image)
+        # self.open_image_button.place(x=303*ratio, y= 758*ratio)
 
         # Tạo hình ảnh và đặt ở tọa độ (156,71)
         self.image = Image.open("./main/image_transparent.png")
@@ -88,7 +94,8 @@ class LoginMenu:
         self.confirm_password_label = ctk.CTkLabel(self.frame, text="Password", font=("default", 20*ratio, "bold"))
 
         self.confirm_password_entry = ctk.CTkEntry(self.frame, width=343*ratio, height=54*ratio, fg_color="white", border_width=2, border_color="black", corner_radius=20, font=("default", 20*ratio),show='•')
-
+    def open_image(self):
+        pass
     def draw(self):
         # Lặp vô tận để hiển thị cửa sổ
         self.window.mainloop()
