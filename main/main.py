@@ -1202,7 +1202,6 @@ rankSound = False
 class Play:
     def __init__(self):
         # money_bet()
-        reset_game()
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2), imageNormal = "play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.7), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
@@ -1372,14 +1371,14 @@ def DrawInfo():
 class MenuClass: 
     #Khởi tạo các thuộc tính
     def __init__(self):
-
+        reset_game()
         global VOLUME_INDEX, present_volume
         self.playButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 0.9), imageNormal = f"play.png", imageChanged = "play2.png") # Nút có dòng chữ "Play game"
         self.settingsButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.15), imageNormal = "settings.png", imageChanged = "settings2.png") # Nút có dòng chữ "Settings"
         self.minigame = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.35), imageNormal = "minigame.png", imageChanged = "minigame2.png")
         self.historyButton = Button (pos=(screen.get_width() / 2, screen.get_height() / 2 * 1.55),imageNormal="history.png",imageChanged="history2.png")
         self.quitButton = Button(pos = (screen.get_width() / 2, screen.get_height() / 2 * 1.8), imageNormal = "quit.png", imageChanged = "quit2.png") # Nút có dòng chữ "Quit"
-        self.infoButton = Button(pos = (screen.get_width() - screen.get_width() / 25, screen.get_height() / 20), imageNormal="info.jpg", imageChanged="info2.jpg") # Nút thông tin
+        self.infoButton = Button(pos = (screen.get_width() - screen.get_width() / 30, screen.get_height() / 20), imageNormal="info.jpg", imageChanged="info2.jpg") # Nút thông tin
         #v self.changeLanguageButton = Button(pos=(screen.get_width() - screen.get_width() / 16, screen.get_height() - screen.get_height() / 16), imageNormal= "lang40.png", imageChanged= "lang240.png") # Nút chuyển đổi ngôn ngữ
     #Vẽ các thuộc tính lên màn hình
     def draw(self, mouse_pos):
