@@ -120,7 +120,7 @@ def flappy_bird():
         clock.tick(120)
         #Khởi tạo và vẽ ảnh lên màn hình
         background_image = pygame.image.load(f"{subpath}/flappybird/background.png").convert_alpha()
-        background_image = pygame.transform.scale(background_image, (screen_Width, screen_Height))
+        # background_image = pygame.transform.scale(background_image, (screen_Width, screen_Height))
         screen.blit(background_image, (0, 0))
         
         #Load các thông số người chơi: ID, money
@@ -135,7 +135,7 @@ def flappy_bird():
         bird_image = pygame.image.load(f"{subpath}/flappybird/bird.png").convert_alpha()
         bird_image = pygame.transform.scale(bird_image, (BIRD_WIDTH, BIRD_HEIGHT))
         base_image = pygame.image.load(f"{subpath}/flappybird/base.png").convert_alpha()
-        base_image = pygame.transform.scale(base_image, (screen_Width, screen_Height // 4))
+        # base_image = pygame.transform.scale(base_image, (screen_Width, screen_Height // 4))
 
         tube_image1 = pygame.image.load(f"{subpath}/flappybird/pipe1.png").convert_alpha()
         tube_image1 = pygame.transform.scale(tube_image1, (TUBE_WIDTH, tube1_height))
