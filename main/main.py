@@ -55,8 +55,8 @@ color = pygame.Color('lightskyblue3')
 subpath = './main/flappybird'
 account_sub_path = './assets/player/'
 pygame.init()
-WINDOW_SIZES = [pygame.display.get_desktop_sizes()[0], (768,432)]
-window_size_index = 0
+WINDOW_SIZES = [(1920, 1080), (1920 * 0.8 , 1080  * 0.8)]
+window_size_index = 1
 screen_Width = WINDOW_SIZES[window_size_index][0]
 screen_Height = WINDOW_SIZES[window_size_index][1]
 screen_ratio = WINDOW_SIZES[window_size_index][0] * WINDOW_SIZES[window_size_index][1] / (WINDOW_SIZES[0][0] * WINDOW_SIZES[0][1])
