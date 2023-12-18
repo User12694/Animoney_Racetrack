@@ -5,9 +5,9 @@ HƯỚNG DẪN SỬ DỤNG CHO NGƯỜI MỚI - Animoney RaceTrack
 ====================================================
 Chào mừng bạn đến với game Animoney RaceTrack!
 
-Nếu bạn muốn tìm kiếm một cái gì đó giải trí sau khi chạy deadline, đồ án, hay muốn tìm đến một game nào đó có màu sắc tươi sáng, trẻ trung để xua tan đi cái u tôi trong cuộc đời của bạn, hay chỉ đơn giản là bạn muốn tìm một game để chơi: Đơn giản, đồ họa 2D không bị rối mắt bởi những hiệu ứng chém ảo tung chảo như các series Final Fantasy hay Dark Soul, thì game này là một sự lựa chọn hoàn hảo dành cho bạn
+Nếu bạn muốn tìm kiếm một cái gì đó giải trí sau khi chạy deadline, đồ án, hay muốn tìm đến một game nào đó có màu sắc tươi sáng, trẻ trung để xua tan đi cái u tối trong cuộc đời của bạn, hay chỉ một game để chơi: Đơn giản, đồ họa 2D không bị rối mắt bởi những hiệu ứng chém ảo tung chảo như các series Final Fantasy hay Dark Soul, thì game này là một sự lựa chọn hoàn hảo dành cho bạn
 
-Animoney RaceTrack là một game mang thiên hướng cá cược là chính, tại đó bạn có thể được dùng tiền chọn nhân vật bạn thích, tiến tới vạch xuất phát và chờ xem ai là người thắng cuộc. Nếu bạn là một người có tính thích ăn thua đủ , máu cá cược cao, thì game này đích thị là dành cho bạn
+Animoney RaceTrack là một game mang thiên hướng cá cược là chính, tại đó bạn có thể được dùng tiền chọn nhân vật bạn thích, tiến tới vạch xuất phát và chờ xem ai là người thắng cuộc. Nếu bạn là một người có tính thích ăn thua đủ , máu cá cược cao, thì game này đích thị là lựa chọn số một
 
 
 CÁCH CÀI ĐẶT VÀ KHỞI ĐỘNG GAME
