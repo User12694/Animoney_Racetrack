@@ -1587,7 +1587,7 @@ class VolumeSettingClass:
                 pygame.mixer.music.stop()
                 music = './assets/sounds/' + random.choice(music_list)
                 pygame.mixer.music.load(music)
-                pygame.mixer.music.play()
+                pygame.mixer.music.play(loops=-1)
         return self
     
 #Quy định đối tượng màn hình cài đặt kích thước cửa sổ
