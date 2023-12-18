@@ -266,7 +266,7 @@ class LoginMenu:
                 with open(f"assets/player/{username}/{username}.txt", "w") as file:  # Tạo một file mới với tên người dùng
                     file.write(password + "\n")  # Ghi mật khẩu vào dòng đầu tiên của file
                     file.write("500" + "\n")  # Ghi "500" vào dòng thứ hai của file
-                '''with open(f"assets/player/{username}/{email}.txt") as file:
+                '''with open(f"assets/player/{username}/{email}.txt",'w') as file:
                     file.write(email + '\n')'''
                 tkinter.messagebox.showinfo("Register successful!", "Register successful!")  # Hiển thị thông báo thành công
                 self.switch_to_login()  # Chuyển về chế độ đăng nhập

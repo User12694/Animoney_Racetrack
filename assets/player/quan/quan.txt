@@ -1,0 +1,35 @@
+123
+4924
+
+
+2023/12/15 02:37:42: quan win +600, balance: 500400 
+2023/12/15 02:37:42: quan win +600, balance: 500400
+2023/12/15 02:37:42: quan win +600, balance: 500400
+2023/12/15 02:37:42: quan win +600, balance: 500400
+2023/12/15 02:37:42: quan win +600, balance: 500400
+2023/12/15 03:23:07: quan win +600, balance: 501700
+2023/12/15 03:38:36: quan win +600, balance: 503000
+2023/12/15 03:44:25: quan lose -200, balance: 501700
+2023/12/15 03:46:04: quan lose -200, balance: 501200
+2023/12/15 10:42:45: quan lose -200, balance: 500100
+2023/12/15 13:45:03: quan win +600, balance: 494100
+2023/12/15 13:50:34: quan lose -200, balance: 492800
+2023/12/16 19:06:34: quan win +3000, balance: 492670
+2023/12/16 21:05:58: quan lose -200, balance: 492385
+2023/12/16 21:07:24: quan lose -200, balance: 491885
+2023/12/16 21:21:09: quan win +3000, balance: 493385
+2023/12/16 21:22:04: quan win +3000, balance: 495885
+2023/12/16 21:26:58: quan lose -200, balance: 495385
+2023/12/16 21:27:54: quan lose -1000, balance: 494385
+2023/12/16 21:28:52: quan win +3000, balance: 496385
+2023/12/16 21:30:15: quan lose -1000, balance: 495085
+2023/12/16 21:31:36: quan lose -1000, balance: 493785
+2023/12/16 21:33:11: quan win +3000, balance: 495485
+2023/12/16 21:34:01: quan lose -1000, balance: 494085
+2023/12/16 21:38:46: quan lose -200, balance: 493085
+2023/12/16 21:40:08: quan win +600, balance: 493185
+2023/12/17 15:12:53: quan win +600, balance: 493400
+2023/12/17 15:13:39: quan win +3000, balance: 495100
+2023/12/18 10:53:06: quan lose -1000, balance: 492390
+2023/12/18 10:53:59: quan win +3000, balance: 493890
+2023/12/18 14:12:24: quan lose -200, balance: 492965

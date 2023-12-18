@@ -4,13 +4,16 @@ from datetime import datetime
 from io import StringIO 
 from LoginSignup import *
 import re
-
-    
+# Khởi tạo các thứ
 pygame.init()
 pygame.font.init()
+# Đặt tên cho cửa sổ hiển thị
 pygame.display.set_caption("12BET - Animoney RaceTrack")
+# Thiết đặt đồng hồ
 clock = pygame.time.Clock()
+# Thiết lập seed random ngẫu nhiên dựa trên thời gian hiện tại của game
 random.seed(datetime.now().timestamp())
+# List âm lượng. Mặc định là 40
 VOLUME = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 VOLUME_INDEX = 4
 present_volume = VOLUME[VOLUME_INDEX]
@@ -19,14 +22,17 @@ account_sub_path = './assets/player/'
 #Ngôn ngữ
 LANGUAGE = ["./assets/background/ENG/", "./assets/background/VIET/"]
 LANGUAGE_INDEX = 0
-
+# List tiền cược
 money_bet_list = [200,500,1000]
 #Các biến cần dùng
 user_id = LoginSignup.user_id
 user_pwd = ''
+# Biến đọc ghi lịch sử (được ghi trong file {account}.txt)
 historyLine = StringIO() 
 traceBackCount = 0
+# Lấy số tiền của người chơi trong file .txt
 user_money = int(LoginSignup.user_money)
+# Các thiết đặt mặc định
 set_choice = 1
 choice = 0
 list_image_load = []
@@ -1438,7 +1444,8 @@ class MenuClass:
                 pygame.quit()
                 sys.exit()
             if self.minigame.CheckClick(pos):
-                flappy_bird()
+                if user_money <= 1500:
+                    flappy_bird()
             if self.historyButton.CheckClick(pos):
                 return History()
                     
