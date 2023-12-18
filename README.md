@@ -35,19 +35,29 @@ Nếu bạn muốn chơi ngay, cứ việc ấn thẳng Play.
 HƯỚNG DẪN CHƠI GAME CƠ BẢN
 ==========================
 Nhiệm vụ của bạn trong game này là... chỉ cần nhấn nút và click chuột để chọn bản đồ(map) và nhân vật mình muốn, sau đó ngồi chờ kết quả thôi. 
+
 Cụ thể:
+
 Hãy dùng chuột nhấn vào phím Play trên màn hình chính nào. 
+
 Màn hình đầu tiên, chọn bản đồ. Bạn hãy nhấn phím từ 1 đến 5 để chọn bản đồ nhé
+
 Bạn sẽ được dẫn đến màn hình thứ 2, chọn nhân vật. Nhân vật sẽ mang tính tương ứng với map. Hãy chọn từ 1 đến 5 để chọn bản đồ nhé.
+
 Trước khi chơi , bạn sẽ được đưa đến màn hình chọn item power-up và chọn tiền cược. Hãy làm theo hướng dẫn trên màn hình thôi.
+
 Riêng với việc chọn power-up, bạn có thể bỏ qua bằng cách nhấn Enter.
+
 Trong quá trình đặt cược, nếu bạn muốn "hoàn lương" , hãy nhấn phím Esc và chọn các tùy chọn xuất hiện sau đó nhé
 
 Việc cuối cùng là... ngồi chờ kết quả thôi.
+
 Bạn sẽ không thể làm gì với mấy nhân vật trong suốt cuộc đua đâu. Khi các nhân vật đều đã đến đích , bạn có thể nhấn phím Enter để chuyển đến màn hình màn hình Xếp hạng. 
+
 Nếu nhân vật của bạn là nhân vật đang ăn mừng, xin chúc mừng bạn đã thắng tiền cược. Nếu không thì chia buồn nhé
 
 À, nếu bạn thua nhiều quá,đến độ không đủ tiền cược, bạn có thể chơi Minigame để kiếm thêm tiền thưởng. 
+
 Lưu ý: Mỗi lần bạn chơi và thoát khỏi minigame, nếu số tiền của bạn lớn hơn 1500, game sẽ chả thông báo gì mà "cấm cửa" không cho bạn chơi Minigame nữa đâu.
 
 
@@ -55,6 +65,7 @@ MẸO VÀ CHIẾN LƯỢC
 =================
 
 Trò chơi này mang tính may rủi khá cao
+
 Tips: Bạn có thể chọn Trói hồn trong Màn lựa chọn item power-up để khóa đối thủ , tạo lợi thế cho bạn
 
 
