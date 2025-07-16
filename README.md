@@ -69,11 +69,6 @@ Trò chơi này mang tính may rủi khá cao
 Tips: Bạn có thể chọn Trói hồn trong Màn lựa chọn item power-up để khóa đối thủ , tạo lợi thế cho bạn
 
 
-HỖ TRỢ
-=======
-
-Nếu có vấn đề khi chơi game, hãy liên hệ chúng tôi qua email
-devteam.animalracetrack@gmail.com
 
 VỀ CHÚNG TÔI
 =============
