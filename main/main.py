@@ -31,7 +31,7 @@ user_pwd = ''
 historyLine = StringIO() 
 traceBackCount = 0
 # Lấy số tiền của người chơi trong file .txt
-user_money = int(LoginSignup.user_money)
+user_money = int(LoginSignup.user_money or 0)
 # Các thiết đặt mặc định
 set_choice = 1
 choice = 0
